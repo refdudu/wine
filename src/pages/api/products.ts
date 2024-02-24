@@ -2,27 +2,23 @@ import {
   GetProductsFilter,
   ProductRepositoryJson,
 } from "@/api/product/ProductRepository";
+import { ListResponse, ProductService } from "@/api/product/ProductService";
 import { ProductI } from "@/interfaces/ProductI";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export interface GetProductsResponse {
-  products: ProductI[];
-  //   message: string;
-}
+
 interface Query {
   filter: GetProductsFilter;
 }
 
 export default function index(
   req: NextApiRequest,
-  res: NextApiResponse<GetProductsResponse>
+  res: NextApiResponse<ListResponse>
 ) {
   if (req.method !== "GET") return res.status(401);
   const filter = req.query as unknown as GetProductsFilter;
-  console.log("🚀 ~ filter:", filter)
-
   const productRepository = new ProductRepositoryJson();
-  const products = productRepository.get(filter);
-
-  res.status(200).json({ products });
+  var productService = new ProductService(productRepository);
+  var response = productService.get(filter);
+  return res.status(200).json(response);
 }

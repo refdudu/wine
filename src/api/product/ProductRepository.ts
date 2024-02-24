@@ -40,7 +40,8 @@ import { randomUUID } from "crypto";
 //     return this.products;
 //   }
 // }
-interface ProductRepositoryI {
+export interface ProductRepositoryI {
+  getTotal: () => number;
   get: (filter: GetProductsFilter) => ProductI[];
   find: (id: string) => ProductI;
 }
@@ -48,6 +49,9 @@ export class ProductRepositoryJson implements ProductRepositoryI {
   private products: ProductI[] = [];
   constructor() {
     this.products = require("../../../database/products.json");
+  }
+  public getTotal(): number {
+    return this.products.length;
   }
 
   public find(id: string): ProductI {
