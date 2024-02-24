@@ -20,8 +20,8 @@ const lato = Lato({
   preload: false,
 });
 
+const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
-  const queryClient = new QueryClient();
   return (
     <>
       <style jsx global>{`
