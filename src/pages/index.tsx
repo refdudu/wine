@@ -1,31 +1,59 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 
-import { InputHTMLAttributes, useId, useState } from "react";
+import { InputHTMLAttributes, useCallback, useId, useState } from "react";
 import { XIcon } from "@/utils/icons";
 import { ProductCard } from "@/components/pages/Home/ProductCard";
 import { Header } from "@/components/Header";
 import { api } from "@/utils/api";
-import type { GetProductsResponse } from "./api/products";
 import { Pagination } from "@/components/Pagination";
+
+import { GetProductsFilter } from "@/api/product/ProductRepository";
+import { useSearchParams } from "next/navigation";
+import { ListResponse } from "@/api/product/ProductService";
+import { useRouter } from "next/router";
 import { useQuery } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 export default function Home() {
-  const { data: products } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const { data } = await api.get<GetProductsResponse>("products", {
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+  const pageIndex = searchParams.get("pageIndex")
+    ? Number(searchParams.get("pageIndex"))
+    : 0;
+  const betweenPrices = searchParams.get("betweenPrices");
+
+  const {
+    data: productsResponse,
+    isLoading,
+    isFetching,
+  } = useQuery(
+    ["products", pageIndex],
+    async () => {
+      const { data } = await api.get<ListResponse>("products", {
         params: {
-          pageIndex: 0,
+          pageIndex,
           pageSize: 15,
         },
       });
-      return data.products;
+      const promise = () => new Promise((resolve) => setTimeout(resolve, 2000));
+      await promise();
+      return data;
     },
-    staleTime: 1000,
-  });
+    {
+      keepPreviousData: true,
+    }
+  );
 
-  if (!products) {
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      replace(`${window.location.pathname}?${params.toString()}`);
+    },
+    [replace, searchParams]
+  );
+  if (!productsResponse) {
     return null;
   }
   return (
@@ -34,12 +62,25 @@ export default function Home() {
       <div className="max-w-[1120px] w-full m-auto my-10 flex justify-between">
         <SideBar />
         <main className="flex-1">
+          {isLoading && "carregando"}
+          {isFetching && "isFetching"}
+          <div className="flex justify-center ">
+            <Pagination
+              current={pageIndex}
+              changePageIndex={(pageIndex) =>
+                createQueryString("pageIndex", String(pageIndex))
+              }
+              total={Math.ceil(
+                productsResponse.total / productsResponse.pageSize
+              )}
+            />
+          </div>
           <span onClick={() => {}}>
-            <b>{products.length}</b> produtos encontrados
+            <b>{productsResponse.total}</b> produtos encontrados
           </span>
 
           <div className="grid-products my-6">
-            {products.map((product) => (
+            {productsResponse.products.map((product) => (
               <ProductCard
                 key={product.name}
                 {...{ product }}
@@ -48,10 +89,19 @@ export default function Home() {
             ))}
           </div>
           <div className="flex justify-center ">
-            <Pagination current={6} total={7} />
+            <Pagination
+              current={pageIndex}
+              changePageIndex={(pageIndex) =>
+                createQueryString("pageIndex", String(pageIndex))
+              }
+              total={Math.ceil(
+                productsResponse.total / productsResponse.pageSize
+              )}
+            />
           </div>
         </main>
       </div>
+      <ReactQueryDevtools initialIsOpen />
     </div>
   );
 }
