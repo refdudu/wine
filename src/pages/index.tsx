@@ -20,30 +20,27 @@ export default function Home() {
   const { replace } = useRouter();
   const pageIndex = searchParams.get("pageIndex")
     ? Number(searchParams.get("pageIndex"))
-    : 0;
+    : 1;
   const betweenPrices = searchParams.get("betweenPrices");
 
   const {
     data: productsResponse,
     isLoading,
     isFetching,
-  } = useQuery(
-    ["products", pageIndex],
-    async () => {
+  } = useQuery({
+    queryFn: async () => {
       const { data } = await api.get<ListResponse>("products", {
         params: {
-          pageIndex,
-          pageSize: 15,
+          pageIndex: pageIndex - 1,
+          pageSize: 9,
         },
       });
-      const promise = () => new Promise((resolve) => setTimeout(resolve, 2000));
-      await promise();
       return data;
     },
-    {
-      keepPreviousData: true,
-    }
-  );
+    queryKey: ["products", pageIndex],
+    staleTime: 1000 * 60 * 60,
+    keepPreviousData: true,
+  });
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -53,53 +50,51 @@ export default function Home() {
     },
     [replace, searchParams]
   );
-  if (!productsResponse) {
-    return null;
-  }
+
   return (
     <div className="">
       <Header />
       <div className="max-w-[1120px] w-full m-auto my-10 flex justify-between">
         <SideBar />
-        <main className="flex-1">
-          {isLoading && "carregando"}
-          {isFetching && "isFetching"}
-          <div className="flex justify-center ">
-            <Pagination
-              current={pageIndex}
-              changePageIndex={(pageIndex) =>
-                createQueryString("pageIndex", String(pageIndex))
-              }
-              total={Math.ceil(
-                productsResponse.total / productsResponse.pageSize
-              )}
-            />
-          </div>
-          <span onClick={() => {}}>
-            <b>{productsResponse.total}</b> produtos encontrados
-          </span>
-
-          <div className="grid-products my-6">
-            {productsResponse.products.map((product) => (
-              <ProductCard
-                key={product.name}
-                {...{ product }}
-                onAdd={() => {}}
+        {productsResponse && (
+          <main className="flex-1">
+            <div className="flex justify-center ">
+              <Pagination
+                current={pageIndex}
+                changePageIndex={(pageIndex) =>
+                  createQueryString("pageIndex", String(pageIndex))
+                }
+                total={Math.ceil(
+                  productsResponse.total / productsResponse.pageSize
+                )}
               />
-            ))}
-          </div>
-          <div className="flex justify-center ">
-            <Pagination
-              current={pageIndex}
-              changePageIndex={(pageIndex) =>
-                createQueryString("pageIndex", String(pageIndex))
-              }
-              total={Math.ceil(
-                productsResponse.total / productsResponse.pageSize
-              )}
-            />
-          </div>
-        </main>
+            </div>
+            <span onClick={() => {}}>
+              <b>{productsResponse.total}</b> produtos encontrados
+            </span>
+
+            <div className="grid-products my-6">
+              {productsResponse.products.map((product) => (
+                <ProductCard
+                  key={product.name}
+                  {...{ product }}
+                  onAdd={() => {}}
+                />
+              ))}
+            </div>
+            <div className="flex justify-center ">
+              <Pagination
+                current={pageIndex}
+                changePageIndex={(pageIndex) =>
+                  createQueryString("pageIndex", String(pageIndex))
+                }
+                total={Math.ceil(
+                  productsResponse.total / productsResponse.pageSize
+                )}
+              />
+            </div>
+          </main>
+        )}
       </div>
       <ReactQueryDevtools initialIsOpen />
     </div>
