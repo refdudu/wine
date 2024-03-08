@@ -30,22 +30,35 @@ export function Pagination({
   }
   return (
     <div className="flex gap-2 text-custom-violet items-center">
-      <button disabled={current <= 1} onClick={previousPage}>
-        {"<<"} anterior
-      </button>
-      {pageNumbers.map((pageNumber) => (
+      <div className="w-20">
+        {current > 1 && (
+          <button disabled={current <= 1} onClick={previousPage}>
+            {"<<"} anterior
+          </button>
+        )}
+      </div>
+      {pageNumbers.map((pageNumber, index) => (
         <span
-          className={`w-9 h-9 flex items-center justify-center border border-custom-violet rounded ${classNames(
-            {}
+          className={`h-9 flex items-center justify-center border border-custom-violet rounded ${classNames(
+            {
+              "text-white": pageNumber === current,
+              "bg-custom-violet": pageNumber === current,
+              "w-20": index === 1,
+              "w-9": index !== 1,
+            }
           )}`}
           key={pageNumber}
         >
           {pageNumber}
         </span>
       ))}
-      <button disabled={current >= total} onClick={nextPage}>
-        próximo {">>"}{" "}
-      </button>
+      <div className="w-20">
+        {current < total && (
+          <button disabled={current >= total} onClick={nextPage}>
+            próximo {">>"}{" "}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

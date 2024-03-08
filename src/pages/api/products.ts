@@ -6,11 +6,6 @@ import { ListResponse, ProductService } from "@/api/product/ProductService";
 import { ProductI } from "@/interfaces/ProductI";
 import { NextApiRequest, NextApiResponse } from "next";
 
-
-interface Query {
-  filter: GetProductsFilter;
-}
-
 export default function index(
   req: NextApiRequest,
   res: NextApiResponse<ListResponse>

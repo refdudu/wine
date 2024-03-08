@@ -1,7 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 
-import { InputHTMLAttributes, useCallback, useId, useState } from "react";
+import {
+  InputHTMLAttributes,
+  useCallback,
+  useEffect,
+  useId,
+  useState,
+} from "react";
 import { XIcon } from "@/utils/icons";
 import { ProductCard } from "@/components/pages/Home/ProductCard";
 import { Header } from "@/components/Header";
@@ -9,19 +15,20 @@ import { api } from "@/utils/api";
 import { Pagination } from "@/components/Pagination";
 
 import { GetProductsFilter } from "@/api/product/ProductRepository";
-import { useSearchParams } from "next/navigation";
+import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { ListResponse } from "@/api/product/ProductService";
 import { useRouter } from "next/router";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 
 export default function Home() {
+  const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pageIndex = searchParams.get("pageIndex")
     ? Number(searchParams.get("pageIndex"))
     : 1;
-  const betweenPrices = searchParams.get("betweenPrices");
+  const betweenPrices = searchParams.get("betweenPrices") || "";
 
   const {
     data: productsResponse,
@@ -33,6 +40,7 @@ export default function Home() {
         params: {
           pageIndex: pageIndex - 1,
           pageSize: 9,
+          betweenPrices,
         },
       });
       return data;
@@ -42,33 +50,41 @@ export default function Home() {
     keepPreviousData: true,
   });
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-      replace(`${window.location.pathname}?${params.toString()}`);
-    },
-    [replace, searchParams]
-  );
+  const createQueryString = (
+    searchParams: ReadonlyURLSearchParams,
+    name: string,
+    value?: string
+  ) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (!value) params.delete(name);
+    else params.set(name, value);
+    replace(`${window.location.pathname}?${params.toString()}`);
+  };
+
+  function setPageIndex(
+    pageIndex: string | number,
+    _searchParams = searchParams
+  ) {
+    createQueryString(_searchParams, "pageIndex", String(pageIndex));
+  }
+  function handleFilterBetweenPrices(betweenPrices?: string) {
+    const params = new URLSearchParams();
+    params.set("betweenPrices", betweenPrices || "");
+    params.set("pageIndex", "1");
+    replace(`${window.location.pathname}?${params.toString()}`);
+    queryClient.invalidateQueries("products");
+  }
 
   return (
     <div className="">
       <Header />
       <div className="max-w-[1120px] w-full m-auto my-10 flex justify-between">
-        <SideBar />
+        <SideBar
+          betweenPrices={betweenPrices}
+          changeBetweenPrice={handleFilterBetweenPrices}
+        />
         {productsResponse && (
           <main className="flex-1">
-            <div className="flex justify-center ">
-              <Pagination
-                current={pageIndex}
-                changePageIndex={(pageIndex) =>
-                  createQueryString("pageIndex", String(pageIndex))
-                }
-                total={Math.ceil(
-                  productsResponse.total / productsResponse.pageSize
-                )}
-              />
-            </div>
             <span onClick={() => {}}>
               <b>{productsResponse.total}</b> produtos encontrados
             </span>
@@ -85,9 +101,7 @@ export default function Home() {
             <div className="flex justify-center ">
               <Pagination
                 current={pageIndex}
-                changePageIndex={(pageIndex) =>
-                  createQueryString("pageIndex", String(pageIndex))
-                }
+                changePageIndex={setPageIndex}
                 total={Math.ceil(
                   productsResponse.total / productsResponse.pageSize
                 )}
@@ -101,11 +115,16 @@ export default function Home() {
   );
 }
 
-type FilterValues = "0-40" | "40-60" | "100-200" | "200-500" | "500-*";
+type BetweenPriceFilterValues =
+  | "0-40"
+  | "40-60"
+  | "100-200"
+  | "200-500"
+  | "500-*";
 
 interface FilterOption {
   label: string;
-  value: FilterValues;
+  value: BetweenPriceFilterValues;
 }
 
 const filterOptions: FilterOption[] = [
@@ -128,20 +147,21 @@ const filterOptions: FilterOption[] = [
   },
 ];
 
-function SideBar() {
-  const [selectedFilterOption, setSelectedFilterOption] =
-    useState<FilterValues | null>(null);
-
+interface SideBarProps {
+  betweenPrices: string | null;
+  changeBetweenPrice: (betweenPrice?: string) => void;
+}
+function SideBar({ betweenPrices, changeBetweenPrice }: SideBarProps) {
   return (
     <aside className="font-neo w-64">
       <div className="font-extrabold ">
         <h3 className="text-xl">Refine sua busca</h3>
         <div className="flex gap-8 items-end">
           <h4 className="text-lg mt-8 text-custom-subtitle">Por preço</h4>
-          {selectedFilterOption && (
+          {betweenPrices && (
             <div
               className="flex items-center gap-1 font-normal cursor-pointer"
-              onClick={() => setSelectedFilterOption(null)}
+              onClick={() => changeBetweenPrice(undefined)}
             >
               <Image alt="X" src={XIcon} width={16} height={16} />
               <span>Limpar</span>
@@ -153,10 +173,10 @@ function SideBar() {
         {filterOptions.map((option) => (
           <RadioInput
             value={option.value}
-            checked={option.value === selectedFilterOption}
+            checked={option.value === betweenPrices}
             key={option.value}
             name="between_the_price"
-            onChange={() => setSelectedFilterOption(option.value)}
+            onChange={() => changeBetweenPrice(option.value)}
           >
             {option.label}
           </RadioInput>
