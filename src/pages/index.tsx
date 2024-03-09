@@ -45,7 +45,7 @@ export default function Home() {
       });
       return data;
     },
-    queryKey: ["products", pageIndex],
+    queryKey: ["products", { pageIndex, betweenPrices }],
     staleTime: 1000 * 60 * 60,
     keepPreviousData: true,
   });
@@ -72,7 +72,7 @@ export default function Home() {
     params.set("betweenPrices", betweenPrices || "");
     params.set("pageIndex", "1");
     replace(`${window.location.pathname}?${params.toString()}`);
-    queryClient.invalidateQueries("products");
+    // queryClient.invalidateQueries("products");
   }
 
   return (
@@ -83,8 +83,18 @@ export default function Home() {
           betweenPrices={betweenPrices}
           changeBetweenPrice={handleFilterBetweenPrices}
         />
+
         {productsResponse && (
           <main className="flex-1">
+            <div className="flex justify-center ">
+              <Pagination
+                current={pageIndex}
+                changePageIndex={setPageIndex}
+                total={Math.ceil(
+                  productsResponse.total / productsResponse.pageSize
+                )}
+              />
+            </div>
             <span onClick={() => {}}>
               <b>{productsResponse.total}</b> produtos encontrados
             </span>
