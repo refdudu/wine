@@ -70,9 +70,10 @@ export class ProductRepositoryJson implements ProductRepositoryI {
     const products = this.products.slice(start, end);
     if (betweenPrices) {
       const [min, max] = betweenPrices.split("-");
-      return products.filter(
-        (x) => x.price >= Number(min) && x.price <= Number(max)
-      );
+      return products.filter((x) => {
+        if (max === "*") return x.price >= Number(min);
+        return x.price >= Number(min) && x.price <= Number(max);
+      });
     }
     return products;
   }
