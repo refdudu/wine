@@ -9,9 +9,9 @@ async function migrate() {
     "https://worldwine.vteximg.com.br/arquivos/ids/159769-1000-1500/Vinho_Tinto_Chateau_Lafite_Rothschild_2006_012704.png?v=637320846781600000",
     "https://images.tcdn.com.br/img/img_prod/796852/vinho_tinto_suave_bordo_san_martin_2l_87_1_20200525111101.png",
   ];
-  const uids = Array.from({ length: 100 }, randomUUID);
+  const uids = Array.from({ length: 1000 }, randomUUID);
   const products = uids.map((id) => {
-    const price = Math.floor(Math.random() * 1000);
+    const price = Math.floor(Math.random() * 600);
     const percentOff = Math.floor(Math.random() * 100);
     const partnerPrice = price - (price * percentOff) / 100;
 
