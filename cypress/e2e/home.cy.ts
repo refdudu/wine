@@ -21,6 +21,7 @@ describe("template spec", () => {
     );
 
   it("ir para a próxima página e filtrar os items", async () => {
+    cy.viewport(1280, 760)
     const getFirstProductName: () => Promise<string> = () =>
       new Cypress.Promise((resolve) => {
         cy.getBySel("product-card-name").first().invoke("text").then(resolve);
