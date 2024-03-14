@@ -81,12 +81,12 @@ export default function Home({}: { initialData: GetProductsResponse }) {
         />
 
         {productsResponse && (
-          <main className="flex-1">
-            <span onClick={() => {}}>
+          <main className="flex-1 ml-3">
+            <span  onClick={() => {}}>
               <b>{productsResponse.total}</b> produtos encontrados
             </span>
 
-            <div className="grid-products my-6">
+            <div className="grid-products my-6 w-full">
               {productsResponse.products.map((product) => (
                 <ProductCard
                   key={product.name}
