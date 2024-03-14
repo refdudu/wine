@@ -5,11 +5,11 @@ describe("<Pagination />", () => {
   let pageIndex = 1;
   const total = 5;
   const clickNextButton = () =>
-    new Promise((resolve) => {
+    new Cypress.Promise((resolve) => {
       cy.get("button").contains("próximo").click().then(resolve);
     });
   const clickPreviousButton = () =>
-    new Promise((resolve) => {
+    new Cypress.Promise((resolve) => {
       cy.get("button").contains("anterior").click().then(resolve);
     });
 
