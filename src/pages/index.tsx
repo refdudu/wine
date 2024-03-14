@@ -89,15 +89,6 @@ export default function Home({}: { initialData: GetProductsResponse }) {
 
         {productsResponse && (
           <main className="flex-1">
-            <div className="flex justify-center ">
-              <Pagination
-                current={pageIndex}
-                changePageIndex={setPageIndex}
-                total={Math.ceil(
-                  productsResponse.total / productsResponse.pageSize
-                )}
-              />
-            </div>
             <span onClick={() => {}}>
               <b>{productsResponse.total}</b> produtos encontrados
             </span>
