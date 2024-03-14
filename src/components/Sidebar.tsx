@@ -8,7 +8,7 @@ interface SideBarProps {
 }
 export function SideBar({ betweenPrices, changeBetweenPrice }: SideBarProps) {
   return (
-    <aside className="font-neo w-64">
+    <aside className="hidden lg:block font-neo w-64">
       <div className="font-extrabold">
         <h3 className="text-xl">Refine sua busca</h3>
         <div className="flex gap-8 items-end">
