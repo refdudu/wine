@@ -24,7 +24,8 @@ import { ReactQueryDevtools } from "react-query/devtools";
 export default function Home() {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
-  const { replace } = useRouter();
+
+  const { push, query } = useRouter();
   const pageIndex = searchParams.get("pageIndex")
     ? Number(searchParams.get("pageIndex"))
     : 1;
@@ -50,29 +51,29 @@ export default function Home() {
     keepPreviousData: true,
   });
 
-  const createQueryString = (
-    searchParams: ReadonlyURLSearchParams,
-    name: string,
-    value?: string
-  ) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (!value) params.delete(name);
-    else params.set(name, value);
-    replace(`${window.location.pathname}?${params.toString()}`);
-  };
-
-  function setPageIndex(
-    pageIndex: string | number,
-    _searchParams = searchParams
-  ) {
-    createQueryString(_searchParams, "pageIndex", String(pageIndex));
+  function setPageIndex(pageIndex: string | number) {
+    push(
+      {
+        query: {
+          ...query,
+          pageIndex,
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
   }
   function handleFilterBetweenPrices(betweenPrices?: string) {
-    const params = new URLSearchParams();
-    params.set("betweenPrices", betweenPrices || "");
-    params.set("pageIndex", "1");
-    replace(`${window.location.pathname}?${params.toString()}`);
-    // queryClient.invalidateQueries("products");
+    push(
+      {
+        query: {
+          betweenPrices,
+          pageIndex: 1,
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
   }
 
   return (

@@ -41,7 +41,7 @@ import { randomUUID } from "crypto";
 //   }
 // }
 export interface ProductRepositoryI {
-  getTotal: () => number;
+  getTotal: (filter: GetProductsFilter) => number;
   get: (filter: GetProductsFilter) => ProductI[];
   find: (id: string) => ProductI;
 }
@@ -50,8 +50,25 @@ export class ProductRepositoryJson implements ProductRepositoryI {
   constructor() {
     this.products = require("../../../database/products.json");
   }
-  public getTotal(): number {
+  public getTotal({ betweenPrices = "" }: GetProductsFilter): number {
+    if (betweenPrices) {
+      const [min, max] = betweenPrices.split("-");
+      return this.products.filter((x) => {
+        if (max === "*") return x.price >= Number(min);
+        return x.price >= Number(min) && x.price <= Number(max);
+      }).length;
+    }
     return this.products.length;
+  }
+  private getFilteredProducts({ betweenPrices = "" }: GetProductsFilter) {
+    if (betweenPrices) {
+      const [min, max] = betweenPrices.split("-");
+      return this.products.filter((x) => {
+        if (max === "*") return x.price >= Number(min);
+        return x.price >= Number(min) && x.price <= Number(max);
+      });
+    }
+    return this.products;
   }
 
   public find(id: string): ProductI {
@@ -59,22 +76,12 @@ export class ProductRepositoryJson implements ProductRepositoryI {
     if (!product) throw new ProductNotFound();
     return product;
   }
-
-  public get({
-    pageIndex = 0,
-    pageSize = 15,
-    betweenPrices = "",
-  }: GetProductsFilter): ProductI[] {
+  public get(filter: GetProductsFilter): ProductI[] {
+    this.products = this.getFilteredProducts(filter);
+    const { pageIndex, pageSize } = filter;
     const start = pageIndex * pageSize;
     const end = start + Number(pageSize);
     const products = this.products.slice(start, end);
-    if (betweenPrices) {
-      const [min, max] = betweenPrices.split("-");
-      return products.filter((x) => {
-        if (max === "*") return x.price >= Number(min);
-        return x.price >= Number(min) && x.price <= Number(max);
-      });
-    }
     return products;
   }
 }

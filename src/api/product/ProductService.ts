@@ -13,7 +13,7 @@ export class ProductService {
   constructor(private productRepository: ProductRepositoryI) {}
   public get(filter: GetProductsFilter): ListResponse {
     const products = this.productRepository.get(filter);
-    const total = this.productRepository.getTotal();
+    const total = this.productRepository.getTotal(filter);
     return {
       ...filter,
       pageIndex: filter.pageIndex ? Number(filter.pageIndex) : 0,
