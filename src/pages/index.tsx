@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import { useQuery, useQueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { GetServerSideProps } from "next";
+import { BetweenPriceFilter } from "@/components/BetweenPriceFilter";
 
 export default function Home({}: { initialData: GetProductsResponse }) {
   const queryClient = useQueryClient();
@@ -124,39 +125,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
     props: {},
   };
 };
-
-type BetweenPriceFilterValues =
-  | "0-40"
-  | "40-60"
-  | "100-200"
-  | "200-500"
-  | "500-*";
-
-interface FilterOption {
-  label: string;
-  value: BetweenPriceFilterValues;
-}
-
-const filterOptions: FilterOption[] = [
-  {
-    label: "Até R$40",
-    value: "0-40",
-  },
-  {
-    label: "R$40 A R$60",
-    value: "40-60",
-  },
-  { label: "R$100 A R$200", value: "100-200" },
-  {
-    label: "R$200 A R$500",
-    value: "200-500",
-  },
-  {
-    label: "Acima de R$500",
-    value: "500-*",
-  },
-];
-
 interface SideBarProps {
   betweenPrices: string | null;
   changeBetweenPrice: (betweenPrice?: string) => void;
@@ -164,7 +132,7 @@ interface SideBarProps {
 function SideBar({ betweenPrices, changeBetweenPrice }: SideBarProps) {
   return (
     <aside className="font-neo w-64">
-      <div className="font-extrabold ">
+      <div className="font-extrabold">
         <h3 className="text-xl">Refine sua busca</h3>
         <div className="flex gap-8 items-end">
           <h4 className="text-lg mt-8 text-custom-subtitle">Por preço</h4>
@@ -174,40 +142,12 @@ function SideBar({ betweenPrices, changeBetweenPrice }: SideBarProps) {
               onClick={() => changeBetweenPrice(undefined)}
             >
               <Image alt="X" src={XIcon} width={16} height={16} />
-              <span data-cy='clear-between-prices-filter'>Limpar</span>
+              <span data-cy="clear-between-prices-filter">Limpar</span>
             </div>
           )}
         </div>
       </div>
-      <div data-cy='between-prices-filter' className="flex flex-col gap-4 mt-4">
-        {filterOptions.map((option) => (
-          <RadioInput
-            value={option.value}
-            checked={option.value === betweenPrices}
-            key={option.value}
-            name="between_the_price"
-            onChange={() => changeBetweenPrice(option.value)}
-          >
-            {option.label}
-          </RadioInput>
-        ))}
-      </div>
+      <BetweenPriceFilter {...{ betweenPrices, changeBetweenPrice }} />
     </aside>
-  );
-}
-
-interface RadioInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  children: React.ReactNode;
-}
-function RadioInput({ children, ...props }: RadioInputProps) {
-  const id = useId();
-
-  return (
-    <div className="flex gap-2 text-custom-text cursor-pointer">
-      <input className="cursor-pointer" id={id} type="radio" {...props} />
-      <label className="cursor-pointer" htmlFor={id}>
-        {children}
-      </label>
-    </div>
   );
 }
