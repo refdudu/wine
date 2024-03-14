@@ -16,12 +16,13 @@ import { Pagination } from "@/components/Pagination";
 
 import { GetProductsFilter } from "@/api/product/ProductRepository";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
-import { ListResponse } from "@/api/product/ProductService";
+import { GetProductsResponse } from "@/api/product/ProductService";
 import { useRouter } from "next/router";
 import { useQuery, useQueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { GetServerSideProps } from "next";
 
-export default function Home() {
+export default function Home({}: { initialData: GetProductsResponse }) {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
 
@@ -37,7 +38,7 @@ export default function Home() {
     isFetching,
   } = useQuery({
     queryFn: async () => {
-      const { data } = await api.get<ListResponse>("products", {
+      const { data } = await api.get<GetProductsResponse>("products", {
         params: {
           pageIndex: pageIndex - 1,
           pageSize: 9,
@@ -49,6 +50,7 @@ export default function Home() {
     queryKey: ["products", { pageIndex, betweenPrices }],
     staleTime: 1000 * 60 * 60,
     keepPreviousData: true,
+    initialData: {} as GetProductsResponse,
   });
 
   function setPageIndex(pageIndex: string | number) {
@@ -125,6 +127,12 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
 
 type BetweenPriceFilterValues =
   | "0-40"

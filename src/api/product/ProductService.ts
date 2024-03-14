@@ -5,13 +5,13 @@ import {
   ProductRepositoryJson,
 } from "./ProductRepository";
 
-export interface ListResponse extends GetProductsFilter {
+export interface GetProductsResponse extends GetProductsFilter {
   total: number;
   products: ProductI[];
 }
 export class ProductService {
   constructor(private productRepository: ProductRepositoryI) {}
-  public get(filter: GetProductsFilter): ListResponse {
+  public get(filter: GetProductsFilter): GetProductsResponse {
     const products = this.productRepository.get(filter);
     const total = this.productRepository.getTotal(filter);
     return {
