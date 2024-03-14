@@ -114,7 +114,7 @@ export default function Home({}: { initialData: GetProductsResponse }) {
           </main>
         )}
       </div>
-      <ReactQueryDevtools initialIsOpen />
+      <ReactQueryDevtools />
     </div>
   );
 }
@@ -174,12 +174,12 @@ function SideBar({ betweenPrices, changeBetweenPrice }: SideBarProps) {
               onClick={() => changeBetweenPrice(undefined)}
             >
               <Image alt="X" src={XIcon} width={16} height={16} />
-              <span>Limpar</span>
+              <span data-cy='clear-between-prices-filter'>Limpar</span>
             </div>
           )}
         </div>
       </div>
-      <div className="flex flex-col gap-4 mt-4">
+      <div data-cy='between-prices-filter' className="flex flex-col gap-4 mt-4">
         {filterOptions.map((option) => (
           <RadioInput
             value={option.value}

@@ -32,7 +32,7 @@ export function Pagination({
     <div className="flex gap-2 text-custom-violet items-center">
       <div className="w-20">
         {current > 1 && (
-          <button disabled={current <= 1} onClick={previousPage}>
+          <button data-cy='previous-page' disabled={current <= 1} onClick={previousPage}>
             {"<<"} anterior
           </button>
         )}
@@ -54,7 +54,7 @@ export function Pagination({
       ))}
       <div className="w-20">
         {current < total && (
-          <button disabled={current >= total} onClick={nextPage}>
+          <button data-cy='next-page' disabled={current >= total} onClick={nextPage}>
             próximo {">>"}{" "}
           </button>
         )}
