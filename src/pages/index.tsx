@@ -50,7 +50,7 @@ export default function Home({}: { initialData: GetProductsResponse }) {
     queryKey: ["products", { pageIndex, betweenPrices }],
     staleTime: 1000 * 60 * 60,
     keepPreviousData: true,
-    initialData: {} as GetProductsResponse,
+    // initialData: {} as GetProductsResponse,
   });
 
   function setPageIndex(pageIndex: string | number) {
