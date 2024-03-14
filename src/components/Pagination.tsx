@@ -29,32 +29,44 @@ export function Pagination({
     changePageIndex(current - 1);
   }
   return (
-    <div className="flex gap-2 text-custom-violet items-center">
-      <div className="w-20">
+    <div className="flex justify-between gap-4 text-custom-violet items-center">
+      <div className="w-24 flex justify-center">
         {current > 1 && (
-          <button data-cy='previous-page' disabled={current <= 1} onClick={previousPage}>
+          <button
+            className="font-bold"
+            data-cy="previous-page"
+            disabled={current <= 1}
+            onClick={previousPage}
+          >
             {"<<"} anterior
           </button>
         )}
       </div>
-      {pageNumbers.map((pageNumber, index) => (
-        <span
-          className={`h-9 flex items-center justify-center border border-custom-violet rounded ${classNames(
-            {
-              "text-white": pageNumber === current,
-              "bg-custom-violet": pageNumber === current,
-              "w-20": index === 1,
-              "w-9": index !== 1,
-            }
-          )}`}
-          key={pageNumber}
-        >
-          {pageNumber}
-        </span>
-      ))}
-      <div className="w-20">
+      <div className="flex gap-2">
+        {pageNumbers.map((pageNumber, index) => (
+          <span
+            className={`h-9 flex items-center justify-center border border-custom-violet rounded ${classNames(
+              {
+                "text-white": pageNumber === current,
+                "bg-custom-violet": pageNumber === current,
+                "w-20": index === 1,
+                "w-9": index !== 1,
+              }
+            )}`}
+            key={pageNumber}
+          >
+            {pageNumber}
+          </span>
+        ))}
+      </div>
+      <div className="w-24 flex justify-center">
         {current < total && (
-          <button data-cy='next-page' disabled={current >= total} onClick={nextPage}>
+          <button
+            className="font-bold"
+            data-cy="next-page"
+            disabled={current >= total}
+            onClick={nextPage}
+          >
             próximo {">>"}{" "}
           </button>
         )}
