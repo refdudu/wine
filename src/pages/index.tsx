@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { GetProductsResponse } from "@/api/product/ProductService";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticProps } from "next";
 import { SideBar } from "@/components/Sidebar";
 import { Layout } from "@/components/Layout";
 import { ProductsGrid } from "@/components/ProductsGrid";
@@ -21,23 +21,27 @@ export default function Home({}: StaticProps) {
     ? Number(searchParams.get("pageIndex"))
     : 1;
   const betweenPrices = searchParams.get("betweenPrices") || "";
+  const searchText = searchParams.get("searchText") || "";
 
   const {
     data: productsResponse,
     isLoading,
     isFetching,
-  } = useQuery({
+  } = useQuery<GetProductsResponse>({
     queryFn: async () => {
+      //   const isMobile = document.body.clientWidth <= 1024;
+      const params = {
+        pageIndex: pageIndex - 1,
+        pageSize: 9,
+        betweenPrices,
+        searchText,
+      };
       const { data } = await api.get<GetProductsResponse>("products", {
-        params: {
-          pageIndex: pageIndex - 1,
-          pageSize: 9,
-          betweenPrices,
-        },
+        params,
       });
       return data;
     },
-    queryKey: ["products", { pageIndex, betweenPrices }],
+    queryKey: ["products", { pageIndex, betweenPrices, searchText }],
     staleTime: 1000 * 60 * 60,
     keepPreviousData: true,
     // initialData: {} as GetProductsResponse,
@@ -58,8 +62,18 @@ export default function Home({}: StaticProps) {
   function handleFilterBetweenPrices(betweenPrices?: string) {
     push(
       {
+        query: { searchText, betweenPrices, pageIndex: 1 },
+      },
+      undefined,
+      { shallow: true }
+    );
+  }
+  function handleFilterSearch(searchText: string) {
+    push(
+      {
         query: {
           betweenPrices,
+          searchText,
           pageIndex: 1,
         },
       },
@@ -75,9 +89,16 @@ export default function Home({}: StaticProps) {
           betweenPrices={betweenPrices}
           changeBetweenPrice={handleFilterBetweenPrices}
         />
-
         {productsResponse && (
-          <ProductsGrid {...{ pageIndex, productsResponse, setPageIndex }} />
+          <ProductsGrid
+            {...{
+              pageIndex,
+              productsResponse,
+              setPageIndex,
+              handleFilterSearch,
+              searchText,
+            }}
+          />
         )}
       </div>
     </Layout>

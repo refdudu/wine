@@ -2,6 +2,7 @@ import { ProductI } from "@/interfaces/ProductI";
 import { ProductNotFound } from "./ProductNotFound";
 import { faker } from "@faker-js/faker";
 import { randomUUID } from "crypto";
+import { SearchIcon } from "@/utils/icons";
 
 // export class ProductRepositoryList implements ProductRepositoryI {
 //   private products: ProductI[] = [];
@@ -60,13 +61,19 @@ export class ProductRepositoryJson implements ProductRepositoryI {
     }
     return this.products.length;
   }
-  private getFilteredProducts({ betweenPrices = "" }: GetProductsFilter) {
+  private getFilteredProducts({
+    betweenPrices = "",
+    searchText = "",
+  }: GetProductsFilter) {
     if (betweenPrices) {
       const [min, max] = betweenPrices.split("-");
-      return this.products.filter((x) => {
+      this.products = this.products.filter((x) => {
         if (max === "*") return x.price >= Number(min);
         return x.price >= Number(min) && x.price <= Number(max);
       });
+    }
+    if (searchText) {
+      this.products = this.products.filter((x) => x.name.includes(searchText));
     }
     return this.products;
   }
@@ -89,4 +96,5 @@ export interface GetProductsFilter {
   pageSize: number;
   pageIndex: number;
   betweenPrices: string;
+  searchText: string;
 }

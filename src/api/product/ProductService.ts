@@ -5,9 +5,11 @@ import {
   ProductRepositoryJson,
 } from "./ProductRepository";
 
-export interface GetProductsResponse extends GetProductsFilter {
+export interface GetProductsResponse {
   total: number;
   products: ProductI[];
+  pageIndex: number;
+  pageSize: number;
 }
 export class ProductService {
   constructor(private productRepository: ProductRepositoryI) {}
