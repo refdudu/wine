@@ -29,7 +29,10 @@ export function ProductCard({ onAdd, product }: ProductCardProps) {
   }, [product.partnerPrice]);
 
   return (
-    <div data-cy='product-card' className="w-[256px] flex flex-col gap-4 font-bold text-center">
+    <div
+      data-cy="product-card"
+      className="flex-1 flex flex-col gap-4 font-bold text-center"
+    >
       <div className="flex flex-col items-center shadow-product-card bg-white p-4">
         <img
           className="object-contain transition-transform max-h-40"
@@ -37,7 +40,12 @@ export function ProductCard({ onAdd, product }: ProductCardProps) {
           src={product.image}
           alt={product.name}
         />
-        <span className="text-custom-gray-dark mt-4" data-cy='product-card-name'>{product.name}</span>
+        <span
+          className="text-custom-gray-dark mt-4"
+          data-cy="product-card-name"
+        >
+          {product.name}
+        </span>
         <div className="flex my-4 gap-2">
           <span className="text-3xs text-custom-gray line-through">
             {priceFormatted}

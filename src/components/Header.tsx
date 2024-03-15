@@ -20,10 +20,12 @@ export function Header() {
   };
   return (
     <header className="text-custom-gray-light bg-white flex items-center text-lg h-[88px] font-neo w-full shadow-md">
-      <div className="flex justify-between items-center w-full max-w-[1120px] m-auto">
+      <div className="flex justify-between items-center w-full max-w-[1120px] m-auto px-3">
         <div className="flex gap-20">
           <Image alt="Wine" width={100} height={28} src={WineLogo} />
-          <Tabs />
+          <div className="hidden lg:block">
+            <Tabs />
+          </div>
         </div>
         <div className="flex gap-10">
           <Image
@@ -45,8 +47,7 @@ export function Header() {
               alt="Carrinho de compras"
               className="cursor-pointer"
             />
-            <div>
-            </div>
+            <div></div>
           </div>
         </div>
       </div>

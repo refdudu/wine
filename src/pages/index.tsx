@@ -1,22 +1,19 @@
-import Image from "next/image";
-
-import { XIcon } from "@/utils/icons";
-import { ProductCard } from "@/components/pages/Home/ProductCard";
-import { Header } from "@/components/Header";
 import { api } from "@/utils/api";
-import { Pagination } from "@/components/Pagination";
 
 import { useSearchParams } from "next/navigation";
 import { GetProductsResponse } from "@/api/product/ProductService";
 import { useRouter } from "next/router";
-import { useQuery, useQueryClient } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
-import { GetServerSideProps } from "next";
-import { BetweenPriceFilter } from "@/components/BetweenPriceFilter";
+import { useQuery } from "react-query";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { SideBar } from "@/components/Sidebar";
+import { Layout } from "@/components/Layout";
+import { ProductsGrid } from "@/components/ProductsGrid";
 
-export default function Home({}: { initialData: GetProductsResponse }) {
-  const queryClient = useQueryClient();
+interface StaticProps {
+  initialData: GetProductsResponse;
+}
+
+export default function Home({}: StaticProps) {
   const searchParams = useSearchParams();
 
   const { push, query } = useRouter();
@@ -72,48 +69,26 @@ export default function Home({}: { initialData: GetProductsResponse }) {
   }
 
   return (
-    <div className="">
-      <Header />
-      <div className="max-w-[1120px] w-full m-auto my-10 flex justify-between">
+    <Layout>
+      <div className="max-w-[1120px] w-full my-10 flex justify-between mx-auto px-3">
         <SideBar
           betweenPrices={betweenPrices}
           changeBetweenPrice={handleFilterBetweenPrices}
         />
 
         {productsResponse && (
-          <main className="flex-1 ml-3">
-            <span  onClick={() => {}}>
-              <b>{productsResponse.total}</b> produtos encontrados
-            </span>
-
-            <div className="grid-products my-6 w-full">
-              {productsResponse.products.map((product) => (
-                <ProductCard
-                  key={product.name}
-                  {...{ product }}
-                  onAdd={() => {}}
-                />
-              ))}
-            </div>
-            <div className="flex justify-center ">
-              <Pagination
-                current={pageIndex}
-                changePageIndex={setPageIndex}
-                total={Math.ceil(
-                  productsResponse.total / productsResponse.pageSize
-                )}
-              />
-            </div>
-          </main>
+          <ProductsGrid {...{ pageIndex, productsResponse, setPageIndex }} />
         )}
       </div>
-      <ReactQueryDevtools />
-    </div>
+    </Layout>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStatic: GetStaticProps<StaticProps> = async () => {
   return {
-    props: {},
+    props: {
+      initialData: {} as GetProductsResponse,
+    },
+    revalidate: false,
   };
 };
