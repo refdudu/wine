@@ -8,12 +8,15 @@ import { GetStaticProps } from "next";
 import { SideBar } from "@/components/Sidebar";
 import { Layout } from "@/components/Layout";
 import { ProductsGrid } from "@/components/ProductsGrid";
+import { ApiProductService } from "@/services/ProductsService";
 
 interface StaticProps {
   initialData: GetProductsResponse;
 }
 
-export default function Home({}: StaticProps) {
+const apiProductsService = new ApiProductService();
+
+export default function Home({ initialData }: StaticProps) {
   const searchParams = useSearchParams();
 
   const { push, query } = useRouter();
@@ -28,23 +31,17 @@ export default function Home({}: StaticProps) {
     isLoading,
     isFetching,
   } = useQuery<GetProductsResponse>({
-    queryFn: async () => {
-      //   const isMobile = document.body.clientWidth <= 1024;
-      const params = {
+    queryFn: () =>
+      apiProductsService.getProducts({
+        betweenPrices,
         pageIndex: pageIndex - 1,
         pageSize: 9,
-        betweenPrices,
         searchText,
-      };
-      const { data } = await api.get<GetProductsResponse>("products", {
-        params,
-      });
-      return data;
-    },
+      }),
     queryKey: ["products", { pageIndex, betweenPrices, searchText }],
     staleTime: 1000 * 60 * 60,
     keepPreviousData: true,
-    // initialData: {} as GetProductsResponse,
+    initialData,
   });
 
   function setPageIndex(pageIndex: string | number) {
@@ -105,10 +102,16 @@ export default function Home({}: StaticProps) {
   );
 }
 
-export const getStatic: GetStaticProps<StaticProps> = async () => {
+export const getStaticProps: GetStaticProps<StaticProps> = async () => {
+  const initialData = await apiProductsService.getProducts({
+    betweenPrices: "",
+    pageIndex: 0,
+    pageSize: 9,
+    searchText: "",
+  });
   return {
     props: {
-      initialData: {} as GetProductsResponse,
+      initialData,
     },
     revalidate: false,
   };
