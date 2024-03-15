@@ -38,7 +38,7 @@ export function Header() {
             {...iconsProps}
             src={AccountIcon}
             alt="Conta"
-            className="cursor-pointer"
+            className="cursor-pointer hidden lg:block"
           />
           <div className={"relative"} style={{ ...iconsProps }}>
             <Image
