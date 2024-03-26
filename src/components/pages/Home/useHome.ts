@@ -20,17 +20,19 @@ export const useHome = (initialData: GetProductsResponse) => {
     isLoading,
     isFetching,
   } = useQuery<GetProductsResponse>({
-    queryFn: () =>
-      productService.getProducts({
+    queryFn: async () => {
+      const data = await productService.getProducts({
         betweenPrices,
         pageIndex: pageIndex - 1,
         pageSize: 9,
         searchText,
-      }),
+      });
+      return data;
+    },
     queryKey: ["products", { pageIndex, betweenPrices, searchText }],
     staleTime: 1000 * 60 * 60,
     keepPreviousData: true,
-    initialData,
+    // initialData,
   });
 
   function setPageIndex(pageIndex: string | number) {

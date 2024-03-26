@@ -14,6 +14,7 @@ const neoSansBold = localFont({
 
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ServicesProvider } from "@/contexts/ServicesContext";
 
 const lato = Lato({
   weight: ["700", "400"],
@@ -37,7 +38,9 @@ export default function App({ Component, pageProps }: AppProps) {
         }
       `}</style>
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
+        <ServicesProvider>
+          <Component {...pageProps} />
+        </ServicesProvider>
       </QueryClientProvider>
     </>
   );
