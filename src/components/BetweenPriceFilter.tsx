@@ -1,17 +1,14 @@
 import { RadioInput } from "./RadioInput";
-
 type BetweenPriceFilterValues =
   | "0-40"
   | "40-60"
   | "100-200"
   | "200-500"
   | "500-*";
-
 interface FilterOption {
   label: string;
   value: BetweenPriceFilterValues;
 }
-
 const filterOptions: FilterOption[] = [
   {
     label: "Até R$40",
@@ -31,7 +28,6 @@ const filterOptions: FilterOption[] = [
     value: "500-*",
   },
 ];
-
 interface BetweenPriceFilterProps {
   betweenPrices: string | null;
   changeBetweenPrice: (betweenPrice?: string) => void;

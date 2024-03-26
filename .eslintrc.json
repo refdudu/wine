@@ -1,3 +1,9 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-unused-vars": "error", //  Identifica variáveis declaradas mas não utilizadas.
+    "no-multiple-empty-lines": ["error", { "max": 0 }],
+    "quotes": ["error", "double"],
+    "no-empty": "error"
+  }
 }

@@ -1,5 +1,4 @@
 import { api } from "@/utils/api";
-
 import { useSearchParams } from "next/navigation";
 import { GetProductsResponse } from "@/api/product/ProductService";
 import { useRouter } from "next/router";
@@ -9,41 +8,38 @@ import { SideBar } from "@/components/Sidebar";
 import { Layout } from "@/components/Layout";
 import { ProductsGrid } from "@/components/ProductsGrid";
 import { ApiProductService } from "@/services/ProductsService";
-
 interface StaticProps {
   initialData: GetProductsResponse;
 }
-
 const apiProductsService = new ApiProductService();
-
 export default function Home({ initialData }: StaticProps) {
   const searchParams = useSearchParams();
-
   const { push, query } = useRouter();
   const pageIndex = searchParams.get("pageIndex")
     ? Number(searchParams.get("pageIndex"))
     : 1;
   const betweenPrices = searchParams.get("betweenPrices") || "";
   const searchText = searchParams.get("searchText") || "";
-
   const {
     data: productsResponse,
     isLoading,
     isFetching,
   } = useQuery<GetProductsResponse>({
-    queryFn: () =>
-      apiProductsService.getProducts({
+    queryFn: async () => {
+      const a = await apiProductsService.getProducts({
         betweenPrices,
         pageIndex: pageIndex - 1,
         pageSize: 9,
         searchText,
-      }),
+      });
+      console.log(a);
+      return a;
+    },
     queryKey: ["products", { pageIndex, betweenPrices, searchText }],
     staleTime: 1000 * 60 * 60,
     keepPreviousData: true,
-    initialData,
+    // initialData,
   });
-
   function setPageIndex(pageIndex: string | number) {
     push(
       {
@@ -78,7 +74,6 @@ export default function Home({ initialData }: StaticProps) {
       { shallow: true }
     );
   }
-
   return (
     <Layout>
       <div className="max-w-[1120px] w-full my-10 flex justify-between mx-auto px-3">
@@ -101,7 +96,6 @@ export default function Home({ initialData }: StaticProps) {
     </Layout>
   );
 }
-
 export const getStaticProps: GetStaticProps<StaticProps> = async () => {
   const initialData = await apiProductsService.getProducts({
     betweenPrices: "",

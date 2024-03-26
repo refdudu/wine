@@ -4,7 +4,6 @@ import { Pagination } from "./Pagination";
 import Image from "next/image";
 import { MagnifyingGlassIcon } from "@/utils/icons";
 import { useRef } from "react";
-
 interface ProductsGridProps {
   productsResponse: GetProductsResponse;
   pageIndex: number;
@@ -12,7 +11,6 @@ interface ProductsGridProps {
   handleFilterSearch: (text: string) => void;
   searchText?: string;
 }
-
 export function ProductsGrid({
   productsResponse,
   pageIndex,
@@ -56,7 +54,6 @@ export function ProductsGrid({
           <b>{productsResponse.total}</b> produtos encontrados
         </span>
       </div>
-
       <div className="grid-products my-6 flex-1">
         {productsResponse.products.map((product) => (
           <ProductCard key={product.name} {...{ product }} onAdd={() => {}} />

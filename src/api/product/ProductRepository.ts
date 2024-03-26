@@ -1,46 +1,5 @@
 import { ProductI } from "@/interfaces/ProductI";
 import { ProductNotFound } from "./ProductNotFound";
-import { faker } from "@faker-js/faker";
-import { randomUUID } from "crypto";
-import { SearchIcon } from "@/utils/icons";
-
-// export class ProductRepositoryList implements ProductRepositoryI {
-//   private products: ProductI[] = [];
-
-//   constructor() {
-//     const images = [
-//       "https://images.tcdn.com.br/img/img_prod/796852/vinho_tinto_suave_bordo_san_martin_1l_153_1_20200525112308.png",
-//       "https://images.tcdn.com.br/img/img_prod/796852/vinho_tinto_suave_bordo_san_martin_750ml_47_1_20200525112436.png",
-//       "https://worldwine.vteximg.com.br/arquivos/ids/159769-1000-1500/Vinho_Tinto_Chateau_Lafite_Rothschild_2006_012704.png?v=637320846781600000",
-//       "https://images.tcdn.com.br/img/img_prod/796852/vinho_tinto_suave_bordo_san_martin_2l_87_1_20200525111101.png",
-//     ];
-//     const uids = Array.from({ length: 100 }, randomUUID);
-//     this.products = uids.map((id) => {
-//       const price = Math.floor(Math.random() * 1000);
-//       const percentOff = Math.floor(Math.random() * 100);
-//       const partnerPrice = price - (price * percentOff) / 100;
-
-//       return {
-//         id,
-//         image: images[Math.floor(Math.random() * images.length)],
-//         name: faker.commerce.productName(),
-//         partnerPrice,
-//         price,
-//         percentOff,
-//       };
-//     });
-//   }
-
-//   public find(id: string): ProductI {
-//     const product = this.products.find((x) => x.id === id);
-//     if (!product) throw new ProductNotFound();
-//     return product;
-//   }
-
-//   public get(): ProductI[] {
-//     return this.products;
-//   }
-// }
 export interface ProductRepositoryI {
   getTotal: (filter: GetProductsFilter) => number;
   get: (filter: GetProductsFilter) => ProductI[];
@@ -51,13 +10,16 @@ export class ProductRepositoryJson implements ProductRepositoryI {
   constructor() {
     this.products = require("../../../database/products.json");
   }
+  private filterProduct(product: ProductI, min: string, max: string) {
+    if (max === "*") return product.price >= Number(min);
+    return product.price >= Number(min) && product.price <= Number(max);
+  }
   public getTotal({ betweenPrices = "" }: GetProductsFilter): number {
     if (betweenPrices) {
       const [min, max] = betweenPrices.split("-");
-      return this.products.filter((x) => {
-        if (max === "*") return x.price >= Number(min);
-        return x.price >= Number(min) && x.price <= Number(max);
-      }).length;
+      return this.products.filter((product) =>
+        this.filterProduct(product, min, max)
+      ).length;
     }
     return this.products.length;
   }
@@ -67,17 +29,15 @@ export class ProductRepositoryJson implements ProductRepositoryI {
   }: GetProductsFilter) {
     if (betweenPrices) {
       const [min, max] = betweenPrices.split("-");
-      this.products = this.products.filter((x) => {
-        if (max === "*") return x.price >= Number(min);
-        return x.price >= Number(min) && x.price <= Number(max);
-      });
+      this.products = this.products.filter((product) =>
+        this.filterProduct(product, min, max)
+      );
     }
     if (searchText) {
       this.products = this.products.filter((x) => x.name.includes(searchText));
     }
     return this.products;
   }
-
   public find(id: string): ProductI {
     const product = this.products.find((x) => x.id === id);
     if (!product) throw new ProductNotFound();

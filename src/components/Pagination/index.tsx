@@ -1,12 +1,10 @@
 import classNames from "classnames";
 import { useMemo } from "react";
-
 interface PaginationProps {
   current: number;
   total: number;
   changePageIndex: (page: number) => void;
 }
-
 export function Pagination({
   current,
   total,
@@ -21,7 +19,6 @@ export function Pagination({
       return number - 1;
     });
   }, [current, total, TOTAL_STEPS]);
-
   function nextPage() {
     changePageIndex(current + 1);
   }

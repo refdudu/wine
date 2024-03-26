@@ -1,20 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
-
 import { ProductI } from "@/interfaces/ProductI";
 import { useMemo } from "react";
-
 interface ProductCardProps {
   product: ProductI;
   onAdd: () => void;
 }
-
 export function ProductCard({ onAdd, product }: ProductCardProps) {
   const formatPrice = (price: number) =>
     price.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
     });
-
   const priceFormatted = useMemo(
     () => formatPrice(product.price),
     [product.price]
@@ -27,7 +23,6 @@ export function ProductCard({ onAdd, product }: ProductCardProps) {
       decimal: Number(decimal * 100).toFixed(0),
     };
   }, [product.partnerPrice]);
-
   return (
     <div
       data-cy="product-card"

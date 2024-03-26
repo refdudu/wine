@@ -4,7 +4,6 @@ import {
   ProductRepositoryI,
   ProductRepositoryJson,
 } from "./ProductRepository";
-
 export interface GetProductsResponse {
   total: number;
   products: ProductI[];

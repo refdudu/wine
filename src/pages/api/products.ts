@@ -5,7 +5,6 @@ import {
 import { GetProductsResponse, ProductService } from "@/api/product/ProductService";
 import { ProductI } from "@/interfaces/ProductI";
 import { NextApiRequest, NextApiResponse } from "next";
-
 export default function index(
   req: NextApiRequest,
   res: NextApiResponse<GetProductsResponse>

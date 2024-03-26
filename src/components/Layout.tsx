@@ -1,6 +1,5 @@
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Header } from "./Header";
-
 interface LayoutProps {
   children: React.ReactNode;
 }

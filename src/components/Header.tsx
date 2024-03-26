@@ -3,7 +3,6 @@ import { SearchIcon, AccountIcon, ShoppingCardIcon } from "@/utils/icons";
 import classNames from "classnames";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-
 interface Line {
   left: number;
   width: number;
@@ -12,7 +11,6 @@ interface Tab {
   key: string;
   name: string;
 }
-
 export function Header() {
   const iconsProps = {
     width: 48,
@@ -74,7 +72,6 @@ function Tabs() {
       name: "Eventos",
     },
   ];
-
   const [activeTabKey, setActiveTabKey] = useState<string>("club");
   const activeTabRef = useRef<HTMLDivElement>(null);
   const [line, setLine] = useState<Line>({ left: 0, width: 0 });
@@ -86,11 +83,9 @@ function Tabs() {
       width: clientWidth,
     });
   }
-
   useEffect(() => {
     handleSetLine();
   }, [activeTabKey]);
-
   return (
     <div className="flex relative items-center gap-12">
       {headerTabs.map(({ name, key }) => {
