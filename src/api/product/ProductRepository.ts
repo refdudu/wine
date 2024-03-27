@@ -73,7 +73,12 @@ export class ProductRepositoryJson implements ProductRepositoryI {
       });
     }
     if (searchText) {
-      this.products = this.products.filter((x) => x.name.includes(searchText));
+      const normalize = (text: string) =>
+        text.normalize("NFD").toLocaleLowerCase();
+      searchText = normalize(searchText);
+      this.products = this.products.filter((x) =>
+        normalize(x.name).includes(searchText)
+      );
     }
     return this.products;
   }
