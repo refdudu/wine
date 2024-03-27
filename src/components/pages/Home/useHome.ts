@@ -38,10 +38,7 @@ export const useHome = (initialData: GetProductsResponse) => {
   function setPageIndex(pageIndex: string | number) {
     push(
       {
-        query: {
-          ...query,
-          pageIndex,
-        },
+        query: { ...query, pageIndex },
       },
       undefined,
       { shallow: true }
