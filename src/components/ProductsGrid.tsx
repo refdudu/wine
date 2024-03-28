@@ -5,7 +5,7 @@ import Image from "next/image";
 import { MagnifyingGlassIcon } from "@/utils/icons";
 import { FormEvent, useRef } from "react";
 
-interface ProductsGridProps {
+export interface ProductsGridProps {
   productsResponse: GetProductsResponse;
   pageIndex: number;
   setPageIndex: (index: number) => void;
