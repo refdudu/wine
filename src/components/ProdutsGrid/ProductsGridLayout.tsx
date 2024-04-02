@@ -1,24 +1,21 @@
-import { GetProductsResponse } from "@/api/product/ProductService";
-import { ProductCard } from "./pages/Home/ProductCard";
-import { Pagination } from "./Pagination";
 import Image from "next/image";
 import { MagnifyingGlassIcon } from "@/utils/icons";
 import { FormEvent, useRef } from "react";
 
 export interface ProductsGridProps {
-  productsResponse: GetProductsResponse;
-  pageIndex: number;
-  setPageIndex: (index: number) => void;
   handleFilterSearch: (text: string) => void;
-  searchText?: string;
+  searchText: string;
+  totalProducts: number;
+  children: React.ReactNode;
+  footer?: React.ReactNode;
 }
 
-export function ProductsGrid({
-  productsResponse,
-  pageIndex,
-  setPageIndex,
-  searchText: textSearch,
+export function ProductsGridLayout({
+  searchText,
   handleFilterSearch,
+  children,
+  totalProducts,
+  footer,
 }: ProductsGridProps) {
   const inputSearchRef = useRef<HTMLInputElement>(null);
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -37,7 +34,7 @@ export function ProductsGrid({
             ref={inputSearchRef}
             className="outline-none w-full"
             placeholder="Pesquisar"
-            defaultValue={textSearch || ""}
+            defaultValue={searchText || ""}
           />
           <button className="filter brightness-0">
             <Image
@@ -53,22 +50,12 @@ export function ProductsGrid({
           className="border-b lg:border-none pb-4 lg:pb-0 border-custom-gray"
           onClick={() => {}}
         >
-          <b>{productsResponse.total}</b> produtos encontrados
+          <b>{totalProducts}</b> produtos encontrados
         </span>
       </div>
 
-      <div className="grid-products my-6 flex-1">
-        {productsResponse.products.map((product) => (
-          <ProductCard key={product.name} {...{ product }} onAdd={() => {}} />
-        ))}
-      </div>
-      <div className="justify-center hidden lg:flex">
-        <Pagination
-          current={pageIndex}
-          changePageIndex={setPageIndex}
-          total={Math.ceil(productsResponse.total / productsResponse.pageSize)}
-        />
-      </div>
+      <div className="grid-products my-6 flex-1">{children}</div>
+      {footer && <div className="justify-center hidden lg:flex">{footer}</div>}
     </main>
   );
 }

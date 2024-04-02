@@ -1,13 +1,14 @@
-import { ProductsGridLarge } from "@/components/ProdutsGrid/ProductsGridLarge";
 import { useHomeLarge } from "./useHomeLarge";
 import { GetProductsResponse } from "@/api/product/ProductService";
 import { SideBar } from "@/components/Sidebar";
+import { useHomeMobile } from "./useHomeMobile";
+import { ProductsGridMobile } from "@/components/ProdutsGrid/ProductsGridMobile";
 
 interface LargeLayoutProps {
   initialData: GetProductsResponse;
 }
 
-export function LargeLayout({ initialData }: LargeLayoutProps) {
+export function MobileLayout({ initialData }: LargeLayoutProps) {
   const {
     betweenPrices,
     handleFilterBetweenPrices,
@@ -16,15 +17,11 @@ export function LargeLayout({ initialData }: LargeLayoutProps) {
     productsResponse,
     searchText,
     setPageIndex,
-  } = useHomeLarge(initialData);
+  } = useHomeMobile(initialData);
   return (
     <>
-      <SideBar
-        betweenPrices={betweenPrices}
-        changeBetweenPrice={handleFilterBetweenPrices}
-      />
       {productsResponse && (
-        <ProductsGridLarge
+        <ProductsGridMobile
           {...{
             pageIndex,
             productsResponse,
