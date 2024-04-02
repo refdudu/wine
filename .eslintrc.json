@@ -1,7 +1,16 @@
 {
   "extends": "next/core-web-vitals",
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "next/core-web-vitals"
+  ],
   "rules": {
     "no-unused-vars": "error", //  Identifica variáveis declaradas mas não utilizadas.
+    "@typescript-eslint/no-unused-vars": ["never"],
     "no-multiple-empty-lines": ["error", { "max": 0 }],
     "quotes": ["error", "double"],
     "no-empty": "error"
