@@ -1,7 +1,8 @@
 import { GetProductsFilter } from "@/api/product/ProductRepository";
 import { GetProductsResponse } from "@/api/product/ProductService";
 import { api } from "@/utils/api";
-interface ProductServiceI {
+
+export interface ProductServiceI {
   getProducts({}: GetProductsFilter): Promise<GetProductsResponse>;
 }
 export class ApiProductService implements ProductServiceI {
@@ -22,6 +23,7 @@ export class ApiProductService implements ProductServiceI {
     const { data } = await api.get<GetProductsResponse>("products", {
       params,
     });
+    console.log(data)
     return data;
     // return {
     //   pageIndex: 0,
@@ -31,7 +33,7 @@ export class ApiProductService implements ProductServiceI {
     // };
   }
 }
-export class MochProductService implements ProductServiceI {
+export class MockProductService implements ProductServiceI {
   public async getProducts({}: GetProductsFilter): Promise<GetProductsResponse> {
     return {
       pageIndex: 0,

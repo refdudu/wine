@@ -3,7 +3,8 @@ import { ProductCard } from "./pages/Home/ProductCard";
 import { Pagination } from "./Pagination";
 import Image from "next/image";
 import { MagnifyingGlassIcon } from "@/utils/icons";
-import { useRef } from "react";
+import { FormEvent, useRef } from "react";
+
 interface ProductsGridProps {
   productsResponse: GetProductsResponse;
   pageIndex: number;
@@ -19,16 +20,16 @@ export function ProductsGrid({
   handleFilterSearch,
 }: ProductsGridProps) {
   const inputSearchRef = useRef<HTMLInputElement>(null);
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const inputValue = inputSearchRef.current?.value.trim() || "";
+    handleFilterSearch(inputValue);
+  };
   return (
     <main className="flex-1">
       <div className="flex justify-between lg:items-center flex-col lg:flex-row gap-4">
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const inputValue = inputSearchRef.current?.value.trim() || "";
-            if (inputValue.length === 0) return;
-            handleFilterSearch(inputValue);
-          }}
+          onSubmit={handleSubmit}
           className="lg:max-w-xs flex-1 bg-white flex p-2"
         >
           <input
