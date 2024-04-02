@@ -4,19 +4,19 @@ import { Layout } from "@/components/Layout";
 import { ApiProductService } from "@/services/ProductsService";
 import { LargeLayout } from "@/components/pages/Home/LargeLayout";
 import { MobileLayout } from "@/components/pages/Home/MobileLayout";
+import { useMemo } from "react";
 
 interface StaticProps {
   initialData: GetProductsResponse;
 }
 
 export default function Home({ initialData }: StaticProps) {
-  if (typeof window === "undefined") return <div />;
-  const isMobile = window.innerWidth < 1120;
-
+ 
   return (
     <Layout>
       <div className="max-w-[1120px] w-full my-10 flex justify-between mx-auto px-3">
-        <MobileLayout initialData={initialData} />
+        <LargeLayout initialData={initialData} />
+        {/* <MobileLayout initialData={initialData} /> */}
         {/* {!isMobile && } */}
       </div>
     </Layout>

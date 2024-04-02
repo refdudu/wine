@@ -29,6 +29,7 @@ export function MobileLayout({ initialData }: LargeLayoutProps) {
           searchText={searchText}
           handleFilterSearch={handleFilterSearch}
           totalProducts={0}
+          footer={<div></div>}
         >
           {products.map((product) => (
             <ProductCard key={product.name} {...{ product }} onAdd={() => {}} />
