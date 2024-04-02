@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { BetweenPriceFilter } from "./BetweenPriceFilter";
 import { XIcon } from "@/utils/icons";
-interface SideBarProps {
+
+export interface SideBarProps {
   betweenPrices: string | null;
   changeBetweenPrice: (betweenPrice?: string) => void;
 }
