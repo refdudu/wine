@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { Button } from "@/components/Button";
 import { ProductI } from "@/interfaces/ProductI";
 import { useMemo } from "react";
 interface ProductCardProps {
@@ -62,12 +63,7 @@ export function ProductCard({ onAdd, product }: ProductCardProps) {
           Não sócio {priceFormatted}
         </span>
       </div>
-      <button
-        onClick={onAdd}
-        className="bg-custom-green filter hover:brightness-110 transition flex-1 py-2 font-lato text-white rounded-sm"
-      >
-        Adicionar
-      </button>
+      <Button onClick={onAdd}>Adicionar</Button>
     </div>
   );
 }
