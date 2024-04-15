@@ -1,4 +1,3 @@
-import { ProductsGridLarge } from "@/components/ProdutsGrid/ProductsGridLarge";
 import { useHomeLarge } from "./useHomeLarge";
 import { GetProductsResponse } from "@/api/product/ProductService";
 import { SideBar } from "@/components/Sidebar";
@@ -32,13 +31,15 @@ export function LargeLayout({ initialData }: LargeLayoutProps) {
             searchText={searchText}
             handleFilterSearch={handleFilterSearch}
             footer={
-              <Pagination
-                current={pageIndex}
-                changePageIndex={setPageIndex}
-                total={Math.ceil(
-                  productsResponse.total / productsResponse.pageSize
-                )}
-              />
+              <div className="lg:flex justify-center">
+                <Pagination
+                  current={pageIndex}
+                  changePageIndex={setPageIndex}
+                  total={Math.ceil(
+                    productsResponse.total / productsResponse.pageSize
+                  )}
+                />
+              </div>
             }
             totalProducts={productsResponse.total}
           >

@@ -55,7 +55,7 @@ export function ProductsGridLayout({
       </div>
 
       <div className="grid-products my-6 flex-1">{children}</div>
-      {footer && <div className="justify-center hidden lg:flex">{footer}</div>}
+      {footer && footer}
     </main>
   );
 }
