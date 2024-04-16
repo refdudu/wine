@@ -4,6 +4,7 @@ import { SideBar } from "@/components/Sidebar";
 import { Pagination } from "@/components/Pagination";
 import { ProductsGridLayout } from "@/components/ProductsGridLayout";
 import { ProductCard } from "./ProductCard";
+import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 
 interface LargeLayoutProps {
   initialData: GetProductsResponse;
@@ -19,6 +20,7 @@ export function LargeLayout({ initialData }: LargeLayoutProps) {
     searchText,
     setPageIndex,
   } = useHomeLarge(initialData);
+  const { handleAddInShoppingCart } = useShoppingCart();
   return (
     <>
       <SideBar
@@ -47,7 +49,7 @@ export function LargeLayout({ initialData }: LargeLayoutProps) {
               <ProductCard
                 key={product.name}
                 {...{ product }}
-                onAdd={() => {}}
+                onAdd={() => handleAddInShoppingCart(product)}
               />
             ))}
           </ProductsGridLayout>

@@ -5,6 +5,7 @@ import { useHomeMobile } from "./useHomeMobile";
 import { ProductsGridLayout } from "@/components/ProductsGridLayout";
 import { ProductCard } from "./ProductCard";
 import classNames from "classnames";
+import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 
 interface LargeLayoutProps {
   initialData: GetProductsResponse;
@@ -15,14 +16,12 @@ export function MobileLayout({ initialData }: LargeLayoutProps) {
     betweenPrices,
     handleFilterBetweenPrices,
     handleFilterSearch,
-    pageIndex,
     productsResponse,
     searchText,
-    setPageIndex,
     fetchNextPage,
     hasNextPage,
   } = useHomeMobile(initialData);
-  console.log("🚀 ~ MobileLayout ~ hasNextPage:", hasNextPage);
+  const { handleAddInShoppingCart } = useShoppingCart();
   const products = productsResponse?.pages?.flatMap((x) => x.products) || [];
 
   return (
@@ -67,7 +66,11 @@ export function MobileLayout({ initialData }: LargeLayoutProps) {
           }
         >
           {products.map((product) => (
-            <ProductCard key={product.name} {...{ product }} onAdd={() => {}} />
+            <ProductCard
+              key={product.name}
+              {...{ product }}
+              onAdd={() => handleAddInShoppingCart(product)}
+            />
           ))}
         </ProductsGridLayout>
       )}
