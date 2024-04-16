@@ -1,3 +1,4 @@
+import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 import WineLogo from "@/images/WineLogo.svg";
 import { SearchIcon, AccountIcon, ShoppingCardIcon } from "@/utils/icons";
 import classNames from "classnames";
@@ -12,6 +13,7 @@ interface Tab {
   name: string;
 }
 export function Header() {
+  const { products } = useShoppingCart();
   const iconsProps = {
     width: 48,
     height: 48,
@@ -45,7 +47,9 @@ export function Header() {
               alt="Carrinho de compras"
               className="cursor-pointer"
             />
-            <div></div>
+            <button className="absolute -top-2 -right-2 w-6 h-6 bg-custom-tannat text-white flex items-center justify-center rounded-full text-sm">
+              <span>{products.length}</span>
+            </button>
           </div>
         </div>
       </div>
