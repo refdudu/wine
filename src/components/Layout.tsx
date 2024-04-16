@@ -1,6 +1,7 @@
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Header } from "./Header";
 import { createContext, useContext, useMemo } from "react";
+import { ShoppingCartProvider } from "@/contexts/ShoppingCartContext";
 interface LayoutProps {
   children: React.ReactNode;
 }
@@ -12,13 +13,15 @@ export function Layout({ children }: LayoutProps) {
     []
   );
   return (
-    <LayoutContext.Provider value={{ isMobile }}>
-      <div>
-        <Header />
-        {children}
-        <ReactQueryDevtools />
-      </div>
-    </LayoutContext.Provider>
+    <ShoppingCartProvider>
+      <LayoutContext.Provider value={{ isMobile }}>
+        <div>
+          <Header />
+          {children}
+          <ReactQueryDevtools />
+        </div>
+      </LayoutContext.Provider>
+    </ShoppingCartProvider>
   );
 }
 export const useLayout = () => useContext(LayoutContext);
