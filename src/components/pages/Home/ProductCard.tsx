@@ -1,17 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import { Button } from "@/components/Button";
 import { ProductI } from "@/interfaces/ProductI";
+import { formatPrice } from "@/utils/formatPrice";
 import { useMemo } from "react";
 interface ProductCardProps {
   product: ProductI;
   onAdd: () => void;
 }
 export function ProductCard({ onAdd, product }: ProductCardProps) {
-  const formatPrice = (price: number) =>
-    price.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
   const priceFormatted = useMemo(
     () => formatPrice(product.price),
     [product.price]
