@@ -1,7 +1,10 @@
 {
-  "extends": "next/core-web-vitals",
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "react"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -10,9 +13,14 @@
   ],
   "rules": {
     "no-unused-vars": "error", //  Identifica variáveis declaradas mas não utilizadas.
-    "@typescript-eslint/no-unused-vars": ["never"],
+    "@typescript-eslint/no-unused-vars": "error",
     "no-multiple-empty-lines": ["error", { "max": 0 }],
     "quotes": ["error", "double"],
-    "no-empty": "error"
+    "no-empty": "error",
+    "react/jsx-curly-brace-presence": [
+      "error",
+      { "props": "never", "children": "never" }
+    ],
+    "react/jsx-uses-vars": ["error"]
   }
 }
