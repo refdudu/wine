@@ -13,7 +13,7 @@ interface Tab {
   name: string;
 }
 export function Header() {
-  const { products } = useShoppingCart();
+  const { products, handleOpenDrawer } = useShoppingCart();
   const iconsProps = {
     width: 48,
     height: 48,
@@ -40,7 +40,11 @@ export function Header() {
             alt="Conta"
             className="cursor-pointer hidden lg:block"
           />
-          <div className={"relative"} style={{ ...iconsProps }}>
+          <div
+            className={"relative"}
+            style={{ ...iconsProps }}
+            onClick={handleOpenDrawer}
+          >
             <Image
               {...iconsProps}
               src={ShoppingCardIcon}
