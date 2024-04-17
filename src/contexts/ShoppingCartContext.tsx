@@ -71,8 +71,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     if (products.length > 0) setIsVisibleDrawer(true);
   }
   async function getProducts() {
-    console.log("🚀 ~ getProducts ~ products:", products);
-
     if (products.length > 0) return;
     try {
       const { data } = await api.get<ProductI[]>("products/search", {

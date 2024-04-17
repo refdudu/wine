@@ -41,7 +41,7 @@ export function Header() {
             className="cursor-pointer hidden lg:block"
           />
           <div
-            className={"relative"}
+            className="relative"
             style={{ ...iconsProps }}
             onClick={handleOpenDrawer}
           >
@@ -116,7 +116,7 @@ function Tabs() {
           width: line.width,
           left: line.left,
         }}
-        className={`absolute -bottom-2 h-[2px] bg-custom-tannat transition-all time `}
+        className="absolute -bottom-2 h-[2px] bg-custom-tannat transition-all time "
       />
     </div>
   );

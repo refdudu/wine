@@ -2,18 +2,12 @@ import { useQuery } from "react-query";
 import { useHome } from "./useHome";
 import { GetProductsResponse } from "@/api/product/ProductService";
 import { useServices } from "@/contexts/ServicesContext";
-import { ProductI } from "@/interfaces/ProductI";
-import { useEffect, useMemo, useState } from "react";
-import { useLayout } from "@/components/Layout";
+
 export const useHomeLarge = (initialData: GetProductsResponse) => {
   const useHomeProps = useHome();
   const { betweenPrices, pageIndex, searchText } = useHomeProps;
   const { productService } = useServices();
-  const {
-    data: productsResponse,
-    isLoading,
-    isFetching,
-  } = useQuery<GetProductsResponse>({
+  const { data: productsResponse } = useQuery<GetProductsResponse>({
     queryFn: async (ctx) => {
       console.log("🚀 ~ queryFn: ~ ctx:", ctx);
       const data = await productService.getProducts({
