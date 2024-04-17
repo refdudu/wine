@@ -33,10 +33,21 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       listProduct.amount += 1;
       return p.map((x) => (x.id === product.id ? listProduct : x));
     });
-    setProductsStorage([
-      ...productsStorage,
-      { productId: product.id, amount: 1 },
-    ]);
+    const storageProduct = productsStorage.find(
+      (x) => x.productId === product.id
+    );
+    if (storageProduct) {
+      setProductsStorage(
+        productsStorage.map((x) =>
+          x.productId === product.id ? { ...x, amount: x.amount + 1 } : x
+        )
+      );
+    } else {
+      setProductsStorage([
+        ...productsStorage,
+        { productId: product.id, amount: 1 },
+      ]);
+    }
   }
   function handleRemoveFromShoppingCart(productId: string) {
     setProducts((p) => p.filter((x) => x.id !== productId));
@@ -60,16 +71,31 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     if (products.length > 0) setIsVisibleDrawer(true);
   }
   async function getProducts() {
+    console.log("🚀 ~ getProducts ~ products:", products);
+
+    if (products.length > 0) return;
     try {
       const { data } = await api.get<ProductI[]>("products/search", {
         params: {
-          ids: productsStorage.join(","),
+          ids: productsStorage.map((x) => x.productId).join(","),
         },
       });
-      setProducts(data.map((x) => ({ ...x, amount: 1 })));
+
+      setProducts(
+        data.map((x) => {
+          const product = productsStorage.find((y) => y.productId === x.id);
+          if (product)
+            return {
+              ...x,
+              amount: product.amount,
+            };
+          return { ...x, amount: 1 };
+        })
+      );
     } catch {}
   }
   useEffect(() => {
+    console.log(productsStorage);
     getProducts();
   }, [productsStorage]);
 
