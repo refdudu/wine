@@ -4,6 +4,7 @@ export interface ProductRepositoryI {
   getTotal: (filter: GetProductsFilter) => number;
   get: (filter: GetProductsFilter) => ProductI[];
   find: (id: string) => ProductI;
+  search: (ids: string[]) => ProductI[];
 }
 export class ProductRepositoryJson implements ProductRepositoryI {
   private products: ProductI[] = [];
@@ -54,6 +55,10 @@ export class ProductRepositoryJson implements ProductRepositoryI {
     const start = pageIndex * pageSize;
     const end = start + Number(pageSize);
     const products = this.products.slice(start, end);
+    return products;
+  }
+  public search(ids: string[]): ProductI[] {
+    const products = this.products.filter((x) => ids.includes(x.id));
     return products;
   }
 }

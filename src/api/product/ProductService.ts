@@ -23,4 +23,8 @@ export class ProductService {
       products,
     };
   }
+  public search(ids: string[]) {
+    const products = this.productRepository.search(ids);
+    return products
+  }
 }
