@@ -19,7 +19,6 @@ export function ShoppingCartDrawer({
   isVisible,
   setIsVisible,
 }: ShoppingCartDrawerProps) {
-  console.log("🚀 ~ isVisible:", isVisible);
   return (
     <Drawer width={500} open={isVisible} onClose={() => setIsVisible(false)}>
       <ShoppingCartDrawerContent />

@@ -2,7 +2,8 @@ import { ShoppingCartDrawer } from "@/components/ShoppingCartDrawer";
 import { useArrayLocalStorage } from "@/hooks/useLocalStorage";
 import { ProductI } from "@/interfaces/ProductI";
 import { ProductShoppingCartI } from "@/interfaces/ProductShoppingCartI";
-import { createContext, useContext, useState } from "react";
+import { api } from "@/utils/api";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface ShoppingCartContextProps {
   products: ProductShoppingCartI[];
@@ -19,10 +20,10 @@ interface ShoppingCartProviderProps {
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
-  const [productsId, setProductsId] = useArrayLocalStorage<string>(
-    "products",
-    []
-  );
+  const [productsStorage, setProductsStorage] = useArrayLocalStorage<{
+    productId: string;
+    amount: number;
+  }>("products", []);
   const [products, setProducts] = useState<ProductShoppingCartI[]>([]);
 
   function handleAddInShoppingCart(product: ProductI) {
@@ -32,11 +33,16 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       listProduct.amount += 1;
       return p.map((x) => (x.id === product.id ? listProduct : x));
     });
-    setProductsId([...productsId, product.id]);
+    setProductsStorage([
+      ...productsStorage,
+      { productId: product.id, amount: 1 },
+    ]);
   }
   function handleRemoveFromShoppingCart(productId: string) {
     setProducts((p) => p.filter((x) => x.id !== productId));
-    setProductsId(productsId.filter((x) => x !== productId));
+    setProductsStorage(
+      productsStorage.filter((x) => x.productId !== productId)
+    );
     if (products.length === 1) setIsVisibleDrawer(false);
   }
   function changeProductAmount(productId: string, amount: number) {
@@ -44,10 +50,28 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     setProducts((p) =>
       p.map((x) => (x.id === productId ? { ...x, amount } : x))
     );
+    setProductsStorage(
+      productsStorage.map((x) =>
+        x.productId === productId ? { ...x, amount } : x
+      )
+    );
   }
   function handleOpenDrawer() {
     if (products.length > 0) setIsVisibleDrawer(true);
   }
+  async function getProducts() {
+    try {
+      const { data } = await api.get<ProductI[]>("products/search", {
+        params: {
+          ids: productsStorage.join(","),
+        },
+      });
+      setProducts(data.map((x) => ({ ...x, amount: 1 })));
+    } catch {}
+  }
+  useEffect(() => {
+    getProducts();
+  }, [productsStorage]);
 
   return (
     <ShoppingCartContext.Provider
