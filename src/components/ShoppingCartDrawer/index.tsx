@@ -26,18 +26,19 @@ export function ShoppingCartDrawer({
   );
 }
 
-export function ShoppingCartDrawerContent({}: ShoppingCartDrawerContentProps) {
+export function ShoppingCartDrawerContent() {
   const { products, changeProductAmount, handleRemoveFromShoppingCart } =
     useShoppingCart();
-//   function handleRemoveProductAmount(productId: string, amount: number) {
-//     if (amount === 0) return;
-//     changeProductAmount(productId, amount - 1);
-//   }
+  //   function handleRemoveProductAmount(productId: string, amount: number) {
+  //     if (amount === 0) return;
+  //     changeProductAmount(productId, amount - 1);
+  //   }
   return (
     <div className="flex flex-col justify-between h-full">
       <main className="h-5/6 p-4 overflow-auto">
         {products.map((product, index, array) => (
           <div
+            key={product.id}
             className={`flex gap-4 p-4  border-custom-gray ${classNames({
               "border-b": index !== array.length - 1,
             })}`}

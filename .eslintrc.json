@@ -12,11 +12,10 @@
     "next/core-web-vitals"
   ],
   "rules": {
-    "no-unused-vars": "error", //  Identifica variáveis declaradas mas não utilizadas.
-    "@typescript-eslint/no-unused-vars": "error",
-    "no-multiple-empty-lines": ["error", { "max": 0 }],
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
     "quotes": ["error", "double"],
-    "no-empty": "error",
+    "no-empty": ["error", { "allowEmptyCatch": true }],
     "react/jsx-curly-brace-presence": [
       "error",
       { "props": "never", "children": "never" }

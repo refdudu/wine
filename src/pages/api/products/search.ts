@@ -14,8 +14,8 @@ export default function index(
   if (req.method !== "GET") return res.status(401);
   const query = req.query as unknown as SearchProductsQuery;
   const productRepository = new ProductRepositoryJson();
-  var productService = new ProductService(productRepository);
+  const productService = new ProductService(productRepository);
   const ids = query.ids.split(",");
-  var response = productService.search(ids);
+  const response = productService.search(ids);
   return res.status(200).json(response);
 }

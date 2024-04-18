@@ -70,32 +70,32 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   function handleOpenDrawer() {
     if (products.length > 0) setIsVisibleDrawer(true);
   }
-  async function getProducts() {
-    if (products.length > 0) return;
-    try {
-      const { data } = await api.get<ProductI[]>("products/search", {
-        params: {
-          ids: productsStorage.map((x) => x.productId).join(","),
-        },
-      });
 
-      setProducts(
-        data.map((x) => {
-          const product = productsStorage.find((y) => y.productId === x.id);
-          if (product)
-            return {
-              ...x,
-              amount: product.amount,
-            };
-          return { ...x, amount: 1 };
-        })
-      );
-    } catch {}
-  }
   useEffect(() => {
-    console.log(productsStorage);
+    async function getProducts() {
+      if (products.length > 0) return;
+      try {
+        const { data } = await api.get<ProductI[]>("products/search", {
+          params: {
+            ids: productsStorage.map((x) => x.productId).join(","),
+          },
+        });
+
+        setProducts(
+          data.map((x) => {
+            const product = productsStorage.find((y) => y.productId === x.id);
+            if (product)
+              return {
+                ...x,
+                amount: product.amount,
+              };
+            return { ...x, amount: 1 };
+          })
+        );
+      } catch {}
+    }
     getProducts();
-  }, [productsStorage]);
+  }, [products.length, productsStorage]);
 
   return (
     <ShoppingCartContext.Provider
