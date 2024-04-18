@@ -2,7 +2,7 @@ import { useHomeLarge } from "./useHomeLarge";
 import { GetProductsResponse } from "@/api/product/ProductService";
 import { SideBar } from "@/components/Sidebar";
 import { useHomeMobile } from "./useHomeMobile";
-import { ProductsGridLayout } from "@/components/ProductsGridLayout";
+import { ProductsGridLayout } from "@/components/pages/Home/ProductsGridLayout";
 import { ProductCard } from "./ProductCard";
 import classNames from "classnames";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";

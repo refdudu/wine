@@ -7,7 +7,11 @@ export const useHomeLarge = (initialData: GetProductsResponse) => {
   const useHomeProps = useHome();
   const { betweenPrices, pageIndex, searchText } = useHomeProps;
   const { productService } = useServices();
-  const { data: productsResponse } = useQuery<GetProductsResponse>({
+  const {
+    data: productsResponse,
+    isLoading,
+    isFetching,
+  } = useQuery<GetProductsResponse>({
     queryFn: async (ctx) => {
       console.log("🚀 ~ queryFn: ~ ctx:", ctx);
       const data = await productService.getProducts({
@@ -27,5 +31,7 @@ export const useHomeLarge = (initialData: GetProductsResponse) => {
   return {
     ...useHomeProps,
     productsResponse,
+    isLoading,
+    isFetching,
   };
 };

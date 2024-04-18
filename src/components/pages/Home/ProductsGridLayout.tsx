@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { MagnifyingGlassIcon } from "@/utils/icons";
 import { FormEvent, useRef } from "react";
+import { Loader } from "@/components/Loader";
 
 export interface ProductsGridProps {
   handleFilterSearch: (text: string) => void;
@@ -54,7 +55,9 @@ export function ProductsGridLayout({
         </span>
       </div>
 
-      <div className="grid-products my-6 flex-1">{children}</div>
+      <Loader isLoading>
+        <div className="grid-products my-6 flex-1">{children}</div>
+      </Loader>
       {footer && footer}
     </main>
   );

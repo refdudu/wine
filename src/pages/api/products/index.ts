@@ -7,7 +7,7 @@ import {
   ProductService,
 } from "@/api/product/ProductService";
 import { NextApiRequest, NextApiResponse } from "next";
-export default function index(
+export default async function index(
   req: NextApiRequest,
   res: NextApiResponse<GetProductsResponse>
 ) {
@@ -16,5 +16,6 @@ export default function index(
   const productRepository = new ProductRepositoryJson();
   const productService = new ProductService(productRepository);
   const response = productService.get(filter);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   return res.status(200).json(response);
 }
