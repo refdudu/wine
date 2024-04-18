@@ -19,7 +19,7 @@ export function Header() {
     height: 48,
   };
   return (
-    <header className="text-custom-gray-light bg-white flex items-center text-lg h-[88px] font-neo w-full shadow-md">
+    <header className="text-custom-gray bg-white flex items-center text-lg h-[88px] font-neo w-full shadow-md">
       <div className="flex justify-between items-center w-full max-w-[1120px] m-auto px-3">
         <div className="flex gap-20">
           <Image alt="Wine" width={100} height={28} src={WineLogo} />

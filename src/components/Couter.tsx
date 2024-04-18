@@ -9,7 +9,7 @@ export function Counter({ handleAdd, handleRemove, total }: CounterProps) {
       <button className="text-custom-gray" onClick={handleRemove}>
         -
       </button>
-      <span className="text-custom-gray-light">{total}</span>
+      <span className="text-custom-gray">{total}</span>
       <button className="text-custom-gray" onClick={handleAdd}>
         +
       </button>

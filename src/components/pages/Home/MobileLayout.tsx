@@ -42,12 +42,14 @@ export function MobileLayout({ initialData }: LargeLayoutProps) {
             <div className="flex flex-col gap-2 items-center">
               <button
                 onClick={() => fetchNextPage()}
-                className={`border font-bold filter hover:brightness-125 transition w-full py-2 font-lato  rounded-sm ${classNames(
+                className={`border font-bold filter  transition w-full py-2 font-lato  rounded-sm ${classNames(
                   {
+                    "cursor-not-allowed": !hasNextPage,
                     "border-custom-gray-light": !hasNextPage,
                     "text-custom-gray-light": !hasNextPage,
                     "border-custom-violet": hasNextPage,
                     "text-custom-violet": hasNextPage,
+                    "hover:brightness-125": hasNextPage,
                   }
                 )}`}
               >

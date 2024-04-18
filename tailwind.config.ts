@@ -15,9 +15,9 @@ const config: Config = {
       },
       colors: {
         custom: {
-          "gray-light": "#555555",
+          "gray-light": "#888888",
+          gray: "#555555",
           "gray-dark": "#1D1D1B",
-          gray: "#888888",
           tannat: "#D14B8F",
           subtitle: "#333333",
           text: "#1D1D1B",
