@@ -51,7 +51,7 @@ export function Header() {
               alt="Carrinho de compras"
               className="cursor-pointer"
             />
-            <button className="absolute -top-2 -right-2 w-6 h-6 bg-custom-tannat text-white flex items-center justify-center rounded-full text-sm">
+            <button className="absolute -bottom-2 -right-2 w-6 h-6 bg-white shadow-lg text-custom-green flex items-center justify-center rounded-full text-sm">
               <span>{products.length}</span>
             </button>
           </div>
