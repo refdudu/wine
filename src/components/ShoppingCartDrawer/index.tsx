@@ -1,6 +1,6 @@
+import "rc-drawer/assets/index.css";
 import { Dispatch, SetStateAction, useMemo } from "react";
 import { Drawer } from "../Drawer";
-import "rc-drawer/assets/index.css";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 import { BackIcon, XCircleIcon, XIcon } from "@/utils/icons";
 import Image from "next/image";
@@ -27,7 +27,7 @@ export function ShoppingCartDrawer({
 }
 
 export function ShoppingCartDrawerContent() {
-  const { products, changeProductAmount, handleRemoveFromShoppingCart } =
+  const { products, changeProductAmount, handleRemoveFromShoppingCart,handleCloseDrawer } =
     useShoppingCart();
   const totalProducts = useMemo(
     () =>
@@ -39,7 +39,9 @@ export function ShoppingCartDrawerContent() {
   return (
     <div className="flex flex-col justify-between h-full bg-custom-background">
       <header className="bg-white w-full h-24 flex items-center gap-4 p-4">
-        <Image alt="Voltar" src={BackIcon} width={20} height={20} />
+        <button onClick={handleCloseDrawer}>
+          <Image alt="Voltar" src={BackIcon} width={20} height={20} />
+        </button>
         <span>Winebox ({products.length})</span>
       </header>
       <main className="h-full p-4 overflow-auto">

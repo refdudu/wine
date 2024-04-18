@@ -10,6 +10,7 @@ interface ShoppingCartContextProps {
   handleAddInShoppingCart: (product: ProductI) => void;
   handleRemoveFromShoppingCart: (productId: string) => void;
   handleOpenDrawer: () => void;
+  handleCloseDrawer: () => void;
   changeProductAmount: (productId: string, amount: number) => void;
 }
 const ShoppingCartContext = createContext({} as ShoppingCartContextProps);
@@ -70,6 +71,9 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   function handleOpenDrawer() {
     if (products.length > 0) setIsVisibleDrawer(true);
   }
+  function handleCloseDrawer() {
+    setIsVisibleDrawer(false);
+  }
 
   useEffect(() => {
     async function getProducts() {
@@ -104,6 +108,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         handleAddInShoppingCart,
         handleRemoveFromShoppingCart,
         handleOpenDrawer,
+        handleCloseDrawer,
         changeProductAmount,
       }}
     >
