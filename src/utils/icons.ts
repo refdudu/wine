@@ -4,6 +4,7 @@ import ShoppingCardIcon from "@/images/icons/shopping-cart.svg";
 import XIcon from "@/images/icons/x.svg";
 import MagnifyingGlassIcon from "@/images/icons/magnifying-glass.svg";
 import XCircleIcon from "@/images/icons/x-circle.svg";
+import BackIcon from "@/images/icons/back.svg";
 export {
   SearchIcon,
   AccountIcon,
@@ -11,4 +12,5 @@ export {
   XIcon,
   MagnifyingGlassIcon,
   XCircleIcon,
+  BackIcon,
 };
