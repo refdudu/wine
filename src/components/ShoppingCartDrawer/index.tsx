@@ -1,8 +1,8 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 import { Drawer } from "../Drawer";
 import "rc-drawer/assets/index.css";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
-import { XCircleIcon, XIcon } from "@/utils/icons";
+import { BackIcon, XCircleIcon, XIcon } from "@/utils/icons";
 import Image from "next/image";
 import { formatPrice } from "@/utils/formatPrice";
 import classNames from "classnames";
@@ -29,17 +29,24 @@ export function ShoppingCartDrawer({
 export function ShoppingCartDrawerContent() {
   const { products, changeProductAmount, handleRemoveFromShoppingCart } =
     useShoppingCart();
-  //   function handleRemoveProductAmount(productId: string, amount: number) {
-  //     if (amount === 0) return;
-  //     changeProductAmount(productId, amount - 1);
-  //   }
+  const totalProducts = useMemo(
+    () =>
+      formatPrice(
+        products.map((x) => x.amount * x.price).reduce((pv, cv) => pv + cv, 0)
+      ),
+    [products]
+  );
   return (
-    <div className="flex flex-col justify-between h-full">
-      <main className="h-5/6 p-4 overflow-auto">
+    <div className="flex flex-col justify-between h-full bg-custom-background">
+      <header className="bg-white w-full h-24 flex items-center gap-4 p-4">
+        <Image alt="Voltar" src={BackIcon} width={20} height={20} />
+        <span>Winebox ({products.length})</span>
+      </header>
+      <main className="h-full p-4 overflow-auto">
         {products.map((product, index, array) => (
           <div
             key={product.id}
-            className={`flex gap-4 p-4  border-custom-gray ${classNames({
+            className={`flex gap-4 p-4  border-custom-gray-light ${classNames({
               "border-b": index !== array.length - 1,
             })}`}
           >
@@ -75,7 +82,11 @@ export function ShoppingCartDrawerContent() {
           </div>
         ))}
       </main>
-      <header className="w-full h-1/6 flex items-center p-4">
+      <header className="w-full flex items-center p-4 bg-white flex-col gap-4 ">
+        <div className="flex items-center justify-between w-full">
+          <span className="text-custom-gray text-2xl font-bold">Total</span>
+          <span className="text-custom-tannat text-3xl">{totalProducts}</span>
+        </div>
         <Button className="w-full">Finalizar pedido</Button>
       </header>
     </div>
