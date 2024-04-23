@@ -12,8 +12,7 @@ export const useHomeLarge = () => {
 		isLoading,
 		isFetching
 	} = useQuery<GetProductsResponse>({
-		queryFn: async (ctx) => {
-			console.log("🚀 ~ queryFn: ~ ctx:", ctx);
+		queryFn: async () => {
 			const data = await productService.getProducts({
 				betweenPrices,
 				pageIndex: pageIndex - 1,
@@ -28,6 +27,7 @@ export const useHomeLarge = () => {
 
 		// initialData,
 	});
+	console.log("🚀 ~ useHomeLarge ~ productsResponse:", productsResponse);
 	return {
 		...useHomeProps,
 		productsResponse,

@@ -1,5 +1,4 @@
 import { ProductServiceI, ApiProductService } from "@/services/ProductsService";
-import { SERVER_DIRECTORY } from "next/dist/shared/lib/constants";
 import { createContext, useContext } from "react";
 
 interface ServicesContextProps {

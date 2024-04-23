@@ -1,5 +1,5 @@
 import { ProductI } from "@/interfaces/ProductI";
-import { GetProductsFilter, ProductRepositoryI, ProductRepositoryJson } from "./ProductRepository";
+import { GetProductsFilter, ProductRepositoryI } from "./ProductRepository";
 export interface GetProductsResponse {
 	total: number;
 	products: ProductI[];
@@ -9,7 +9,6 @@ export interface GetProductsResponse {
 export class ProductService {
 	constructor(private productRepository: ProductRepositoryI) {}
 	public get(filter: GetProductsFilter): GetProductsResponse {
-		console.log("");
 		const products = this.productRepository.get(filter);
 		const total = this.productRepository.getTotal(filter);
 		return {

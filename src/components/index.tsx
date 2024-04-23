@@ -1,17 +1,17 @@
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Header } from "./Header";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { ShoppingCartProvider } from "@/contexts/ShoppingCartContext";
-import { useMediaQuery } from "react-responsive";
 interface LayoutProps {
 	children: React.ReactNode;
 }
-const LayoutContext = createContext({} as { isMobile: boolean });
+const LayoutContext = createContext({} as { isMobile?: boolean });
 
 export function Layout({ children }: LayoutProps) {
-	const isMobile = useMediaQuery({
-		maxWidth: 1120
-	});
+	const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
+	useEffect(() => {
+		setIsMobile(window.innerWidth < 1120);
+	}, []);
 	return (
 		<ShoppingCartProvider>
 			<LayoutContext.Provider value={{ isMobile }}>

@@ -8,10 +8,11 @@ export interface ProductsGridProps {
 	searchText: string;
 	totalProducts: number;
 	children: React.ReactNode;
+	isLoading: boolean;
 	footer?: React.ReactNode;
 }
 
-export function ProductsGridLayout({ searchText, handleFilterSearch, children, totalProducts, footer }: ProductsGridProps) {
+export function ProductsGridLayout({ searchText, handleFilterSearch, children, totalProducts, footer, isLoading }: ProductsGridProps) {
 	const inputSearchRef = useRef<HTMLInputElement>(null);
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -32,7 +33,7 @@ export function ProductsGridLayout({ searchText, handleFilterSearch, children, t
 				</span>
 			</div>
 
-			<Loader isLoading>
+			<Loader isLoading={isLoading}>
 				<div className="grid-products my-6 flex-1">{children}</div>
 			</Loader>
 			{footer && footer}
