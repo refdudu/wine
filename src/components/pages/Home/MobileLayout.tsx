@@ -22,6 +22,7 @@ export function MobileLayout() {
 				<div className="flex flex-col gap-2 items-center">
 					{hasNextPage && (
 						<button
+							type="button"
 							onClick={() => fetchNextPage()}
 							className={`border font-bold filter  transition w-full py-2 font-lato  rounded-sm ${classNames({
 								"cursor-not-allowed": !hasNextPage,

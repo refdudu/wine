@@ -1,4 +1,4 @@
-import { ProductI } from "@/interfaces/ProductI";
+import type { ProductI } from "@/interfaces/ProductI";
 import { ProductNotFound } from "./ProductNotFound";
 export interface ProductRepositoryI {
 	getTotal: (filter: GetProductsFilter) => number;

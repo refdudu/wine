@@ -1,7 +1,7 @@
 import { ShoppingCartDrawer } from "@/components/ShoppingCartDrawer";
 import { useArrayLocalStorage } from "@/hooks/useLocalStorage";
-import { ProductI } from "@/interfaces/ProductI";
-import { ProductShoppingCartI } from "@/interfaces/ProductShoppingCartI";
+import type { ProductI } from "@/interfaces/ProductI";
+import type { ProductShoppingCartI } from "@/interfaces/ProductShoppingCartI";
 import { api } from "@/utils/api";
 import { createContext, useContext, useEffect, useState } from "react";
 

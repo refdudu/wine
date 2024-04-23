@@ -1,4 +1,4 @@
-import { ProductServiceI, ApiProductService } from "@/services/ProductsService";
+import { type ProductServiceI, ApiProductService } from "@/services/ProductsService";
 import { createContext, useContext } from "react";
 
 interface ServicesContextProps {

@@ -14,11 +14,8 @@ export function Home() {
 function Content() {
 	const { isMobile } = useLayout();
 	if (isMobile === undefined) return <></>;
-	if (isMobile) {
-		return <MobileLayout />;
-	} else {
-		return <LargeLayout />;
-	}
+	if (isMobile) return <MobileLayout />;
+	return <LargeLayout />;
 }
 
 // export const getStaticProps: GetStaticProps<StaticProps> = async () => {

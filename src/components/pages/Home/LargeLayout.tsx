@@ -4,7 +4,7 @@ import { Pagination } from "@/components/Pagination";
 import { ProductsGridLayout } from "@/components/pages/Home/ProductsGridLayout";
 import { ProductCard } from "./ProductCard";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
-import { ProductI } from "@/interfaces/ProductI";
+import type { ProductI } from "@/interfaces/ProductI";
 
 // interface LargeLayoutProps {
 //   initialData: GetProductsResponse;

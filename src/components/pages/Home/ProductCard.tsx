@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Button } from "@/components/Button";
-import { ProductI } from "@/interfaces/ProductI";
+import type { ProductI } from "@/interfaces/ProductI";
 import { formatPrice } from "@/utils/formatPrice";
 import { useMemo } from "react";
 interface ProductCardProps {

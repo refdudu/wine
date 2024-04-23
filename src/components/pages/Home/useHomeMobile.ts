@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from "react-query";
 import { useHome } from "./useHome";
-import { GetProductsResponse } from "@/api/product/ProductService";
+import type { GetProductsResponse } from "@/api/product/ProductService";
 import { useServices } from "@/contexts/ServicesContext";
 
 export const useHomeMobile = () => {

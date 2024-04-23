@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 export function useArrayLocalStorage<T>(key = "", initialValue?: T[]) {
 	const [items, setItems] = useState<T[]>(initialValue || []);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		function getItems() {
 			if (!localStorage) return;
@@ -12,7 +13,8 @@ export function useArrayLocalStorage<T>(key = "", initialValue?: T[]) {
 			return setItems(items);
 		}
 		getItems();
-	}, []);
+	}, [key]);
+
 	function handleSetItems(newItems: T[]) {
 		localStorage.setItem(key, JSON.stringify(newItems));
 		setItems(newItems);

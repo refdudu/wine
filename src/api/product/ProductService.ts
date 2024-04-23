@@ -1,5 +1,5 @@
-import { ProductI } from "@/interfaces/ProductI";
-import { GetProductsFilter, ProductRepositoryI } from "./ProductRepository";
+import type { ProductI } from "@/interfaces/ProductI";
+import type { GetProductsFilter, ProductRepositoryI } from "./ProductRepository";
 export interface GetProductsResponse {
 	total: number;
 	products: ProductI[];

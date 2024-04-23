@@ -1,6 +1,6 @@
-import { GetProductsFilter, ProductRepositoryJson } from "@/api/product/ProductRepository";
-import { GetProductsResponse, ProductService } from "@/api/product/ProductService";
-import { NextApiRequest, NextApiResponse } from "next";
+import { type GetProductsFilter, ProductRepositoryJson } from "@/api/product/ProductRepository";
+import { type GetProductsResponse, ProductService } from "@/api/product/ProductService";
+import type { NextApiRequest, NextApiResponse } from "next";
 export default async function index(req: NextApiRequest, res: NextApiResponse<GetProductsResponse>) {
 	if (req.method !== "GET") return res.status(401);
 	const filter = req.query as unknown as GetProductsFilter;

@@ -1,5 +1,5 @@
-import { GetProductsFilter } from "@/api/product/ProductRepository";
-import { GetProductsResponse } from "@/api/product/ProductService";
+import type { GetProductsFilter } from "@/api/product/ProductRepository";
+import type { GetProductsResponse } from "@/api/product/ProductService";
 import { api } from "@/utils/api";
 
 export interface ProductServiceI {

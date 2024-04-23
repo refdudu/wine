@@ -30,12 +30,12 @@ export function Header() {
 				<div className="flex gap-10">
 					<Image {...iconsProps} src={SearchIcon} alt="Pesquisa" className="cursor-pointer" />
 					<Image {...iconsProps} src={AccountIcon} alt="Conta" className="cursor-pointer hidden lg:block" />
-					<div className="relative" style={{ ...iconsProps }} onClick={handleOpenDrawer}>
+					<button type="button" className="relative" style={{ ...iconsProps }} onClick={handleOpenDrawer}>
 						<Image {...iconsProps} src={ShoppingCardIcon} alt="Carrinho de compras" className="cursor-pointer" />
-						<button className="absolute -bottom-2 -right-2 w-6 h-6 bg-white shadow-lg text-custom-green flex items-center justify-center rounded-full text-sm">
+						<div className="absolute -bottom-2 -right-2 w-6 h-6 bg-white shadow-lg text-custom-green flex items-center justify-center rounded-full text-sm">
 							<span>{products.length}</span>
-						</button>
-					</div>
+						</div>
+					</button>
 				</div>
 			</div>
 		</header>
@@ -62,17 +62,19 @@ function Tabs() {
 		}
 	];
 	const [activeTabKey, setActiveTabKey] = useState<string>("club");
-	const activeTabRef = useRef<HTMLDivElement>(null);
+	const activeTabRef = useRef<HTMLButtonElement>(null);
 	const [line, setLine] = useState<Line>({ left: 0, width: 0 });
-	function handleSetLine(): void {
-		if (!activeTabRef.current) return;
-		const { clientWidth, offsetLeft } = activeTabRef.current;
-		setLine({
-			left: offsetLeft,
-			width: clientWidth
-		});
-	}
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
+		function handleSetLine(): void {
+			if (!activeTabRef.current) return;
+			const { clientWidth, offsetLeft } = activeTabRef.current;
+			setLine({
+				left: offsetLeft,
+				width: clientWidth
+			});
+		}
 		handleSetLine();
 	}, [activeTabKey]);
 	return (
@@ -80,15 +82,16 @@ function Tabs() {
 			{headerTabs.map(({ name, key }) => {
 				const isActiveKey = key === activeTabKey;
 				return (
-					<div
+					<button
+						type="button"
 						onClick={() => setActiveTabKey(key)}
-						ref={isActiveKey ? activeTabRef : null}
+						ref={activeTabRef ? activeTabRef : null}
 						key={key}
 						className={`${classNames({
 							"text-custom-tannat": isActiveKey
 						})} cursor-pointer`}>
 						<span>{name}</span>
-					</div>
+					</button>
 				);
 			})}
 			<div

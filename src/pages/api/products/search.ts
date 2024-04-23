@@ -1,7 +1,7 @@
 import { ProductRepositoryJson } from "@/api/product/ProductRepository";
 import { ProductService } from "@/api/product/ProductService";
-import { ProductI } from "@/interfaces/ProductI";
-import { NextApiRequest, NextApiResponse } from "next";
+import type { ProductI } from "@/interfaces/ProductI";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 interface SearchProductsQuery {
 	ids: string;

@@ -27,7 +27,7 @@ export function Pagination({ current, total, changePageIndex }: PaginationProps)
 		<div className="flex justify-between gap-4 text-custom-violet items-center">
 			<div className="w-24 flex justify-center">
 				{current > 1 && (
-					<button className="font-bold" data-cy="previous-page" disabled={current <= 1} onClick={previousPage}>
+					<button type="button" className="font-bold" data-cy="previous-page" disabled={current <= 1} onClick={previousPage}>
 						{"<<"} anterior
 					</button>
 				)}
@@ -48,7 +48,7 @@ export function Pagination({ current, total, changePageIndex }: PaginationProps)
 			</div>
 			<div className="w-24 flex justify-center">
 				{current < total && (
-					<button className="font-bold" data-cy="next-page" disabled={current >= total} onClick={nextPage}>
+					<button type="button" className="font-bold" data-cy="next-page" disabled={current >= total} onClick={nextPage}>
 						próximo {">>"}{" "}
 					</button>
 				)}
