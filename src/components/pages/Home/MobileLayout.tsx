@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 import { ProductI } from "@/interfaces/ProductI";
 import { Spin } from "@/components/Spin";
+import { isLength, isObjectLike } from "node_modules/cypress/types/lodash";
 
 export function MobileLayout() {
   const {
@@ -29,9 +30,11 @@ export function MobileLayout() {
       totalProducts={productsResponse?.pages?.[0].total || 0}
       footer={
         <div className="flex flex-col gap-2 items-center">
-          <div className="flex w-full justify-center my-6">
-            <Spin />
-          </div>
+          {isFetching && products.length > 0 && (
+            <div className="flex w-full justify-center my-6">
+              <Spin />
+            </div>
+          )}
           {hasNextPage && (
             <button
               type="button"

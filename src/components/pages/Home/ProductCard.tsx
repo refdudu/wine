@@ -25,7 +25,7 @@ export function ProductCard({ onAdd, product }: ProductCardProps) {
       data-cy="product-card"
       className="flex-1 flex flex-col gap-4 font-bold text-center"
     >
-      <div className="flex flex-col items-center shadow-product-card bg-white p-4 h-[350px]">
+      <div className="flex flex-col items-center justify-center shadow-product-card bg-white md:p-4 px-0 py-4 h-[400px]">
         <img
           className="object-contain transition-transform max-h-40"
           width={200}
@@ -47,15 +47,18 @@ export function ProductCard({ onAdd, product }: ProductCardProps) {
           </div>
         </div>
         <div className="mb-1 flex gap-2 items-end">
-          <span className="text-custom-gray-dark text-2xs uppercase">
+          <span className="text-custom-gray-dark md:text-2xs text-xs uppercase">
             Sócio wine
           </span>
-          <span className="text-custom-violet text-2xs">
-            R$ <span className="text-xl">{partnerPriceFormatted.integer}</span>,
-            {partnerPriceFormatted.decimal}
+          <span className="text-custom-violet md:text-2xs text-xs">
+            R${" "}
+            <span className="md:text-xl text-lg">
+              {partnerPriceFormatted.integer}
+            </span>
+            ,{partnerPriceFormatted.decimal}
           </span>
         </div>
-        <span className="text-2xs text-custom-gray uppercase">
+        <span className="md:text-2xs text-xs text-custom-gray uppercase">
           Não sócio {priceFormatted}
         </span>
       </div>
@@ -71,7 +74,7 @@ export function ProductCardSkeleton() {
       data-cy="product-card"
       className="flex-1 flex flex-col gap-4 font-bold text-center"
     >
-      <div className=" shadow-product-card bg-white p-4 loading-card h-[350px]">
+      <div className=" shadow-product-card bg-white p-4 loading-card h-[400px]">
         <div className="w-[200px]" />
       </div>
       <Button className="h-10 cursor-not-allowed hover:brightness-100" />

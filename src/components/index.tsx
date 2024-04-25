@@ -15,7 +15,7 @@ export function Layout({ children }: LayoutProps) {
 	return (
 		<ShoppingCartProvider>
 			<LayoutContext.Provider value={{ isMobile }}>
-				<div>
+				<div className="flex flex-col h-screen">
 					<Header />
 					{children}
 					<ReactQueryDevtools />

@@ -3,19 +3,21 @@ import { MobileLayout } from "./MobileLayout";
 import { LargeLayout } from "./LargeLayout";
 
 export function Home() {
-	return (
-		<Layout>
-			<div className="max-w-[1120px] w-full my-10 flex justify-between mx-auto px-3">
-				<Content />
-			</div>
-		</Layout>
-	);
+  return (
+    <Layout>
+      <div className="w-full py-10 mx-auto px-3 overflow-auto h-full" id='products-grid'>
+        <div className="max-w-[1120px] flex justify-center mx-auto">
+          <Content />
+        </div>
+      </div>
+    </Layout>
+  );
 }
 function Content() {
-	const { isMobile } = useLayout();
-	if (isMobile === undefined) return <></>;
-	if (isMobile) return <MobileLayout />;
-	return <LargeLayout />;
+  const { isMobile } = useLayout();
+  if (isMobile === undefined) return <></>;
+  if (isMobile) return <MobileLayout />;
+  return <LargeLayout />;
 }
 
 // export const getStaticProps: GetStaticProps<StaticProps> = async () => {
