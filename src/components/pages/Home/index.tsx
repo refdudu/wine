@@ -1,4 +1,4 @@
-import { Layout, useLayout } from "@/components";
+import { Layout, useLayout } from "@/components/Layout";
 import { MobileLayout } from "./MobileLayout";
 import { LargeLayout } from "./LargeLayout";
 
