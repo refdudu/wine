@@ -1,3 +1,4 @@
+import { useSession } from "@/contexts/SessionContext";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 import WineLogo from "@/images/WineLogo.svg";
 import { SearchIcon, AccountIcon, ShoppingCardIcon } from "@/utils/icons";
@@ -14,6 +15,7 @@ interface Tab {
 }
 export function Header() {
   const { products, handleOpenDrawer } = useShoppingCart();
+  const { signIn } = useSession();
   const iconsProps = {
     width: 48,
     height: 48,
@@ -34,12 +36,19 @@ export function Header() {
             alt="Pesquisa"
             className="cursor-pointer"
           />
-          <Image
-            {...iconsProps}
-            src={AccountIcon}
-            alt="Conta"
-            className="cursor-pointer hidden lg:block"
-          />
+          <button
+            type="button"
+            className="relative"
+            style={{ ...iconsProps }}
+            onClick={signIn}
+          >
+            <Image
+              {...iconsProps}
+              src={AccountIcon}
+              alt="Conta"
+              className="cursor-pointer hidden lg:block"
+            />
+          </button>
           <button
             type="button"
             className="relative"
