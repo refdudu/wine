@@ -30,24 +30,14 @@ export function Header() {
           </div>
         </div>
         <div className="flex gap-10">
-          <Image
-            {...iconsProps}
-            src={SearchIcon}
-            alt="Pesquisa"
-            className="cursor-pointer"
-          />
+          <Image {...iconsProps} src={SearchIcon} alt="Pesquisa" />
           <button
             type="button"
             className="relative"
             style={{ ...iconsProps }}
             onClick={signIn}
           >
-            <Image
-              {...iconsProps}
-              src={AccountIcon}
-              alt="Conta"
-              className="cursor-pointer hidden lg:block"
-            />
+            <Image {...iconsProps} src={AccountIcon} alt="Conta" />
           </button>
           <button
             type="button"
@@ -59,7 +49,6 @@ export function Header() {
               {...iconsProps}
               src={ShoppingCardIcon}
               alt="Carrinho de compras"
-              className="cursor-pointer"
             />
             <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-white shadow-lg text-custom-green flex items-center justify-center rounded-full text-sm">
               <span>{products.length}</span>

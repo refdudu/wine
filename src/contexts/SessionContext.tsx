@@ -1,35 +1,55 @@
 import { firebaseAuthClient, firebaseClient } from "@/utils/firebaseClient";
-import { createContext, useContext, useEffect } from "react";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { createContext, useContext, useEffect, useState } from "react";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  type User,
+} from "firebase/auth";
+import { api } from "@/utils/api";
 
 interface SessionContextProps {
   signIn: () => Promise<void>;
+  user: User;
 }
 const SessionContext = createContext({} as SessionContextProps);
 
 interface SessionProviderProps {
   children: React.ReactNode;
 }
+// interface Credential{
+//     user:User;
+//     token:string;
+// }
 
 export function SessionProvider({ children }: SessionProviderProps) {
+  // const [credential, setCredential] = useState({})
+  const [user, setUser] = useState({} as);
+
   async function signIn() {
     const provider = new GoogleAuthProvider();
     const { user } = await signInWithPopup(firebaseAuthClient, provider);
-    const userToken = user.getIdToken();
-    console.log(userToken);
+    const userToken = await user.getIdToken();
+    setUser(user);
+    setApiAuthorization(userToken);
+    api.get("").then(console.log);
+  }
+  function setApiAuthorization(userToken: string) {
+    api.defaults.headers.common.Authorization = `Bearer ${userToken}`;
   }
   useEffect(() => {
     async function getUser() {
       await firebaseAuthClient.authStateReady();
       const { currentUser } = firebaseAuthClient;
       if (!currentUser) return;
-      const token = await currentUser.getIdToken();
-      console.log(token);
+      const userToken = await currentUser.getIdToken();
+      setUser(currentUser);
+      setApiAuthorization(userToken);
     }
     getUser();
   }, []);
   return (
-    <SessionContext.Provider value={{ signIn }}>
+    <SessionContext.Provider value={{ signIn, user }}>
       {children}
     </SessionContext.Provider>
   );
