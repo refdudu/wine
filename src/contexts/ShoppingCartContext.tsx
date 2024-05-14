@@ -1,12 +1,12 @@
 import { ShoppingCartDrawer } from "@/components/ShoppingCartDrawer";
 import { useArrayLocalStorage } from "@/hooks/useLocalStorage";
 import type { ProductI } from "@/interfaces/ProductI";
-import type { ProductShoppingCartI } from "@/interfaces/ProductShoppingCartI";
+import type { ShoppingCartProductI } from "@/interfaces/ProductShoppingCartI";
 import { api } from "@/utils/api";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface ShoppingCartContextProps {
-  products: ProductShoppingCartI[];
+  products: ShoppingCartProductI[];
   handleAddInShoppingCart: (product: ProductI) => void;
   handleRemoveFromShoppingCart: (productId: string) => void;
   handleOpenDrawer: () => void;
@@ -25,7 +25,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     productId: string;
     amount: number;
   }>("products", []);
-  const [products, setProducts] = useState<ProductShoppingCartI[]>([]);
+  const [products, setProducts] = useState<ShoppingCartProductI[]>([]);
 
   function handleAddInShoppingCart(product: ProductI) {
     setProducts((p) => {

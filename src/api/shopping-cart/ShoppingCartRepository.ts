@@ -1,20 +1,20 @@
 import {
-  ProductShoppingCartDTO,
-  ProductShoppingCartI,
+  ShoppingCartProductDTO,
+  ShoppingCartProductI,
 } from "@/interfaces/ProductShoppingCartI";
 
 export interface ShoppingCartRepositoryI {
-  addProduct: ({ amount, productId }: ProductShoppingCartDTO) => void;
+  addProduct: ({ amount, productId }: ShoppingCartProductDTO) => void;
   removeProduct: (productId: string) => void;
-  getProducts: () => ProductShoppingCartDTO[];
+  getProducts: () => ShoppingCartProductDTO[];
 }
 export class ShoppingCartRepositoryJson implements ShoppingCartRepositoryI {
   private userUid: string;
   private static shoppingCartProducts: Record<
     string,
-    ProductShoppingCartDTO[]
+    ShoppingCartProductDTO[]
   > = {};
-  private userProducts: ProductShoppingCartDTO[] = [];
+  private userProducts: ShoppingCartProductDTO[] = [];
   constructor(userUid: string) {
     this.userUid = userUid;
     if (
@@ -22,27 +22,32 @@ export class ShoppingCartRepositoryJson implements ShoppingCartRepositoryI {
     ) {
       ShoppingCartRepositoryJson.shoppingCartProducts[userUid] = [];
     }
+    this.userProducts =
+      ShoppingCartRepositoryJson.shoppingCartProducts[userUid];
   }
-  addProduct({ amount, productId }: ProductShoppingCartDTO) {
-    const product = ShoppingCartRepositoryJson.shoppingCartProducts[
-      this.userUid
-    ].find((x) => x.productId === productId);
+  private setProducts() {
+    ShoppingCartRepositoryJson.shoppingCartProducts[this.userUid] =
+      this.userProducts;
+  }
+  addProduct({ amount, productId }: ShoppingCartProductDTO) {
+    const product = this.userProducts.find((x) => x.productId === productId);
     if (product) {
       product.amount += amount;
     } else {
-      ShoppingCartRepositoryJson.shoppingCartProducts[this.userUid].push({
+      this.userProducts.push({
         amount,
         productId,
       });
     }
+    this.setProducts();
   }
   removeProduct(productId: string) {
-    ShoppingCartRepositoryJson.shoppingCartProducts[this.userUid] =
-      ShoppingCartRepositoryJson.shoppingCartProducts[this.userUid].filter(
-        (x) => x.productId !== productId
-      );
+    this.userProducts = this.userProducts.filter(
+      (x) => x.productId !== productId
+    );
+    this.setProducts;
   }
   getProducts() {
-    return ShoppingCartRepositoryJson.shoppingCartProducts[this.userUid];
+    return this.userProducts;
   }
 }

@@ -1,9 +1,9 @@
 import type { ProductI } from "./ProductI";
 
-export interface ProductShoppingCartI extends ProductI {
+export interface ShoppingCartProductI extends ProductI {
   amount: number;
 }
-export interface ProductShoppingCartDTO {
+export interface ShoppingCartProductDTO {
   amount: number;
   productId: string;
 }
