@@ -24,15 +24,19 @@ interface SessionProviderProps {
 
 export function SessionProvider({ children }: SessionProviderProps) {
   // const [credential, setCredential] = useState({})
-  const [user, setUser] = useState({} as);
+  const [user, setUser] = useState({} as User);
 
   async function signIn() {
     const provider = new GoogleAuthProvider();
-    const { user } = await signInWithPopup(firebaseAuthClient, provider);
-    const userToken = await user.getIdToken();
-    setUser(user);
-    setApiAuthorization(userToken);
-    api.get("").then(console.log);
+    try {
+      const { user } = await signInWithPopup(firebaseAuthClient, provider);
+      const userToken = await user.getIdToken();
+      setUser(user);
+      setApiAuthorization(userToken);
+      api.get("").then(console.log);
+    } catch {
+      console.log("erro");
+    }
   }
   function setApiAuthorization(userToken: string) {
     api.defaults.headers.common.Authorization = `Bearer ${userToken}`;
@@ -45,6 +49,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
       const userToken = await currentUser.getIdToken();
       setUser(currentUser);
       setApiAuthorization(userToken);
+      api.get("").then(console.log);
     }
     getUser();
   }, []);
