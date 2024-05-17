@@ -4,6 +4,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 export interface ApiRequestAuth extends NextApiRequest {
   userUid: string;
 }
+
+//TODO isso aqui é um middleware
+// Deve ser criado um WithAuth para buscar o usuário ssr
 export const WithAuth = async (
   main: (req: ApiRequestAuth, res: NextApiResponse) => void,
   req: NextApiRequest,
