@@ -3,8 +3,8 @@ import {
   ShoppingCartProductI,
 } from "@/interfaces/ProductShoppingCartI";
 import { ProductRepositoryI } from "../product/ProductRepository";
-import { ShoppingCartRepositoryI } from "./ShoppingCartRepository";
 import { ProductNotFound } from "../product/ProductNotFound";
+import type { ShoppingCartRepositoryI } from "./ShoppingCartRepositoryI";
 
 export class ShoppingCartService {
   constructor(

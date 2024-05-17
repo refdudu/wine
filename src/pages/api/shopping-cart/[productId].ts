@@ -1,27 +1,14 @@
-import { ApiRequestAuth } from "@/api/HOC/WithAuth";
-import {
-  type GetProductsFilter,
-  ProductRepositoryJson,
-} from "@/api/product/ProductRepository";
-import {
-  type GetProductsResponse,
-  ProductService,
-} from "@/api/product/ProductService";
-import { ShoppingCartRepositoryJson } from "@/api/shopping-cart/ShoppingCartRepository";
+import { ApiRequestAuth, WithAuth } from "@/api/HOC/WithAuth";
+import { ProductRepositoryJson } from "@/api/product/ProductRepository";
+import { type GetProductsResponse } from "@/api/product/ProductService";
+import { ShoppingCartRepositoryJson } from "@/api/shopping-cart/ShoppingCartRepositoryJson";
 import { ShoppingCartService } from "@/api/shopping-cart/ShoppingCartService";
-import { ShoppingCartProductDTO } from "@/interfaces/ProductShoppingCartI";
 import type { NextApiRequest, NextApiResponse } from "next";
 export default async function index(
   req: NextApiRequest,
   res: NextApiResponse<GetProductsResponse>
 ) {
-  if (req.method !== "GET") return res.status(401);
-  const filter = req.query as unknown as GetProductsFilter;
-
-  const productService = new ProductService(productRepository);
-  const response = productService.get(filter);
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  return res.status(200).json(response);
+  return WithAuth(main, req, res);
 }
 function main(req: ApiRequestAuth, res: NextApiResponse) {
   const { userUid } = req;

@@ -1,13 +1,6 @@
-import {
-  ShoppingCartProductDTO,
-  ShoppingCartProductI,
-} from "@/interfaces/ProductShoppingCartI";
+import type { ShoppingCartProductDTO } from "@/interfaces/ProductShoppingCartI";
+import type { ShoppingCartRepositoryI } from "./ShoppingCartRepositoryI";
 
-export interface ShoppingCartRepositoryI {
-  addProduct: ({ amount, productId }: ShoppingCartProductDTO) => void;
-  removeProduct: (productId: string) => void;
-  getProducts: () => ShoppingCartProductDTO[];
-}
 export class ShoppingCartRepositoryJson implements ShoppingCartRepositoryI {
   private userUid: string;
   private static shoppingCartProducts: Record<
