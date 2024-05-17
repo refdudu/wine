@@ -76,6 +76,7 @@ function ProductGrid({ products, isLoading }: ProductGridProps) {
       </>
     );
   }
+  if (products.length === 0) return <span>Nenhum produto encontrado</span>;
   return (
     <>
       {products.map((product) => (
