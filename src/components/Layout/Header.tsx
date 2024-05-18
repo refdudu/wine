@@ -15,7 +15,7 @@ interface Tab {
 }
 export function Header() {
   const { products, handleOpenDrawer } = useShoppingCart();
-  const { signIn } = useSession();
+//   const { signIn } = useSession();
   const iconsProps = {
     width: 48,
     height: 48,
@@ -35,7 +35,7 @@ export function Header() {
             type="button"
             className="relative"
             style={{ ...iconsProps }}
-            onClick={signIn}
+            // onClick={signIn}
           >
             <Image {...iconsProps} src={AccountIcon} alt="Conta" />
           </button>

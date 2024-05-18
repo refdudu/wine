@@ -30,10 +30,10 @@ export function SessionProvider({ children }: SessionProviderProps) {
     const provider = new GoogleAuthProvider();
     try {
       const { user } = await signInWithPopup(firebaseAuthClient, provider);
-      const userToken = await user.getIdToken();
       setUser(user);
-      setApiAuthorization(userToken);
-      api.get("").then(console.log);
+    //   const userToken = await user.getIdToken();
+    //   setApiAuthorization(userToken);
+    //   api.get("").then(console.log);
     } catch {
       console.log("erro");
     }
@@ -42,16 +42,16 @@ export function SessionProvider({ children }: SessionProviderProps) {
     api.defaults.headers.common.Authorization = `Bearer ${userToken}`;
   }
   useEffect(() => {
-    async function getUser() {
-      await firebaseAuthClient.authStateReady();
-      const { currentUser } = firebaseAuthClient;
-      if (!currentUser) return;
-      const userToken = await currentUser.getIdToken();
-      setUser(currentUser);
-      setApiAuthorization(userToken);
-      api.get("").then(console.log);
-    }
-    getUser();
+    // async function getUser() {
+    //   await firebaseAuthClient.authStateReady();
+    //   const { currentUser } = firebaseAuthClient;
+    //   if (!currentUser) return;
+    //   const userToken = await currentUser.getIdToken();
+    //   setUser(currentUser);
+    //   setApiAuthorization(userToken);
+    //   api.get("").then(console.log);
+    // }
+    // getUser();
   }, []);
   return (
     <SessionContext.Provider value={{ signIn, user }}>

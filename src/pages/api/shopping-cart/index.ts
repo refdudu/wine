@@ -1,11 +1,14 @@
-import { ApiRequestAuth, WithAuth } from "@/api/HOC/WithAuth";
+import {
+  ApiRequestAuth,
+  AuthMiddleware,
+} from "@/api/middlewares/AuthMiddleware";
 import { ProductRepositoryJson } from "@/api/product/ProductRepository";
-import { ShoppingCartRepositoryJson } from "@/api/shopping-cart/ShoppingCartRepository";
+import { ShoppingCartRepositoryJson } from "@/api/shopping-cart/ShoppingCartRepositoryJson";
 import { ShoppingCartService } from "@/api/shopping-cart/ShoppingCartService";
 import { ShoppingCartProductDTO } from "@/interfaces/ProductShoppingCartI";
 import type { NextApiRequest, NextApiResponse } from "next";
 export default async function index(req: NextApiRequest, res: NextApiResponse) {
-  return WithAuth(main, req, res);
+  return AuthMiddleware(main, req, res);
 }
 
 function main(req: ApiRequestAuth, res: NextApiResponse) {
