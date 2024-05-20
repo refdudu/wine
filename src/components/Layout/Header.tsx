@@ -14,8 +14,9 @@ interface Tab {
   name: string;
 }
 export function Header() {
-  const { products, handleOpenDrawer } = useShoppingCart();
-//   const { signIn } = useSession();
+  const { shoppingCartProducts, handleOpenDrawer } = useShoppingCart();
+  const { signIn, signOut, user } = useSession();
+  const userImage = user?.photoURL;
   const iconsProps = {
     width: 48,
     height: 48,
@@ -33,11 +34,11 @@ export function Header() {
           <Image {...iconsProps} src={SearchIcon} alt="Pesquisa" />
           <button
             type="button"
-            className="relative"
+            className="relative rounded-full overflow-hidden"
             style={{ ...iconsProps }}
-            // onClick={signIn}
+            onClick={() => (user ? signOut() : signIn())}
           >
-            <Image {...iconsProps} src={AccountIcon} alt="Conta" />
+            <Image {...iconsProps} src={userImage ?? AccountIcon} alt="Conta" />
           </button>
           <button
             type="button"
@@ -51,7 +52,7 @@ export function Header() {
               alt="Carrinho de compras"
             />
             <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-white shadow-lg text-custom-green flex items-center justify-center rounded-full text-sm">
-              <span>{products.length}</span>
+              <span>{shoppingCartProducts.length}</span>
             </div>
           </button>
         </div>

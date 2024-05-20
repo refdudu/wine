@@ -10,7 +10,8 @@ import { api } from "@/utils/api";
 
 interface SessionContextProps {
   signIn: () => Promise<void>;
-  user: User;
+  signOut: () => Promise<void>;
+  user: User | null;
 }
 const SessionContext = createContext({} as SessionContextProps);
 
@@ -24,37 +25,42 @@ interface SessionProviderProps {
 
 export function SessionProvider({ children }: SessionProviderProps) {
   // const [credential, setCredential] = useState({})
-  const [user, setUser] = useState({} as User);
+  //   function setApiAuthorization(userToken: string) {
+  //     api.defaults.headers.common.Authorization = `Bearer ${userToken}`;
+  //   }
+  const [user, setUser] = useState<User | null>(null);
 
   async function signIn() {
+    if (user) return alert("Você já está conectado");
     const provider = new GoogleAuthProvider();
     try {
       const { user } = await signInWithPopup(firebaseAuthClient, provider);
+      console.log("🚀 ~ signIn ~ user:", user);
+
       setUser(user);
-    //   const userToken = await user.getIdToken();
-    //   setApiAuthorization(userToken);
-    //   api.get("").then(console.log);
     } catch {
-      console.log("erro");
+      alert("Erro ao conectar usuário");
     }
   }
-  function setApiAuthorization(userToken: string) {
-    api.defaults.headers.common.Authorization = `Bearer ${userToken}`;
+  async function signOut() {
+    try {
+      await firebaseAuthClient.signOut();
+      setUser(null);
+    } catch {
+      alert("Erro ao desconectar usuário");
+    }
   }
   useEffect(() => {
-    // async function getUser() {
-    //   await firebaseAuthClient.authStateReady();
-    //   const { currentUser } = firebaseAuthClient;
-    //   if (!currentUser) return;
-    //   const userToken = await currentUser.getIdToken();
-    //   setUser(currentUser);
-    //   setApiAuthorization(userToken);
-    //   api.get("").then(console.log);
-    // }
-    // getUser();
+    async function getUser() {
+      await firebaseAuthClient.authStateReady();
+      const { currentUser } = firebaseAuthClient;
+      if (!currentUser) return;
+      setUser(currentUser);
+    }
+    getUser();
   }, []);
   return (
-    <SessionContext.Provider value={{ signIn, user }}>
+    <SessionContext.Provider value={{ signIn, signOut, user }}>
       {children}
     </SessionContext.Provider>
   );

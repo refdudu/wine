@@ -1,1 +1,14 @@
-# 
+# Produtos do carrinho
+    [x] - Enviar mudanças para o firebase
+    [x] - Buscar do firebase
+    [] - Escutar mudanças da lista do usuário
+    [] - Criar regras para o usuário buscar apenas seus produtos
+
+
+# Conectar usuário, mostrar que está conectado
+    [x] - Exibir foto do usuário
+    [] - Drawer de carrinho de compras
+        [x] - mensagem que não está conectado
+        [] - com um botão para conectar
+    [] - botão de confirmar desconexão de usuário (popover)
+ 

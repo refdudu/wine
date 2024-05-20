@@ -1,12 +1,12 @@
 import { ShoppingCartDrawer } from "@/components/ShoppingCartDrawer";
-import { useArrayLocalStorage } from "@/hooks/useLocalStorage";
 import type { ProductI } from "@/interfaces/ProductI";
 import type { ShoppingCartProductI } from "@/interfaces/ProductShoppingCartI";
-import { api } from "@/utils/api";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useSession } from "./SessionContext";
+import { useServices } from "./ServicesContext";
 
 interface ShoppingCartContextProps {
-  products: ShoppingCartProductI[];
+  shoppingCartProducts: ShoppingCartProductI[];
   handleAddInShoppingCart: (product: ProductI) => void;
   handleRemoveFromShoppingCart: (productId: string) => void;
   handleOpenDrawer: () => void;
@@ -20,93 +20,90 @@ interface ShoppingCartProviderProps {
 }
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
+  const { user } = useSession();
+  const { productService, shoppingCartService } = useServices();
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
-  const [productsStorage, setProductsStorage] = useArrayLocalStorage<{
-    productId: string;
-    amount: number;
-  }>("products", []);
-  const [products, setProducts] = useState<ShoppingCartProductI[]>([]);
+  const [shoppingCartProducts, setShoppingCartProducts] = useState<
+    ShoppingCartProductI[]
+  >([]);
 
-  function handleAddInShoppingCart(product: ProductI) {
-    setProducts((p) => {
-      const listProduct = p.find((x) => product.id === x.id);
-      if (!listProduct) return [{ ...product, amount: 1 }, ...p];
-      listProduct.amount += 1;
-      return p.map((x) => (x.id === product.id ? listProduct : x));
-    });
-
-    const storageProduct = productsStorage.find(
-      (x) => x.productId === product.id
-    );
-    if (storageProduct) {
-      setProductsStorage(
-        productsStorage.map((x) =>
-          x.productId === product.id ? { ...x, amount: x.amount + 1 } : x
-        )
-      );
-    } else {
-      setProductsStorage([
-        ...productsStorage,
-        { productId: product.id, amount: 1 },
-      ]);
+  async function getProducts() {
+    if (!user) {
+      setShoppingCartProducts([]);
+      return;
     }
+    const shoppingCartProductsKeyValue = await shoppingCartService.get();
+    if (!shoppingCartProductsKeyValue) return;
+
+    const productIds = shoppingCartProductsKeyValue.map(
+      ([productId]) => productId
+    );
+    const products = await productService.searchProducts(productIds);
+    const shoppingCartProducts: ShoppingCartProductI[] = products.map(
+      (product) => {
+        const keyValue = shoppingCartProductsKeyValue.find(
+          ([id]) => id === product.id
+        );
+        if (keyValue) {
+          const amount = keyValue[1];
+          return { ...product, amount };
+        }
+        return { ...product, amount: 1 };
+      }
+    );
+    setShoppingCartProducts(shoppingCartProducts); 
   }
-  function handleRemoveFromShoppingCart(productId: string) {
-    setProducts((p) => p.filter((x) => x.id !== productId));
-    setProductsStorage(
-      productsStorage.filter((x) => x.productId !== productId)
-    );
-    if (products.length === 1) setIsVisibleDrawer(false);
+
+  async function handleAddInShoppingCart(product: ProductI) {
+    try {
+      shoppingCartService.add(product.id);
+      setShoppingCartProducts((p) => {
+        const listProduct = p.find((x) => product.id === x.id);
+        if (!listProduct) return [{ ...product, amount: 1 }, ...p];
+        listProduct.amount += 1;
+        return p.map((x) => (x.id === product.id ? listProduct : x));
+      });
+    } catch {}
   }
-  function changeProductAmount(productId: string, amount: number) {
-    if (amount < 1) return;
-    setProducts((p) =>
-      p.map((x) => (x.id === productId ? { ...x, amount } : x))
-    );
-    setProductsStorage(
-      productsStorage.map((x) =>
-        x.productId === productId ? { ...x, amount } : x
-      )
-    );
+  async function handleRemoveFromShoppingCart(productId: string) {
+    try {
+      await shoppingCartService.remove(productId);
+      setShoppingCartProducts((p) => p.filter((x) => x.id !== productId));
+      if (shoppingCartProducts.length === 1) setIsVisibleDrawer(false);
+    } catch {}
+  }
+  async function changeProductAmount(productId: string, amount: number) {
+    if (amount < 1) {
+      return handleRemoveFromShoppingCart(productId);
+    }
+    try {
+      await shoppingCartService.change(productId, amount);
+      setShoppingCartProducts((p) =>
+        p.map((x) => (x.id === productId ? { ...x, amount } : x))
+      );
+    } catch {}
   }
   function handleOpenDrawer() {
-    if (products.length > 0) setIsVisibleDrawer(true);
+    // if (products.length > 0)
+    setIsVisibleDrawer(true);
   }
   function handleCloseDrawer() {
     setIsVisibleDrawer(false);
   }
 
-  useEffect(() => {
-    async function getProducts() {
-      if (products.length > 0) return;
-      try {
-        console.log(productsStorage)
-        const { data } = await api.get<ProductI[]>("products/search", {
-          params: {
-            ids: productsStorage.map((x) => x.productId).join(","),
-          },
-        });
+  //   useEffect(() => {
+  //     if (shoppingCartProducts.length === 1) setIsVisibleDrawer(false);
+  //   }, [shoppingCartProducts.length]);
 
-        setProducts(
-          data.map((x) => {
-            const product = productsStorage.find((y) => y.productId === x.id);
-            if (product)
-              return {
-                ...x,
-                amount: product.amount,
-              };
-            return { ...x, amount: 1 };
-          })
-        );
-      } catch {}
-    }
+  useEffect(() => {
+    shoppingCartService.setUserUid(user?.uid);
     getProducts();
-  }, [products.length, productsStorage]);
+  }, [user]);
 
   return (
     <ShoppingCartContext.Provider
       value={{
-        products,
+        shoppingCartProducts,
         handleAddInShoppingCart,
         handleRemoveFromShoppingCart,
         handleOpenDrawer,
