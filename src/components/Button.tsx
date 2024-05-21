@@ -1,10 +1,17 @@
-import type { HTMLAttributes } from "react";
+import type { ButtonHTMLAttributes, HTMLAttributes } from "react";
+import { Spin } from "./Spin";
 
-export function Button(props: HTMLAttributes<HTMLButtonElement>) {
-	return (
-		<button
-			{...props}
-			className={`bg-custom-green filter hover:brightness-110 transition w-full py-2 font-lato text-white rounded-sm ${props.className}`}
-		/>
-	);
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  isLoading?: boolean;
+}
+export function Button({ isLoading, ...props }: ButtonProps) {
+  return (
+    <button
+      {...props}
+      className={`bg-custom-green filter hover:brightness-110 transition w-full py-2 font-lato text-white rounded-sm flex justify-center items-center gap-2 ${props.className}`}
+    >
+      {props.children}
+      {isLoading && <Spin borderWidth={3} color="#fff" size={20} />}
+    </button>
+  );
 }

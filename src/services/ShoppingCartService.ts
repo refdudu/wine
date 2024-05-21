@@ -53,7 +53,7 @@ export class ApiShoppingCartService implements ShoppingCartServiceI {
       amount = snapshot.val();
       amount += 1;
     }
-    await set(this.dbRef, amount);
+    await set(productRef, amount);
   }
 }
 export class MockShoppingCartService implements ShoppingCartServiceI {

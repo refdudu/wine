@@ -1,13 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
 import { Button } from "@/components/Button";
+import { useSession } from "@/contexts/SessionContext";
 import type { ProductI } from "@/interfaces/ProductI";
 import { formatPrice } from "@/utils/formatPrice";
-import { useMemo } from "react";
+import classNames from "classnames";
+import { useMemo, useState } from "react";
 interface ProductCardProps {
   product: ProductI;
-  onAdd: () => void;
+  onAdd: () => Promise<void>;
 }
 export function ProductCard({ onAdd, product }: ProductCardProps) {
+  const { user } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handelAdd() {
+    setIsLoading(true);
+    await onAdd();
+    setIsLoading(false);
+  }
+
   const priceFormatted = useMemo(
     () => formatPrice(product.price),
     [product.price]
@@ -62,7 +73,15 @@ export function ProductCard({ onAdd, product }: ProductCardProps) {
           Não sócio {priceFormatted}
         </span>
       </div>
-      <Button onClick={onAdd} className="h-10">
+      <Button
+        disabled={!user || isLoading}
+        isLoading={isLoading}
+        onClick={handelAdd}
+        className={`h-10 ${classNames({
+          "brightness-90": isLoading,
+          "hover:brightness-90": isLoading,
+        })}`}
+      >
         Adicionar
       </Button>
     </div>
@@ -77,7 +96,7 @@ export function ProductCardSkeleton() {
       <div className=" shadow-product-card bg-white p-4 loading-card h-[400px]">
         <div className="w-[200px]" />
       </div>
-      <Button className="h-10 cursor-not-allowed hover:brightness-100" />
+      <Button className="h-10 cursor-not-allowed hover:brightness-100 " />
     </div>
   );
 }

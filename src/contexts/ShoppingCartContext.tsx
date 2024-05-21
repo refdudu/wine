@@ -7,11 +7,11 @@ import { useServices } from "./ServicesContext";
 
 interface ShoppingCartContextProps {
   shoppingCartProducts: ShoppingCartProductI[];
-  handleAddInShoppingCart: (product: ProductI) => void;
-  handleRemoveFromShoppingCart: (productId: string) => void;
+  handleAddInShoppingCart: (product: ProductI) => Promise<void>;
+  handleRemoveFromShoppingCart: (productId: string) => Promise<void>;
   handleOpenDrawer: () => void;
   handleCloseDrawer: () => void;
-  changeProductAmount: (productId: string, amount: number) => void;
+  changeProductAmount: (productId: string, amount: number) => Promise<void>;
 }
 const ShoppingCartContext = createContext({} as ShoppingCartContextProps);
 
@@ -51,12 +51,14 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         return { ...product, amount: 1 };
       }
     );
-    setShoppingCartProducts(shoppingCartProducts); 
+    setShoppingCartProducts(shoppingCartProducts);
   }
 
   async function handleAddInShoppingCart(product: ProductI) {
+    if (!user) return;
+    
     try {
-      shoppingCartService.add(product.id);
+      await shoppingCartService.add(product.id);
       setShoppingCartProducts((p) => {
         const listProduct = p.find((x) => product.id === x.id);
         if (!listProduct) return [{ ...product, amount: 1 }, ...p];
@@ -66,6 +68,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     } catch {}
   }
   async function handleRemoveFromShoppingCart(productId: string) {
+    if (!user) return;
+    
     try {
       await shoppingCartService.remove(productId);
       setShoppingCartProducts((p) => p.filter((x) => x.id !== productId));
@@ -73,6 +77,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     } catch {}
   }
   async function changeProductAmount(productId: string, amount: number) {
+    if (!user) return;
+    
     if (amount < 1) {
       return handleRemoveFromShoppingCart(productId);
     }
