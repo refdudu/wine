@@ -51,9 +51,11 @@ export function Header() {
               src={ShoppingCardIcon}
               alt="Carrinho de compras"
             />
-            <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-white shadow-lg text-custom-green flex items-center justify-center rounded-full text-sm">
-              <span>{shoppingCartProducts.length}</span>
-            </div>
+            {shoppingCartProducts.length > 0 && (
+              <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-white shadow-lg text-custom-green flex items-center justify-center rounded-full text-sm">
+                <span>{shoppingCartProducts.length}</span>
+              </div>
+            )}
           </button>
         </div>
       </div>
