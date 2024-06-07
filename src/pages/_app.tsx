@@ -14,6 +14,7 @@ import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ServicesProvider } from "@/contexts/ServicesContext";
 import { SessionProvider } from "@/contexts/SessionContext";
+import { ShoppingCartProvider } from "@/contexts/ShoppingCartContext";
 
 const lato = Lato({
   weight: ["700", "400"],
@@ -38,7 +39,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <ServicesProvider>
           <SessionProvider>
-            <Component {...pageProps} />
+            <ShoppingCartProvider>
+              <Component {...pageProps} />
+            </ShoppingCartProvider>
           </SessionProvider>
         </ServicesProvider>
       </QueryClientProvider>
