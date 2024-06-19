@@ -37,12 +37,14 @@ function FirstColumn() {
 }
 function LocationCard() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col border border-custom-violet">
       <div className="h-10 bg-custom-violet" />
-      <span>Casa</span>
-      <span>
-        Rua Emilio Tesche, 782, Oriental - Três de Maio, RS - CEP 98910-000
-      </span>
+      <div className="flex flex-col p-4">
+        <span className="text-xl">Casa</span>
+        <span>
+          Rua Emilio Tesche, 782, Oriental - Três de Maio, RS - CEP 98910-000
+        </span>
+      </div>
     </div>
   );
 }
