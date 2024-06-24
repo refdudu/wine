@@ -1,5 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { BuyHeader } from "./BuyHeader";
+import { useState } from "react";
+import classNames from "classnames";
 
 export function BuyPage() {
   return (
@@ -29,9 +31,26 @@ function NewAddress() {
   );
 }
 function FirstColumn() {
+  const [isChecked, setIsChecked] = useState(false);
+
   return (
     <div className="flex-1 max-w-72">
       <LocationCard />
+      <div
+        onClick={() => setIsChecked((p) => !p)}
+        className="bg-custom-background-light border border-custom-border flex items-center justify-center"
+      >
+        <div
+          className={`transition-all ${classNames({
+            "ml-[100%]": isChecked,
+            "-ml-[100%]": !isChecked,
+            "-translate-x-1/2": isChecked,
+            "translate-x-1/2": !isChecked,
+          })}`}
+        >
+          <span>{isChecked ? "Sim" : "Não"}</span>
+        </div>
+      </div>
     </div>
   );
 }

@@ -24,6 +24,8 @@ const config: Config = {
           green: "#7EBC43",
           orange: "#F79552",
           violet: "#B6116E",
+          border: "#D6D6D6",
+          "background-light": "#E5E5E5",
           background: "#F5F5F5",
         },
       },
