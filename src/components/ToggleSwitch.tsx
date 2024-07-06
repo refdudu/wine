@@ -1,0 +1,36 @@
+import classNames from "classnames";
+import { ReactNode, useState } from "react";
+
+export function ToggleSwitch() {
+  const [isChecked, setIsChecked] = useState(false);
+
+  return (
+    <div
+      onClick={() => setIsChecked((p) => !p)}
+      className="max-w-20 bg-custom-background-light border border-custom-border flex items-center justify-center px-2 py-1 cursor-pointer"
+    >
+      <div
+        className={`transition-all duration-300 select-none px-1 rounded-sm ${classNames(
+          {
+            "ml-[100%]": isChecked,
+            "-ml-[100%]": !isChecked,
+            "-translate-x-1/2": isChecked,
+            "translate-x-1/2": !isChecked,
+            "bg-custom-violet": isChecked,
+            "bg-custom-gray-light": !isChecked,
+          }
+        )}`}
+      >
+        <span className="pointer-events-none text-white">
+          {isChecked ? "Sim" : "Não"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// export function ToggleSwitch(){
+//     return(
+
+//     )
+// }
