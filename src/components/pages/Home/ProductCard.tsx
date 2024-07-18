@@ -77,7 +77,7 @@ export function ProductCard({ onAdd, product }: ProductCardProps) {
         disabled={!user || isLoading}
         isLoading={isLoading}
         onClick={handelAdd}
-        className={`h-10 ${classNames({
+        className={`h-10 bg-custom-green text-white ${classNames({
           "brightness-90": isLoading,
           "hover:brightness-90": isLoading,
         })}`}

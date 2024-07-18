@@ -8,7 +8,7 @@ interface CityIBGE {
   nome: string;
 }
 interface StateSelectProps {
-  selectedCity: Option;
+  selectedCity: Option | null;
   setSelectedCity: (city: Option | null) => void;
   state?: string;
 }
@@ -52,6 +52,10 @@ export function CitySelect({
       setSelectedOption={handelSelectState}
       options={filterOptions}
       label="Cidade"
+      disabled={!state}
+      placeholder={
+        !state ? "Selecione um estado primeiro" : "Selecione uma cidade"
+      }
       {...{ text, setText }}
     />
   );

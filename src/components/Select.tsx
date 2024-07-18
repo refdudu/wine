@@ -1,3 +1,4 @@
+import { Option } from "@/interfaces/Address";
 import classNames from "classnames";
 import { Dispatch, SetStateAction, useId, useState } from "react";
 interface SelectProps {
@@ -6,12 +7,9 @@ interface SelectProps {
   selectedOption: Option | null;
   setSelectedOption: (state: Option | null) => void;
   setText: (text: string) => void;
-  text:string;
-}
-
-export interface Option {
-  label: string;
-  key: string;
+  text: string;
+  disabled?: boolean;
+  placeholder?: string;
 }
 
 export function Select({
@@ -20,32 +18,37 @@ export function Select({
   selectedOption,
   setSelectedOption,
   setText,
-  text
+  text,
+  placeholder,
+  disabled,
 }: SelectProps) {
   const id = useId();
   const [isVisibleDropdown, setIsVisibleDropdown] = useState(false);
+
+  const _placeholder = selectedOption ? selectedOption.label : placeholder;
+  console.log("🚀 ~ selectedOption:", selectedOption)
+
   return (
     <div className="relative w-full">
       <input
         autoComplete="one-time-code"
         type="text"
         onFocus={() => setIsVisibleDropdown(true)}
-        onBlur={() => setTimeout(() => setIsVisibleDropdown(false), 50)}
+        onBlur={() => setTimeout(() => setIsVisibleDropdown(false), 100)}
         id={id}
-        className={`placeholder:text-custom-text w-full peer bg-transparent border-b border-b-custom-gray-light outline-none py-2 px-1 focus:border-b-custom-violet`}
+        className={`placeholder:text-custom-text w-full peer bg-transparent border-b border-b-custom-gray-light outline-none py-2 px-1 focus:border-b-custom-violet ${classNames(
+          {
+            "border-b-custom-violet": selectedOption,
+          }
+        )}`}
         onChange={(e) => setText(e.currentTarget.value)}
-        value={text}
-        placeholder={selectedOption?.label}
+        value={disabled ? _placeholder : text}
+        disabled={Boolean(disabled)}
+        placeholder={_placeholder}
       />
       <label
         htmlFor={id}
-        className={`absolute left-1 transition-all  ${classNames({
-          "-top-3": selectedOption || isVisibleDropdown,
-          "-translate-y-0": selectedOption || isVisibleDropdown,
-          "text-xs": selectedOption || isVisibleDropdown,
-          "-translate-y-1/2": !selectedOption && !isVisibleDropdown,
-          "top-1/2": !selectedOption && !isVisibleDropdown,
-        })}`}
+        className={`absolute left-1 transition-all -top-3 -translate-y-0 text-xs`}
       >
         {label}
       </label>

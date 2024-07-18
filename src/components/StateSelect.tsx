@@ -1,37 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
-import { Option, Select } from "./Select";
-import axios from "axios";
+import { Select } from "./Select";
 import { normalizeString } from "@/utils/normalizeString";
+import { Option } from "@/interfaces/Address";
 
-interface StateIBGE {
-  sigla: string;
-  nome: string;
-}
 interface StateSelectProps {
-  selectedState: Option;
+  selectedState: Option | null;
   setSelectedState: (state: Option | null) => void;
+  states: Option[];
 }
 export function StateSelect({
   selectedState,
   setSelectedState,
+  states: options,
 }: StateSelectProps) {
-  const [options, setOptions] = useState<Option[]>([]);
   const [text, setText] = useState("");
-  useEffect(() => {
-    async function get() {
-      const { data } = await axios.get<StateIBGE[]>(
-        "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
-      );
-      const _options: Option[] = data.map((x) => ({
-        key: x.sigla,
-        label: x.nome,
-      }));
-      _options.sort((a, b) => a.label.localeCompare(b.label));
-      setOptions(_options);
-    }
-    get();
-  }, []);
+
   function handelSelectState(option: Option | null) {
+    console.log("🚀 ~ handelSelectState ~ option:", option);
     setText("");
     setSelectedState(option);
   }
@@ -47,6 +32,7 @@ export function StateSelect({
       selectedOption={selectedState}
       setSelectedOption={handelSelectState}
       options={filterOptions}
+      placeholder="Selecione um estado"
       {...{
         text,
         setText,

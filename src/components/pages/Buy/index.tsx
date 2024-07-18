@@ -1,96 +1,123 @@
 import { BuyHeader } from "./BuyHeader";
-import { useState } from "react";
-import { ToggleSwitch } from "@/components/ToggleSwitch";
-import { Input } from "@/components/Input";
-import { Option } from "@/components/Select";
-import { StateSelect } from "@/components/StateSelect";
-import { CitySelect } from "@/components/CitySelect";
+import { AddressText, NewAddress } from "./NewAdress";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Address } from "@/interfaces/Address";
+import { MapPin, MarkerCircle, PencilLine, User } from "@phosphor-icons/react";
+
+const _address: Address = {
+  address: "",
+  addressIdentify: "",
+  cep: "",
+  city: null,
+  complement: "",
+  conciergeAllDay: false,
+  isFavorite: false,
+  neighborhood: "",
+  number: "",
+  phone: "",
+  recipientName: "",
+  referencePoint: "",
+  state: null,
+};
+const __address: Address = {
+  addressIdentify: "Casa",
+  recipientName: "Renan Fischer",
+  phone: "55999029974",
+  cep: "98910000",
+  address: "Rua Emilio Tesche",
+  neighborhood: "Oriental",
+  city: {
+    key: "4321808",
+    label: "Três de Maio",
+  },
+  state: {
+    key: "RS",
+    label: "Rio Grande do Sul",
+  },
+  referencePoint: "",
+  number: "782",
+  complement: "Casa",
+  isFavorite: true,
+  conciergeAllDay: true,
+};
 
 export function BuyPage() {
+  const [editingAddress, setIsEditingAddress] = useState<Address | null>(null);
+  const [addresses, setAddresses] = useState<Address[]>([__address]);
+  function addAddress(address: Address) {
+    console.log(address);
+    setAddresses((p) => [...p, address]);
+    setIsEditingAddress(null);
+  }
+
   return (
     <div className="flex flex-col h-screen">
       <BuyHeader />
-
       <div className="w-full py-10 mx-auto px-3 overflow-auto h-full">
-        <main className="max-w-[1120px] flex mx-auto">
-          <NewAddress />
-          <div className="w-1/5">pagamento</div>
+        <main className="max-w-[1120px] flex mx-auto  flex-col md:flex-row">
+          <div className="md:w-4/5">
+            {editingAddress ? (
+              <NewAddress editingAddress={editingAddress} addAddress={addAddress} />
+            ) : (
+              <div>
+                <AllAddress
+                  addresses={addresses}
+                  setEditingAddress={setIsEditingAddress}
+                />
+              </div>
+            )}
+          </div>
+          {/* <div className="w-1/5">pagamento</div> */}
         </main>
       </div>
     </div>
   );
 }
-interface Form {
-  state: Option;
-  city: Option;
+
+interface AllAddressProps {
+  setEditingAddress: Dispatch<SetStateAction<Address | null>>;
+  addresses: Address[];
 }
-
-function NewAddress() {
-  const [form, setForm] = useState({} as Form);
-
+function AllAddress({ setEditingAddress, addresses }: AllAddressProps) {
   return (
-    <div className="w-4/5">
-      <header>
-        <span>Cadastrar novo endereço</span>
+    <div>
+      <div className="flex gap-2 text-lg items-center border-b border-b-custom-gray-light text-custom-gray">
+        <MapPin />
+        <span>Escolha um endereço para entrega</span>
+      </div>
+      <div className="flex items-center flex-wrap gap-4 mt-4">
+        {addresses.map((address) => (
+          <AddressCard
+            address={address}
+            setIsEditing={() => setEditingAddress(address)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+interface AddressCardProps {
+  setIsEditing: () => void;
+  address: Address;
+}
+function AddressCard({ setIsEditing, address }: AddressCardProps) {
+  return (
+    <div className="max-w-64 w-full border border-custom-gray-light">
+      <header className="bg-custom-violet w-full text-white p-2">
+        Selecionado
       </header>
-      <div className="flex gap-4 w-full">
-        <FirstColumn />
-        <div className="w-3/5 flex flex-col gap-6">
-          <Input label="Identificação do endereço" />
-          <Input label="Nome do destinatário" />
-          <StateSelect
-            setSelectedState={(state) =>
-              state && setForm((p) => ({ ...p, state }))
-            }
-            selectedState={form.state}
-          />
-          <CitySelect
-            setSelectedCity={(city) => city && setForm((p) => ({ ...p, city }))}
-            selectedCity={form.city}
-            state={form.state?.key}
-          />
-          <Input label="CEP" />
-          <Input label="Endereço" />
-          <Input label="Número" />
-          <Input label="Complemento" />
-          <Input label="Bairro" />
-          <Input label="Telefone" />
+      <div className="p-4">
+        <div className="flex items-center text-xl justify-between">
+          <span>Renan</span>
+          <button onClick={setIsEditing}>
+            <PencilLine color="#B6116E" />
+          </button>
         </div>
-      </div>
-    </div>
-  );
-}
-function FirstColumn() {
-  return (
-    <div className="max-w-72 w-full flex flex-col gap-6">
-      <LocationCard />
-      <div className="flex flex-col gap-2">
-        <span className="text-xs text-custom-gray">
-          Deseja tornar esse endereço o seu favorito?
-        </span>
-        <ToggleSwitch />
-      </div>
-      <div className="flex flex-col gap-2">
-        <span className="text-xs text-custom-gray">
-          Sua portaria funciona 24 horas?
-        </span>
-        <ToggleSwitch />
-      </div>
-      <div>
-        <Input label="Ponto de referência" />
-      </div>
-    </div>
-  );
-}
-function LocationCard() {
-  return (
-    <div className="flex flex-col border border-custom-violet">
-      <div className="h-10 bg-custom-violet" />
-      <div className="flex flex-col p-4">
-        <span className="text-xl">Casa</span>
-        <span>
-          Rua Emilio Tesche, 782, Oriental - Três de Maio, RS - CEP 98910-000
-        </span>
+        <div className="flex items-center text-custom-gray-light font-light gap-1">
+          <User />
+          Renan Fischer
+        </div>
+        <AddressText address={address} />
       </div>
     </div>
   );

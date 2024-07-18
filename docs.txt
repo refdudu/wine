@@ -12,3 +12,9 @@
         [] - com um botão para conectar
     [] - botão de confirmar desconexão de usuário (popover)
  
+
+
+#Endereços
+Editar endereço
+botão para adicionar endereço
+Salvar endereços no firebase

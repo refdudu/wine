@@ -1,12 +1,17 @@
 import classNames from "classnames";
 import { ReactNode, useState } from "react";
 
-export function ToggleSwitch() {
-  const [isChecked, setIsChecked] = useState(false);
+interface ToggleSwitchProps {
+  isChecked: boolean;
+  setIsChecked: (isChecked: boolean) => void;
+}
+
+export function ToggleSwitch({ isChecked, setIsChecked }: ToggleSwitchProps) {
+//   const [isChecked, setIsChecked] = useState(false);
 
   return (
     <div
-      onClick={() => setIsChecked((p) => !p)}
+      onClick={() => setIsChecked(!isChecked)}
       className="max-w-20 bg-custom-background-light border border-custom-border flex items-center justify-center px-2 py-1 cursor-pointer"
     >
       <div

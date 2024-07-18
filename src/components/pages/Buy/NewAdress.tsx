@@ -1,0 +1,225 @@
+import { Button } from "@/components/Button";
+import { CitySelect } from "@/components/CitySelect";
+import { CpfInput } from "@/components/CpfInput";
+import { StateSelect } from "@/components/StateSelect";
+import { ToggleSwitch } from "@/components/ToggleSwitch";
+import { Check, Star } from "@phosphor-icons/react";
+import axios from "axios";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { Input } from "@/components/Input";
+import { Address, Option } from "@/interfaces/Address";
+
+interface NewAddressProps {
+  addAddress: (address: Address) => void;
+  editingAddress: Address;
+}
+export function NewAddress({ addAddress, editingAddress }: NewAddressProps) {
+  const [address, setAddress] = useState(editingAddress);
+  const [states, setStates] = useState<Option[]>([]);
+  useEffect(() => {
+    async function get() {
+    //   if (editingAddress.state) return;
+
+      const { data } = await axios.get<StateIBGE[]>(
+        "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
+      );
+      const _options: Option[] = data.map((x) => ({
+        key: x.sigla,
+        label: x.nome,
+      }));
+      _options.sort((a, b) => a.label.localeCompare(b.label));
+      setStates(_options);
+    }
+    get();
+  }, []);
+
+  function handleAddAddress() {
+    addAddress(address);
+  }
+    console.log("🚀 ~ handleAddAddress ~ address:", address)
+  useEffect(() => {
+    setAddress(editingAddress);
+  }, [editingAddress]);
+
+  return (
+    <>
+      <header className="pb-8 md:pb-2">
+        <span>Cadastrar novo endereço</span>
+      </header>
+      <div className="flex gap-4 w-full flex-col-reverse md:flex-row">
+        <div className="max-w-72 w-full flex flex-col gap-6">
+          <FirstColumn address={address} setAddress={setAddress} />
+        </div>
+        <div className="w-full md:w-3/5 flex flex-col gap-6">
+          <NewAddressForm
+            address={address}
+            setAddress={setAddress}
+            states={states}
+          />
+        </div>
+      </div>
+      <div className="flex py-4 gap-8 ">
+        <Button className="w-32 h-10  bg-white border text-custom-gray-light border-custom-gray-light">
+          Cancelar
+        </Button>
+        <Button
+          onClick={handleAddAddress}
+          className="w-52 bg-custom-violet text-white"
+        >
+          Salvar endereço <Check />
+        </Button>
+      </div>
+    </>
+  );
+}
+
+interface NewAddressFormProps {
+  setAddress: Dispatch<SetStateAction<Address>>;
+  address: Address;
+  states: Option[];
+}
+function NewAddressForm({ address, setAddress, states }: NewAddressFormProps) {
+  return (
+    <>
+      <Input
+        setText={(addressIdentify) =>
+          setAddress((p) => ({ ...p, addressIdentify }))
+        }
+        text={address.addressIdentify}
+        label="Identificação do endereço"
+      />
+      <Input
+        setText={(recipientName) =>
+          setAddress((p) => ({ ...p, recipientName }))
+        }
+        text={address.recipientName}
+        label="Nome do destinatário"
+      />
+      <Input
+        setText={(phone) => setAddress((p) => ({ ...p, phone }))}
+        text={address.phone}
+        label="Telefone"
+      />
+      <CpfInput states={states} setForm={setAddress} text={address.cep} />
+      <StateSelect
+        states={states}
+        setSelectedState={(state) => setAddress((p) => ({ ...p, state }))}
+        selectedState={address.state}
+      />
+      <CitySelect
+        setSelectedCity={(city) => city && setAddress((p) => ({ ...p, city }))}
+        selectedCity={address.city}
+        state={address.state?.key}
+      />
+      <Input
+        setText={(address) => setAddress((p) => ({ ...p, address }))}
+        text={address.address}
+        label="Endereço"
+      />
+      <Input
+        setText={(neighborhood) => setAddress((p) => ({ ...p, neighborhood }))}
+        text={address.neighborhood}
+        label="Bairro"
+      />
+      <Input
+        setText={(number) => setAddress((p) => ({ ...p, number }))}
+        text={address.number}
+        label="Número"
+      />
+      <Input
+        setText={(complement) => setAddress((p) => ({ ...p, complement }))}
+        text={address.complement}
+        label="Complemento"
+        beforeInputText={address.conciergeAllDay ? "Portaria 24h" : ""}
+      />
+    </>
+  );
+}
+interface StateIBGE {
+  sigla: string;
+  nome: string;
+}
+
+interface FirstColumnProps {
+  setAddress: Dispatch<SetStateAction<Address>>;
+  address: Address;
+}
+function FirstColumn({ address, setAddress }: FirstColumnProps) {
+  return (
+    <>
+      <div className="hidden md:flex flex-col border border-custom-violet">
+        <LocationCard address={address} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <span className="text-xs text-custom-gray">
+          Deseja tornar esse endereço o seu favorito?
+        </span>
+        <ToggleSwitch
+          isChecked={address.isFavorite}
+          setIsChecked={(isFavorite) =>
+            setAddress((p) => ({ ...p, isFavorite }))
+          }
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <span className="text-xs text-custom-gray">
+          Sua portaria funciona 24 horas?
+        </span>
+        <ToggleSwitch
+          isChecked={address.conciergeAllDay}
+          setIsChecked={(conciergeAllDay) =>
+            setAddress((p) => ({ ...p, conciergeAllDay }))
+          }
+        />
+      </div>
+      <div>
+        <Input
+          setText={(referencePoint) =>
+            setAddress((p) => ({ ...p, referencePoint }))
+          }
+          text={address.referencePoint || ""}
+          label="Ponto de referência"
+        />
+      </div>
+    </>
+  );
+}
+interface LocationCardProps {
+  address: Address;
+}
+function LocationCard({ address }: LocationCardProps) {
+  return (
+    <>
+      <div className="h-10 bg-custom-violet">
+        <div className="flex gap-2 items-center p-2 text-white">
+          <Star weight="fill" fill="#ffb400" />
+          Favorito
+        </div>
+      </div>
+      <div className="flex flex-col p-4">
+        <span className="text-xl">{address.addressIdentify}</span>
+        <AddressText address={address} />
+      </div>
+    </>
+  );
+}
+function formatCEP(cep: string) {
+  cep = cep.replace(/\D/g, "");
+  if (cep.length < 5) return cep;
+  return cep.substring(0, 5) + "-" + cep.substring(5, 8);
+}
+interface AddressTextProps {
+  address: Address;
+}
+export function AddressText({ address }: AddressTextProps) {
+  return (
+    <span>
+      {address.address && `${address.address},`}{" "}
+      {address.number && `${address.number},`}{" "}
+      {address.neighborhood && `${address.neighborhood} -`}{" "}
+      {address.city && `${address.city.label},`}{" "}
+      {address.state && `${address.state.key} -`}{" "}
+      {address.cep && `CEP ${formatCEP(address.cep)}`}
+    </span>
+  );
+}
