@@ -12,13 +12,18 @@ import { Address, Option } from "@/interfaces/Address";
 interface NewAddressProps {
   addAddress: (address: Address) => void;
   editingAddress: Address;
+  handleCancel: () => void;
 }
-export function NewAddress({ addAddress, editingAddress }: NewAddressProps) {
+export function NewAddress({
+  addAddress,
+  editingAddress,
+  handleCancel,
+}: NewAddressProps) {
   const [address, setAddress] = useState(editingAddress);
   const [states, setStates] = useState<Option[]>([]);
   useEffect(() => {
     async function get() {
-    //   if (editingAddress.state) return;
+      //   if (editingAddress.state) return;
 
       const { data } = await axios.get<StateIBGE[]>(
         "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
@@ -36,15 +41,17 @@ export function NewAddress({ addAddress, editingAddress }: NewAddressProps) {
   function handleAddAddress() {
     addAddress(address);
   }
-    console.log("🚀 ~ handleAddAddress ~ address:", address)
   useEffect(() => {
-    setAddress(editingAddress);
+    if (editingAddress) setAddress(editingAddress);
   }, [editingAddress]);
 
   return (
     <>
-      <header className="pb-8 md:pb-2">
+      <header className="pb-2  mb-6 md:pb-2 flex justify-between border-b border-custom-gray-light">
         <span>Cadastrar novo endereço</span>
+        <button className="text-red-500 text-xs">
+          <span>Excluir endereço</span>
+        </button>
       </header>
       <div className="flex gap-4 w-full flex-col-reverse md:flex-row">
         <div className="max-w-72 w-full flex flex-col gap-6">
@@ -59,7 +66,10 @@ export function NewAddress({ addAddress, editingAddress }: NewAddressProps) {
         </div>
       </div>
       <div className="flex py-4 gap-8 ">
-        <Button className="w-32 h-10  bg-white border text-custom-gray-light border-custom-gray-light">
+        <Button
+          onClick={handleCancel}
+          className="w-32 h-10  bg-white border text-custom-gray-light border-custom-gray-light"
+        >
           Cancelar
         </Button>
         <Button
@@ -100,7 +110,12 @@ function NewAddressForm({ address, setAddress, states }: NewAddressFormProps) {
         text={address.phone}
         label="Telefone"
       />
-      <CpfInput states={states} setForm={setAddress} text={address.cep} />
+      <CpfInput
+        address={address}
+        states={states}
+        setForm={setAddress}
+        text={address.cep}
+      />
       <StateSelect
         states={states}
         setSelectedState={(state) => setAddress((p) => ({ ...p, state }))}

@@ -7,12 +7,7 @@ interface InputProps {
   setText: (text: string) => void;
   beforeInputText?: string;
 }
-export function Input({
-  label,
-  setText,
-  text = "",
-  beforeInputText,
-}: InputProps) {
+export function Input({ label, setText, text, beforeInputText }: InputProps) {
   const id = useId();
   //   const [text, setText] = useState<string>("");
   const hasText = text.length > 0;

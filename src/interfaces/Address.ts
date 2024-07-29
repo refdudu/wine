@@ -1,4 +1,5 @@
 export interface Address {
+  id: number | null;
   state: Option | null;
   city: Option | null;
   phone: string;
@@ -14,6 +15,6 @@ export interface Address {
   conciergeAllDay: boolean;
 }
 export interface Option {
-    label: string;
-    key: string;
-  }
+  label: string;
+  key: string;
+}

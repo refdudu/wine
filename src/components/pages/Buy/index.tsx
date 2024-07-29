@@ -5,6 +5,7 @@ import { Address } from "@/interfaces/Address";
 import { MapPin, MarkerCircle, PencilLine, User } from "@phosphor-icons/react";
 
 const _address: Address = {
+  id: null,
   address: "",
   addressIdentify: "",
   cep: "",
@@ -20,6 +21,7 @@ const _address: Address = {
   state: null,
 };
 const __address: Address = {
+  id: 1,
   addressIdentify: "Casa",
   recipientName: "Renan Fischer",
   phone: "55999029974",
@@ -46,7 +48,11 @@ export function BuyPage() {
   const [addresses, setAddresses] = useState<Address[]>([__address]);
   function addAddress(address: Address) {
     console.log(address);
-    setAddresses((p) => [...p, address]);
+    if (address.id) {
+      setAddresses((p) => p.map((x) => (x.id === address.id ? address : x)));
+    } else {
+      setAddresses((p) => [...p, address]);
+    }
     setIsEditingAddress(null);
   }
 
@@ -57,7 +63,11 @@ export function BuyPage() {
         <main className="max-w-[1120px] flex mx-auto  flex-col md:flex-row">
           <div className="md:w-4/5">
             {editingAddress ? (
-              <NewAddress editingAddress={editingAddress} addAddress={addAddress} />
+              <NewAddress
+                handleCancel={() => setIsEditingAddress(null)}
+                editingAddress={editingAddress}
+                addAddress={addAddress}
+              />
             ) : (
               <div>
                 <AllAddress
@@ -89,7 +99,10 @@ function AllAddress({ setEditingAddress, addresses }: AllAddressProps) {
         {addresses.map((address) => (
           <AddressCard
             address={address}
-            setIsEditing={() => setEditingAddress(address)}
+            setIsEditing={() => {
+              setEditingAddress(address);
+              console.log(address);
+            }}
           />
         ))}
       </div>

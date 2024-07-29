@@ -16,7 +16,6 @@ export function StateSelect({
   const [text, setText] = useState("");
 
   function handelSelectState(option: Option | null) {
-    console.log("🚀 ~ handelSelectState ~ option:", option);
     setText("");
     setSelectedState(option);
   }

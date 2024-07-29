@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { Option, Select } from "./Select";
+import { Select } from "./Select";
 import axios from "axios";
 import { normalizeString } from "@/utils/normalizeString";
+import { Option } from "@/interfaces/Address";
 
 interface CityIBGE {
   id: string;
