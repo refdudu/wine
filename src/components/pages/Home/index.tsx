@@ -5,7 +5,10 @@ import { LargeLayout } from "./LargeLayout";
 export function Home() {
   return (
     <Layout>
-      <div className="w-full py-10 mx-auto px-3 overflow-auto h-full" id='products-grid'>
+      <div
+        className="w-full py-10 mx-auto px-3 overflow-auto h-full"
+        id="products-grid"
+      >
         <div className="max-w-[1120px] flex justify-center mx-auto">
           <Content />
         </div>
@@ -19,19 +22,3 @@ function Content() {
   if (isMobile) return <MobileLayout />;
   return <LargeLayout />;
 }
-
-// export const getStaticProps: GetStaticProps<StaticProps> = async () => {
-//   const apiProductsService = new ApiProductService();
-//   const initialData = await apiProductsService.getProducts({
-//     betweenPrices: "",
-//     pageIndex: 0,
-//     pageSize: 9,
-//     searchText: "",
-//   });
-//   return {
-//     props: {
-//       initialData,
-//     },
-//     revalidate: false,
-//   };
-// };

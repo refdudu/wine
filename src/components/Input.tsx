@@ -1,16 +1,37 @@
 import classNames from "classnames";
-import { useId, useState } from "react";
+import { ChangeEvent, useId } from "react";
+import InputMask from "react-input-mask";
 
 interface InputProps {
   label: string;
   text: string;
   setText: (text: string) => void;
   beforeInputText?: string;
+  mask?: string;
 }
-export function Input({ label, setText, text, beforeInputText }: InputProps) {
+export function Input({
+  label,
+  setText,
+  text,
+  beforeInputText,
+  mask,
+}: InputProps) {
   const id = useId();
   //   const [text, setText] = useState<string>("");
-  const hasText = text.length > 0;
+  const hasText = text?.length > 0;
+  const inputProps = {
+    autoComplete: "one-time-code",
+    id,
+    className: `flex-1 peer bg-transparent border-b border-b-custom-gray-light outline-none py-2 px-1 focus:border-b-custom-violet ${classNames(
+      {
+        "border-b-custom-violet": hasText,
+      }
+    )}`,
+    value: text,
+    onChange: (e: ChangeEvent<HTMLInputElement>) =>
+      setText(e.currentTarget.value),
+  };
+
   return (
     <div className="relative flex w-full min">
       {beforeInputText && (
@@ -18,17 +39,11 @@ export function Input({ label, setText, text, beforeInputText }: InputProps) {
           <span className="">Portaria 24h</span>
         </div>
       )}
-      <input
-        autoComplete="one-time-code"
-        id={id}
-        className={`flex-1 peer bg-transparent border-b border-b-custom-gray-light outline-none py-2 px-1 focus:border-b-custom-violet ${classNames(
-          {
-            "border-b-custom-violet": hasText,
-          }
-        )}`}
-        value={text}
-        onChange={(e) => setText(e.currentTarget.value)}
-      />
+      {mask ? (
+        <InputMask maskChar="" mask={mask} {...inputProps} />
+      ) : (
+        <input {...inputProps} />
+      )}
       <label
         htmlFor={id}
         className={`absolute left-1  transition-all peer-focus:-top-3 peer-focus:-translate-y-0 peer-focus:text-xs ${classNames(

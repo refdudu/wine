@@ -24,10 +24,7 @@ export function Select({
 }: SelectProps) {
   const id = useId();
   const [isVisibleDropdown, setIsVisibleDropdown] = useState(false);
-
   const _placeholder = selectedOption ? selectedOption.label : placeholder;
-  console.log("🚀 ~ selectedOption:", selectedOption)
-
   return (
     <div className="relative w-full">
       <input

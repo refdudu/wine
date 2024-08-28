@@ -11,16 +11,12 @@ const neoSansBold = localFont({
   weight: "700",
 });
 import type { AppProps } from "next/app";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ServicesProvider } from "@/contexts/ServicesContext";
-import { SessionProvider } from "@/contexts/SessionContext";
-import { ShoppingCartProvider } from "@/contexts/ShoppingCartContext";
+import { QueryClient } from "react-query";
 
 const lato = Lato({
   weight: ["700", "400"],
   preload: false,
 });
-const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -36,15 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
             ${neoSansBold.style.fontFamily};
         }
       `}</style>
-      <QueryClientProvider client={queryClient}>
-        <ServicesProvider>
-          <SessionProvider>
-            <ShoppingCartProvider>
-              <Component {...pageProps} />
-            </ShoppingCartProvider>
-          </SessionProvider>
-        </ServicesProvider>
-      </QueryClientProvider>
+      <Component {...pageProps} />
     </>
   );
 }

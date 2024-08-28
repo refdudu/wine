@@ -1,5 +1,5 @@
-export interface Address {
-  id: number | null;
+export interface AddressI {
+  id: string | null;
   state: Option | null;
   city: Option | null;
   phone: string;

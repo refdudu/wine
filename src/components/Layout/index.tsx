@@ -2,6 +2,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { Header } from "./Header";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ShoppingCartProvider } from "@/contexts/ShoppingCartContext";
+import { MasterContext } from "@/contexts/MasterContext";
 interface LayoutProps {
   children: React.ReactNode;
 }
@@ -13,13 +14,15 @@ export function Layout({ children }: LayoutProps) {
     setIsMobile(window.innerWidth < 1120);
   }, []);
   return (
-    <LayoutContext.Provider value={{ isMobile }}>
-      <div className="flex flex-col h-screen">
-        <Header />
-        {children}
-        <ReactQueryDevtools />
-      </div>
-    </LayoutContext.Provider>
+    <MasterContext>
+      <LayoutContext.Provider value={{ isMobile }}>
+        <div className="flex flex-col h-screen">
+          <Header />
+          {children}
+          <ReactQueryDevtools />
+        </div>
+      </LayoutContext.Provider>
+    </MasterContext>
   );
 }
 export const useLayout = () => useContext(LayoutContext);

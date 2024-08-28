@@ -1,23 +1,28 @@
 import { Button } from "@/components/Button";
 import { CitySelect } from "@/components/CitySelect";
-import { CpfInput } from "@/components/CpfInput";
+import { CepInput } from "@/components/CepInput";
 import { StateSelect } from "@/components/StateSelect";
 import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { Check, Star } from "@phosphor-icons/react";
 import axios from "axios";
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, Dispatch, SetStateAction, useId } from "react";
 import { Input } from "@/components/Input";
-import { Address, Option } from "@/interfaces/Address";
+import { AddressI, Option } from "@/interfaces/Address";
 
 interface NewAddressProps {
-  addAddress: (address: Address) => void;
-  editingAddress: Address;
+  addAddress: (address: AddressI) => void;
+  editingAddress: AddressI;
   handleCancel: () => void;
+  deleteAddress: () => void;
+  //   canDeleteAddress: boolean;
+  totalAddresses: number;
 }
 export function NewAddress({
   addAddress,
   editingAddress,
   handleCancel,
+  deleteAddress,
+  totalAddresses,
 }: NewAddressProps) {
   const [address, setAddress] = useState(editingAddress);
   const [states, setStates] = useState<Option[]>([]);
@@ -38,9 +43,6 @@ export function NewAddress({
     get();
   }, []);
 
-  function handleAddAddress() {
-    addAddress(address);
-  }
   useEffect(() => {
     if (editingAddress) setAddress(editingAddress);
   }, [editingAddress]);
@@ -49,9 +51,11 @@ export function NewAddress({
     <>
       <header className="pb-2  mb-6 md:pb-2 flex justify-between border-b border-custom-gray-light">
         <span>Cadastrar novo endereço</span>
-        <button className="text-red-500 text-xs">
-          <span>Excluir endereço</span>
-        </button>
+        {address.id && totalAddresses > 1 && (
+          <button onClick={deleteAddress} className="text-red-500 text-xs">
+            <span>Excluir endereço</span>
+          </button>
+        )}
       </header>
       <div className="flex gap-4 w-full flex-col-reverse md:flex-row">
         <div className="max-w-72 w-full flex flex-col gap-6">
@@ -65,16 +69,18 @@ export function NewAddress({
           />
         </div>
       </div>
-      <div className="flex py-4 gap-8 ">
+      <div className="flex py-4 gap-8 justify-end ">
+        {totalAddresses > 0 && (
+          <Button
+            onClick={handleCancel}
+            className="max-w-32 h-10  bg-white border text-custom-gray-light border-custom-gray-light"
+          >
+            Cancelar
+          </Button>
+        )}
         <Button
-          onClick={handleCancel}
-          className="w-32 h-10  bg-white border text-custom-gray-light border-custom-gray-light"
-        >
-          Cancelar
-        </Button>
-        <Button
-          onClick={handleAddAddress}
-          className="w-52 bg-custom-violet text-white"
+          onClick={() => addAddress(address)}
+          className="max-w-52 bg-custom-violet text-white"
         >
           Salvar endereço <Check />
         </Button>
@@ -84,8 +90,8 @@ export function NewAddress({
 }
 
 interface NewAddressFormProps {
-  setAddress: Dispatch<SetStateAction<Address>>;
-  address: Address;
+  setAddress: Dispatch<SetStateAction<AddressI>>;
+  address: AddressI;
   states: Option[];
 }
 function NewAddressForm({ address, setAddress, states }: NewAddressFormProps) {
@@ -106,11 +112,12 @@ function NewAddressForm({ address, setAddress, states }: NewAddressFormProps) {
         label="Nome do destinatário"
       />
       <Input
+        mask="(99) 99999-9999"
         setText={(phone) => setAddress((p) => ({ ...p, phone }))}
         text={address.phone}
         label="Telefone"
       />
-      <CpfInput
+      <CepInput
         address={address}
         states={states}
         setForm={setAddress}
@@ -139,6 +146,7 @@ function NewAddressForm({ address, setAddress, states }: NewAddressFormProps) {
       <Input
         setText={(number) => setAddress((p) => ({ ...p, number }))}
         text={address.number}
+        mask="99999999999"
         label="Número"
       />
       <Input
@@ -156,8 +164,8 @@ interface StateIBGE {
 }
 
 interface FirstColumnProps {
-  setAddress: Dispatch<SetStateAction<Address>>;
-  address: Address;
+  setAddress: Dispatch<SetStateAction<AddressI>>;
+  address: AddressI;
 }
 function FirstColumn({ address, setAddress }: FirstColumnProps) {
   return (
@@ -200,16 +208,18 @@ function FirstColumn({ address, setAddress }: FirstColumnProps) {
   );
 }
 interface LocationCardProps {
-  address: Address;
+  address: AddressI;
 }
 function LocationCard({ address }: LocationCardProps) {
   return (
     <>
       <div className="h-10 bg-custom-violet">
-        <div className="flex gap-2 items-center p-2 text-white">
-          <Star weight="fill" fill="#ffb400" />
-          Favorito
-        </div>
+        {address.isFavorite && (
+          <div className="flex gap-2 items-center p-2 text-white">
+            <Star weight="fill" fill="#ffb400" />
+            Favorito
+          </div>
+        )}
       </div>
       <div className="flex flex-col p-4">
         <span className="text-xl">{address.addressIdentify}</span>
@@ -224,7 +234,7 @@ function formatCEP(cep: string) {
   return cep.substring(0, 5) + "-" + cep.substring(5, 8);
 }
 interface AddressTextProps {
-  address: Address;
+  address: AddressI;
 }
 export function AddressText({ address }: AddressTextProps) {
   return (

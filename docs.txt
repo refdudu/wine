@@ -7,7 +7,7 @@
 
 # Conectar usuário, mostrar que está conectado
     [x] - Exibir foto do usuário
-    [] - Drawer de carrinho de compras
+    [x] - Drawer de carrinho de compras
         [x] - mensagem que não está conectado
         [] - com um botão para conectar
     [] - botão de confirmar desconexão de usuário (popover)
@@ -18,3 +18,5 @@
 Editar endereço
 botão para adicionar endereço
 Salvar endereços no firebase
+
+Quando coloca o CPF errado fica undefined
