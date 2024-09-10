@@ -1,7 +1,10 @@
 import "rc-drawer/assets/index.css";
 import { type Dispatch, type SetStateAction, useMemo } from "react";
 import { Drawer } from "../Drawer";
-import { useShoppingCart } from "@/contexts/ShoppingCartContext";
+import {
+  useShoppingCart,
+  useTotalShoppingCartProducts,
+} from "@/contexts/ShoppingCartContext";
 import { BackIcon } from "@/utils/icons";
 import Image from "next/image";
 import { formatPrice } from "@/utils/formatPrice";
@@ -93,14 +96,7 @@ function Main() {
   );
 }
 function Footer() {
-  const { shoppingCartProducts: products } = useShoppingCart();
-  const totalProductsPrice = useMemo(
-    () =>
-      formatPrice(
-        products.map((x) => x.amount * x.price).reduce((pv, cv) => pv + cv, 0)
-      ),
-    [products]
-  );
+  const totalProductsPrice = useTotalShoppingCartProducts();
   return (
     <header className="w-full flex items-center p-4 bg-white flex-col gap-4 ">
       <div className="flex items-center justify-between w-full">
@@ -109,10 +105,9 @@ function Footer() {
           {totalProductsPrice}
         </span>
       </div>
-      <Button
-        href="/buy"
-        className="w-full bg-custom-green text-white"
-      >Finalizar</Button>
+      <Button href="/buy" className="w-full bg-custom-green text-white">
+        Finalizar
+      </Button>
     </header>
   );
 }

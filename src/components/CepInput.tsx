@@ -20,7 +20,7 @@ interface CpfResponse {
 export function CepInput({ setForm, text, states, address }: CpfInputProps) {
   useEffect(() => {
     async function getCep() {
-      if (text.length < 9 || address.id || states.length === 0) return;
+      if (text?.length < 9 || address.id || states.length === 0) return;
       try {
         const onlyNumbers = text.replace(/\D/g, '');
         console.log("🚀 ~ getCep ~ onlyNumbers:", onlyNumbers)

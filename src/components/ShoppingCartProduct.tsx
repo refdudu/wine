@@ -22,11 +22,15 @@ export function ShoppingCartProduct({
   return (
     <div
       key={product.id}
-      className={`flex gap-4 p-4  border-custom-gray-light ${classNames({
+      className={`flex gap-4 items-center p-4  border-custom-gray-light ${classNames({
         "border-b": index !== array.length - 1,
       })}`}
     >
-      <img className="w-full max-w-16" src={product.image} alt={product.name} />
+      <img
+        className="w-full max-w-16 h-24 object-contain"
+        src={product.image}
+        alt={product.name}
+      />
       <div className="flex-1 p-4 flex flex-col justify-between gap-4">
         <div className="flex justify-between items-center">
           <span>{product.name}</span>

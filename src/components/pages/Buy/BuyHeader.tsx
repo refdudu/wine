@@ -10,8 +10,14 @@ import {
 } from "@phosphor-icons/react";
 import classNames from "classnames";
 import Link from "next/link";
+import {
+  useShoppingCart,
+  useTotalShoppingCartProducts,
+} from "@/contexts/ShoppingCartContext";
 
 export function BuyHeader() {
+  const { shoppingCartProducts } = useShoppingCart();
+  const totalProducts = useTotalShoppingCartProducts();
   return (
     <header className="text-custom-gray bg-white flex items-center text-lg h-[88px] font-neo w-full shadow-md">
       <div className="flex justify-between items-center w-full max-w-[1120px] m-auto px-3">
@@ -20,12 +26,20 @@ export function BuyHeader() {
             <Image alt="Wine" width={100} height={28} src={WineLogo} />
           </Link>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="lg:hidden flex flex-col justify-end items-end">
+          <span className="text-custom-subtitle">
+            {shoppingCartProducts.length} Itens
+          </span>
+          <span>
+            <span className="text-custom-violet">{totalProducts}</span>
+          </span>
+        </div>
+        <div className="hidden lg:flex items-center gap-4">
           <Step isCurrent Icon={MapPin} label="ENDEREÇO" />
           <CaretRight size={36} />
           <Step Icon={CreditCard} label="PAGAMENTO" />
         </div>
-        <div></div>
+        <div className="hidden lg:flex"></div>
       </div>
     </header>
   );

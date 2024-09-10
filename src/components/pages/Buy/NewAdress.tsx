@@ -8,12 +8,13 @@ import axios from "axios";
 import { useState, useEffect, Dispatch, SetStateAction, useId } from "react";
 import { Input } from "@/components/Input";
 import { AddressI, Option } from "@/interfaces/Address";
+import { Spin } from "@/components/Spin";
 
 interface NewAddressProps {
-  addAddress: (address: AddressI) => void;
+  addAddress: (address: AddressI) => Promise<void>;
   editingAddress: AddressI;
   handleCancel: () => void;
-  deleteAddress: () => void;
+  deleteAddress: () => Promise<void>;
   //   canDeleteAddress: boolean;
   totalAddresses: number;
 }
@@ -26,10 +27,15 @@ export function NewAddress({
 }: NewAddressProps) {
   const [address, setAddress] = useState(editingAddress);
   const [states, setStates] = useState<Option[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleChangeAddress() {
+    setIsLoading(true);
+    await addAddress(address);
+    setIsLoading(false);
+  }
   useEffect(() => {
     async function get() {
-      //   if (editingAddress.state) return;
-
       const { data } = await axios.get<StateIBGE[]>(
         "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
       );
@@ -54,6 +60,7 @@ export function NewAddress({
         {address.id && totalAddresses > 1 && (
           <button onClick={deleteAddress} className="text-red-500 text-xs">
             <span>Excluir endereço</span>
+            <Spin/>
           </button>
         )}
       </header>
@@ -79,10 +86,12 @@ export function NewAddress({
           </Button>
         )}
         <Button
-          onClick={() => addAddress(address)}
+          isLoading={isLoading}
+          icon={<Check />}
+          onClick={handleChangeAddress}
           className="max-w-52 bg-custom-violet text-white"
         >
-          Salvar endereço <Check />
+          Salvar endereço
         </Button>
       </div>
     </>

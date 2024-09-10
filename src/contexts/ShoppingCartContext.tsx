@@ -1,9 +1,11 @@
 import { ShoppingCartDrawer } from "@/components/ShoppingCartDrawer";
 import type { ProductI } from "@/interfaces/ProductI";
 import type { ShoppingCartProductI } from "@/interfaces/ProductShoppingCartI";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useSession } from "./SessionContext";
 import { useServices } from "./ServicesContext";
+import { formatPrice } from "@/utils/formatPrice";
+import { useMediaQuery } from "react-responsive";
 
 interface ShoppingCartContextProps {
   shoppingCartProducts: ShoppingCartProductI[];
@@ -56,7 +58,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 
   async function handleAddInShoppingCart(product: ProductI) {
     if (!user) return;
-    
+
     try {
       await shoppingCartService.add(product.id);
       setShoppingCartProducts((p) => {
@@ -69,7 +71,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   }
   async function handleRemoveFromShoppingCart(productId: string) {
     if (!user) return;
-    
+
     try {
       await shoppingCartService.remove(productId);
       setShoppingCartProducts((p) => p.filter((x) => x.id !== productId));
@@ -78,7 +80,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   }
   async function changeProductAmount(productId: string, amount: number) {
     if (!user) return;
-    
+
     if (amount < 1) {
       return handleRemoveFromShoppingCart(productId);
     }
@@ -89,6 +91,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       );
     } catch {}
   }
+
   function handleOpenDrawer() {
     // if (products.length > 0)
     setIsVisibleDrawer(true);
@@ -127,3 +130,14 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 }
 
 export const useShoppingCart = () => useContext(ShoppingCartContext);
+export const useTotalShoppingCartProducts = () => {
+  const { shoppingCartProducts } = useShoppingCart();
+  function getTotalPrice() {
+    return formatPrice(
+      shoppingCartProducts
+        .map((x) => x.amount * x.price)
+        .reduce((pv, cv) => pv + cv, 0)
+    );
+  }
+  return useMemo(getTotalPrice, [shoppingCartProducts]);
+};
