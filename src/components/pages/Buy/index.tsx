@@ -89,10 +89,12 @@ function BuyPageContent({
               className="w-2/6  h-full shadow  hidden lg:flex flex-col"
             >
               <ShoppingCartItensHeader />
-              <div className="border border-custom-gray-light">
+              <div className="border border-custom-gray-light border-b-transparent">
                 <ShoppingCartItens />
               </div>
-              <ShoppingCartItensFooter />
+              <div className="border border-custom-gray-light ">
+                <ShoppingCartItensFooter />
+              </div>
             </div>
           </main>
         </div>

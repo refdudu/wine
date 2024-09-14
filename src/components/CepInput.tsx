@@ -48,8 +48,8 @@ export function CepInput({ setForm, text, states, address }: CpfInputProps) {
   return (
     <Input
       mask="99999-999"
-      setText={(cep) => setForm((p) => ({ ...p, cep }))}
-      text={text}
+      onChange={(cep) => setForm((p) => ({ ...p, cep }))}
+      value={text}
       label="CEP"
     />
   );

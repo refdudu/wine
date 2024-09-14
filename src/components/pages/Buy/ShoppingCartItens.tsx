@@ -20,7 +20,7 @@ export function ShoppingCartItensHeader() {
 export function ShoppingCartItensFooter() {
   const total = useTotalShoppingCartProducts();
   return (
-    <footer className="flex justify-between items-center border-custom-gray-light border-t  shadow h-12 p-4">
+    <footer className="flex justify-between items-center bg-custom-background-light p-4">
       <span className="text-lg text-custom-text">Total</span>
       <span className="text-2xl text-custom-violet">{total}</span>
     </footer>

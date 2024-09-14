@@ -4,21 +4,25 @@ import InputMask from "react-input-mask";
 
 interface InputProps {
   label: string;
-  text: string;
-  setText: (text: string) => void;
   beforeInputText?: string;
   mask?: string;
+  //   text: string;
+  //   setText: (text: string) => void;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: ChangeEvent<HTMLInputElement>) => void;
+  name?: string;
 }
 export function Input({
   label,
-  setText,
-  text,
   beforeInputText,
   mask,
+  value,
+  ...props
 }: InputProps) {
   const id = useId();
   //   const [text, setText] = useState<string>("");
-  const hasText = text?.length > 0;
+  const hasText = Boolean(value);
   const inputProps = {
     autoComplete: "one-time-code",
     id,
@@ -27,9 +31,8 @@ export function Input({
         "border-b-custom-violet": hasText,
       }
     )}`,
-    value: text,
-    onChange: (e: ChangeEvent<HTMLInputElement>) =>
-      setText(e.currentTarget.value),
+    value,
+    ...props,
   };
 
   return (

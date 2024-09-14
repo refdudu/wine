@@ -10,6 +10,10 @@ import { Input } from "@/components/Input";
 import { AddressI, Option } from "@/interfaces/Address";
 import { Spin } from "@/components/Spin";
 
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+
 interface NewAddressProps {
   addAddress: (address: AddressI) => Promise<void>;
   editingAddress: AddressI;
@@ -58,9 +62,16 @@ export function NewAddress({
       <header className="pb-2  mb-6 md:pb-2 flex justify-between border-b border-custom-gray-light">
         <span>Cadastrar novo endereço</span>
         {address.id && totalAddresses > 1 && (
-          <button onClick={deleteAddress} className="text-red-500 text-xs">
+          <button
+            onClick={deleteAddress}
+            className="text-red-500 text-xs flex gap-2"
+          >
             <span>Excluir endereço</span>
-            <Spin/>
+            <Spin
+              color="rgb(239 68 68 / var(--tw-text-opacity))"
+              size={16}
+              borderWidth={3}
+            />
           </button>
         )}
       </header>
@@ -68,7 +79,7 @@ export function NewAddress({
         <div className="max-w-72 w-full flex flex-col gap-6">
           <FirstColumn address={address} setAddress={setAddress} />
         </div>
-        <div className="w-full md:w-3/5 flex flex-col gap-6">
+        <div className="w-full md:w-3/5">
           <NewAddressForm
             address={address}
             setAddress={setAddress}
@@ -103,29 +114,40 @@ interface NewAddressFormProps {
   address: AddressI;
   states: Option[];
 }
+type FormValues = {
+  addressIdentify: string;
+  recipientName: string;
+  phone: string;
+  cep: string;
+  state: string;
+  city: string;
+  neighborhood: string;
+  number: string;
+  complement: string;
+};
+const validationSchema = Yup.object().shape({
+  addressIdentify: Yup.string().required(
+    "O campo Identificação do Endereço é obrigatório"
+  ),
+  recipientName: Yup.string().required(
+    "O campo Nome do Destinatário é obrigatório"
+  ),
+  phone: Yup.string().required("O campo Telefone é obrigatório"),
+  cep: Yup.string().required("O campo CEP é obrigatório"),
+  state: Yup.string().required("O campo Estado é obrigatório"),
+  city: Yup.string().required("O campo Cidade é obrigatório"),
+  neighborhood: Yup.string().required("O campo Bairro é obrigatório"),
+  number: Yup.string().required("O campo Número é obrigatório"),
+  complement: Yup.string().required("O campo Complemento é obrigatório"),
+  address: Yup.string().required("O campo Endereço é obrigatório"),
+});
+
 function NewAddressForm({ address, setAddress, states }: NewAddressFormProps) {
   return (
-    <>
-      <Input
-        setText={(addressIdentify) =>
-          setAddress((p) => ({ ...p, addressIdentify }))
-        }
-        text={address.addressIdentify}
-        label="Identificação do endereço"
-      />
-      <Input
-        setText={(recipientName) =>
-          setAddress((p) => ({ ...p, recipientName }))
-        }
-        text={address.recipientName}
-        label="Nome do destinatário"
-      />
-      <Input
-        mask="(99) 99999-9999"
-        setText={(phone) => setAddress((p) => ({ ...p, phone }))}
-        text={address.phone}
-        label="Telefone"
-      />
+    <div className="flex flex-col gap-6">
+      <Input label="Identificação do endereço" />
+      <Input label="Nome do destinatário" />
+      <Input mask="(99) 99999-9999" label="Telefone" />
       <CepInput
         address={address}
         states={states}
@@ -142,29 +164,14 @@ function NewAddressForm({ address, setAddress, states }: NewAddressFormProps) {
         selectedCity={address.city}
         state={address.state?.key}
       />
+      <Input label="Endereço" />
+      <Input label="Bairro" />
+      <Input mask="99999999999" label="Número" />
       <Input
-        setText={(address) => setAddress((p) => ({ ...p, address }))}
-        text={address.address}
-        label="Endereço"
-      />
-      <Input
-        setText={(neighborhood) => setAddress((p) => ({ ...p, neighborhood }))}
-        text={address.neighborhood}
-        label="Bairro"
-      />
-      <Input
-        setText={(number) => setAddress((p) => ({ ...p, number }))}
-        text={address.number}
-        mask="99999999999"
-        label="Número"
-      />
-      <Input
-        setText={(complement) => setAddress((p) => ({ ...p, complement }))}
-        text={address.complement}
         label="Complemento"
         beforeInputText={address.conciergeAllDay ? "Portaria 24h" : ""}
       />
-    </>
+    </div>
   );
 }
 interface StateIBGE {
@@ -206,10 +213,10 @@ function FirstColumn({ address, setAddress }: FirstColumnProps) {
       </div>
       <div>
         <Input
-          setText={(referencePoint) =>
-            setAddress((p) => ({ ...p, referencePoint }))
-          }
-          text={address.referencePoint || ""}
+          //   setText={(referencePoint) =>
+          //     setAddress((p) => ({ ...p, referencePoint }))
+          //   }
+          //   text={address.referencePoint || ""}
           label="Ponto de referência"
         />
       </div>
