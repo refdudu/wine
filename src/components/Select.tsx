@@ -60,6 +60,7 @@ export function Select({
       >
         {options.map((x) => (
           <button
+            key={x.key}
             type="button"
             className=""
             onClick={() => setSelectedOption(x)}

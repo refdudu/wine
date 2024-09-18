@@ -18,7 +18,6 @@ function OnlyAuthContent({ children }: OnlyAuthContainerProps) {
   const { isAuthorized, isLoadingAuthorization } = useSession();
   const { push } = useRouter();
   useEffect(() => {
-    console.log(isLoadingAuthorization, isAuthorized);
     if (!isLoadingAuthorization && !isAuthorized) {
       push("/");
     }

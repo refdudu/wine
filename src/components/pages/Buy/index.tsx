@@ -134,6 +134,7 @@ function AllAddress({
       <div className="mt-4 flex flex-col lg:grid grid-cols-2 gap-4">
         {addresses.map((address) => (
           <AddressCard
+            key={address.id}
             selectAddress={() => setSelectedAddressId(address.id || "")}
             isSelected={selectedAddressId === address.id}
             address={address}

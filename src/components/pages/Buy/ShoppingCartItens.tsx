@@ -37,6 +37,7 @@ export function ShoppingCartItens() {
     <main className="max-h-[500px] lg:max-h-96 overflow-auto ">
       {products.map((product, index, array) => (
         <ShoppingCartProduct
+          key={product.id}
           array={array}
           changeProductAmount={changeProductAmount}
           handleRemove={handleRemoveFromShoppingCart}

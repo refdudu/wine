@@ -13,6 +13,7 @@ import { Spin } from "@/components/Spin";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { useQuery } from "react-query";
 
 interface NewAddressProps {
   addAddress: (address: AddressI) => Promise<void>;
@@ -29,17 +30,8 @@ export function NewAddress({
   deleteAddress,
   totalAddresses,
 }: NewAddressProps) {
-  const [address, setAddress] = useState(editingAddress);
-  const [states, setStates] = useState<Option[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  async function handleChangeAddress() {
-    setIsLoading(true);
-    await addAddress(address);
-    setIsLoading(false);
-  }
-  useEffect(() => {
-    async function get() {
+  const { data: states, isFetching } = useQuery<Option[]>({
+    queryFn: async () => {
       const { data } = await axios.get<StateIBGE[]>(
         "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
       );
@@ -48,15 +40,24 @@ export function NewAddress({
         label: x.nome,
       }));
       _options.sort((a, b) => a.label.localeCompare(b.label));
-      setStates(_options);
-    }
-    get();
-  }, []);
+      return _options;
+    },
+    queryKey: ["states"],
+  });
+  const [address, setAddress] = useState(editingAddress);
+  const [_isLoading, setIsLoading] = useState(false);
+
+  async function handleChangeAddress() {
+    setIsLoading(true);
+    await addAddress(address);
+    ("");
+    setIsLoading(false);
+  }
 
   useEffect(() => {
     if (editingAddress) setAddress(editingAddress);
   }, [editingAddress]);
-
+  const isLoading = isFetching || _isLoading;
   return (
     <>
       <header className="pb-2  mb-6 md:pb-2 flex justify-between border-b border-custom-gray-light">
@@ -83,7 +84,7 @@ export function NewAddress({
           <NewAddressForm
             address={address}
             setAddress={setAddress}
-            states={states}
+            states={states || []}
           />
         </div>
       </div>
