@@ -1,28 +1,29 @@
 import classNames from "classnames";
-import { ChangeEvent, useId } from "react";
+import { ChangeEvent, InputHTMLAttributes, useId } from "react";
 import InputMask from "react-input-mask";
 
-interface InputProps {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   beforeInputText?: string;
   mask?: string;
-  //   text: string;
-  //   setText: (text: string) => void;
-  value?: string;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (e: ChangeEvent<HTMLInputElement>) => void;
-  name?: string;
+  onChangeText?: (text: string) => void;
 }
 export function Input({
   label,
   beforeInputText,
   mask,
   value,
+  onChangeText,
+  onChange,
   ...props
 }: InputProps) {
   const id = useId();
   //   const [text, setText] = useState<string>("");
   const hasText = Boolean(value);
+  function _onChange(e: ChangeEvent<HTMLInputElement>) {
+    if (onChangeText) return onChangeText(e.currentTarget.value);
+    if (onChange) return onChange(e);
+  }
   const inputProps = {
     autoComplete: "one-time-code",
     id,
@@ -32,6 +33,7 @@ export function Input({
       }
     )}`,
     value,
+    onChange: _onChange,
     ...props,
   };
 
@@ -45,7 +47,7 @@ export function Input({
       {mask ? (
         <InputMask maskChar="" mask={mask} {...inputProps} />
       ) : (
-        <input {...inputProps} />
+        <input {...inputProps} onChange={(e) => console.log(e)} />
       )}
       <label
         htmlFor={id}

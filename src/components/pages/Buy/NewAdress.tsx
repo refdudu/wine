@@ -4,23 +4,26 @@ import { CepInput } from "@/components/CepInput";
 import { StateSelect } from "@/components/StateSelect";
 import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { Check, Star } from "@phosphor-icons/react";
-import axios from "axios";
-import { useState, useEffect, Dispatch, SetStateAction, useId } from "react";
+import {
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+  ButtonHTMLAttributes,
+} from "react";
 import { Input } from "@/components/Input";
 import { AddressI, Option } from "@/interfaces/Address";
 import { Spin } from "@/components/Spin";
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useQuery } from "react-query";
+import { StatesService } from "@/services/StatesService";
 
 interface NewAddressProps {
   addAddress: (address: AddressI) => Promise<void>;
   editingAddress: AddressI;
   handleCancel: () => void;
   deleteAddress: () => Promise<void>;
-  //   canDeleteAddress: boolean;
   totalAddresses: number;
 }
 export function NewAddress({
@@ -30,50 +33,25 @@ export function NewAddress({
   deleteAddress,
   totalAddresses,
 }: NewAddressProps) {
-  const { data: states, isFetching } = useQuery<Option[]>({
-    queryFn: async () => {
-      const { data } = await axios.get<StateIBGE[]>(
-        "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
-      );
-      const _options: Option[] = data.map((x) => ({
-        key: x.sigla,
-        label: x.nome,
-      }));
-      _options.sort((a, b) => a.label.localeCompare(b.label));
-      return _options;
-    },
-    queryKey: ["states"],
-  });
   const [address, setAddress] = useState(editingAddress);
-  const [_isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleChangeAddress() {
     setIsLoading(true);
     await addAddress(address);
-    ("");
     setIsLoading(false);
   }
 
   useEffect(() => {
     if (editingAddress) setAddress(editingAddress);
   }, [editingAddress]);
-  const isLoading = isFetching || _isLoading;
+
   return (
     <>
       <header className="pb-2  mb-6 md:pb-2 flex justify-between border-b border-custom-gray-light">
         <span>Cadastrar novo endereço</span>
         {address.id && totalAddresses > 1 && (
-          <button
-            onClick={deleteAddress}
-            className="text-red-500 text-xs flex gap-2"
-          >
-            <span>Excluir endereço</span>
-            <Spin
-              color="rgb(239 68 68 / var(--tw-text-opacity))"
-              size={16}
-              borderWidth={3}
-            />
-          </button>
+          <DeleteAddress {...{ deleteAddress }} />
         )}
       </header>
       <div className="flex gap-4 w-full flex-col-reverse md:flex-row">
@@ -81,11 +59,7 @@ export function NewAddress({
           <FirstColumn address={address} setAddress={setAddress} />
         </div>
         <div className="w-full md:w-3/5">
-          <NewAddressForm
-            address={address}
-            setAddress={setAddress}
-            states={states || []}
-          />
+          <NewAddressForm address={address} setAddress={setAddress} />
         </div>
       </div>
       <div className="flex py-4 gap-8 justify-end ">
@@ -109,23 +83,38 @@ export function NewAddress({
     </>
   );
 }
+interface DeleteButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  deleteAddress: () => Promise<void>;
+}
+function DeleteAddress({ deleteAddress, ...props }: DeleteButtonProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  async function handleDelete() {
+    setIsLoading(true);
+    await deleteAddress();
+    setIsLoading(false);
+  }
+  return (
+    <button
+      onClick={handleDelete}
+      className="text-red-500 text-xs flex gap-2"
+      {...props}
+    >
+      <span>Excluir endereço</span>
+      {isLoading && (
+        <Spin
+          color="rgb(239 68 68 / var(--tw-text-opacity))"
+          size={16}
+          borderWidth={3}
+        />
+      )}
+    </button>
+  );
+}
 
 interface NewAddressFormProps {
   setAddress: Dispatch<SetStateAction<AddressI>>;
   address: AddressI;
-  states: Option[];
 }
-type FormValues = {
-  addressIdentify: string;
-  recipientName: string;
-  phone: string;
-  cep: string;
-  state: string;
-  city: string;
-  neighborhood: string;
-  number: string;
-  complement: string;
-};
 const validationSchema = Yup.object().shape({
   addressIdentify: Yup.string().required(
     "O campo Identificação do Endereço é obrigatório"
@@ -143,20 +132,36 @@ const validationSchema = Yup.object().shape({
   address: Yup.string().required("O campo Endereço é obrigatório"),
 });
 
-function NewAddressForm({ address, setAddress, states }: NewAddressFormProps) {
+function NewAddressForm({ address, setAddress }: NewAddressFormProps) {
+  const { data: states, isFetching } = useQuery<Option[]>({
+    queryFn: StatesService.getState,
+    queryKey: ["states"],
+  });
+  function handleChange(_object: object) {
+    setAddress((p) => ({ ...p, ..._object }));
+  }
+
   return (
     <div className="flex flex-col gap-6">
-      <Input label="Identificação do endereço" />
-      <Input label="Nome do destinatário" />
-      <Input mask="(99) 99999-9999" label="Telefone" />
-      <CepInput
-        address={address}
-        states={states}
-        setForm={setAddress}
-        text={address.cep}
+      <Input
+        value={address.addressIdentify}
+        onChangeText={(addressIdentify) => handleChange({ addressIdentify })}
+        label="Identificação do endereço"
       />
+      <Input
+        onChangeText={(recipientName) => handleChange({ recipientName })}
+        value={address.recipientName}
+        label="Nome do destinatário"
+      />
+      <Input
+        onChangeText={(phone) => handleChange({ phone })}
+        value={address.phone}
+        mask="(99) 99999-9999"
+        label="Telefone"
+      />
+      <CepInput setForm={setAddress} text={address.cep} />
       <StateSelect
-        states={states}
+        states={states || []}
         setSelectedState={(state) => setAddress((p) => ({ ...p, state }))}
         selectedState={address.state}
       />
@@ -174,10 +179,6 @@ function NewAddressForm({ address, setAddress, states }: NewAddressFormProps) {
       />
     </div>
   );
-}
-interface StateIBGE {
-  sigla: string;
-  nome: string;
 }
 
 interface FirstColumnProps {
@@ -214,10 +215,10 @@ function FirstColumn({ address, setAddress }: FirstColumnProps) {
       </div>
       <div>
         <Input
-          //   setText={(referencePoint) =>
-          //     setAddress((p) => ({ ...p, referencePoint }))
-          //   }
-          //   text={address.referencePoint || ""}
+          onChangeText={(referencePoint) =>
+            setAddress((p) => ({ ...p, referencePoint }))
+          }
+          value={address.referencePoint}
           label="Ponto de referência"
         />
       </div>
