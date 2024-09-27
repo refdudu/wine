@@ -1,22 +1,11 @@
-import axios from "axios";
-import { Dispatch, HTMLAttributes, SetStateAction, useEffect } from "react";
+import { ChangeEvent, HTMLAttributes, InputHTMLAttributes } from "react";
 import { Input } from "./Input";
-import { AddressI, Option } from "@/interfaces/Address";
-import { StatesService } from "@/services/StatesService";
 
-interface CpfInputProps extends HTMLAttributes<HTMLInputElement> {
+interface CpfInputProps extends InputHTMLAttributes<HTMLInputElement> {
   onChangeText?: (text: string) => void;
+  error?:string;
 }
 
-export function CepInput({ onChange, onChangeText }: CpfInputProps) {
-  return (
-    <Input
-      mask="99999-999"
-      onChange={(cep) =>
-        setForm((p) => ({ ...p, cep: cep.currentTarget.value }))
-      }
-      value={text}
-      label="CEP"
-    />
-  );
+export function CepInput(props: CpfInputProps) {
+  return <Input mask="99999-999" label="CEP" {...props} />;
 }

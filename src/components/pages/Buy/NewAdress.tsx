@@ -4,13 +4,7 @@ import { CepInput } from "@/components/CepInput";
 import { StateSelect } from "@/components/StateSelect";
 import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { Check, Star } from "@phosphor-icons/react";
-import {
-  useState,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-  ButtonHTMLAttributes,
-} from "react";
+import { useState, useEffect, ButtonHTMLAttributes } from "react";
 import { Input } from "@/components/Input";
 import { AddressI, Option } from "@/interfaces/Address";
 import { Spin } from "@/components/Spin";
@@ -18,6 +12,23 @@ import { Spin } from "@/components/Spin";
 import * as Yup from "yup";
 import { useQuery } from "react-query";
 import { StatesService } from "@/services/StatesService";
+
+const validationSchema = Yup.object().shape({
+  addressIdentify: Yup.string().required(
+    "O campo Identificação do Endereço é obrigatório"
+  ),
+  recipientName: Yup.string().required(
+    "O campo Nome do Destinatário é obrigatório"
+  ),
+  phone: Yup.string().required("O campo Telefone é obrigatório"),
+  cep: Yup.string().required("O campo CEP é obrigatório"),
+  state: Yup.string().required("O campo Estado é obrigatório"),
+  city: Yup.string().required("O campo Cidade é obrigatório"),
+  neighborhood: Yup.string().required("O campo Bairro é obrigatório"),
+  number: Yup.string().required("O campo Número é obrigatório"),
+  complement: Yup.string().required("O campo Complemento é obrigatório"),
+  address: Yup.string().required("O campo Endereço é obrigatório"),
+});
 
 interface NewAddressProps {
   addAddress: (address: AddressI) => Promise<void>;
@@ -34,12 +45,27 @@ export function NewAddress({
   totalAddresses,
 }: NewAddressProps) {
   const [address, setAddress] = useState(editingAddress);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  async function handleChangeAddress() {
+  async function handleAddAddress() {
     setIsLoading(true);
-    await addAddress(address);
+    try {
+      await validationSchema.validate(address, { abortEarly: false });
+      await addAddress(address);
+    } catch (e) {
+      const { inner } = e as Yup.ValidationError;
+      const errors: Record<string, string> = {};
+      for (const { path, message } of inner) {
+        if (path) errors[path] = message;
+      }
+      setErrors(errors);
+    }
     setIsLoading(false);
+  }
+
+  function handleChange(_object: object) {
+    setAddress((p) => ({ ...p, ..._object }));
   }
 
   useEffect(() => {
@@ -56,10 +82,10 @@ export function NewAddress({
       </header>
       <div className="flex gap-4 w-full flex-col-reverse md:flex-row">
         <div className="max-w-72 w-full flex flex-col gap-6">
-          <FirstColumn address={address} setAddress={setAddress} />
+          <FirstColumn {...{ address, errors, handleChange }} />
         </div>
         <div className="w-full md:w-3/5">
-          <NewAddressForm address={address} setAddress={setAddress} />
+          <NewAddressForm {...{ address, errors, handleChange }} />
         </div>
       </div>
       <div className="flex py-4 gap-8 justify-end ">
@@ -74,7 +100,7 @@ export function NewAddress({
         <Button
           isLoading={isLoading}
           icon={<Check />}
-          onClick={handleChangeAddress}
+          onClick={handleAddAddress}
           className="max-w-52 bg-custom-violet text-white"
         >
           Salvar endereço
@@ -112,68 +138,92 @@ function DeleteAddress({ deleteAddress, ...props }: DeleteButtonProps) {
 }
 
 interface NewAddressFormProps {
-  setAddress: Dispatch<SetStateAction<AddressI>>;
+  handleChange: ({}: object) => void;
   address: AddressI;
+  errors: Record<string, string>;
 }
-const validationSchema = Yup.object().shape({
-  addressIdentify: Yup.string().required(
-    "O campo Identificação do Endereço é obrigatório"
-  ),
-  recipientName: Yup.string().required(
-    "O campo Nome do Destinatário é obrigatório"
-  ),
-  phone: Yup.string().required("O campo Telefone é obrigatório"),
-  cep: Yup.string().required("O campo CEP é obrigatório"),
-  state: Yup.string().required("O campo Estado é obrigatório"),
-  city: Yup.string().required("O campo Cidade é obrigatório"),
-  neighborhood: Yup.string().required("O campo Bairro é obrigatório"),
-  number: Yup.string().required("O campo Número é obrigatório"),
-  complement: Yup.string().required("O campo Complemento é obrigatório"),
-  address: Yup.string().required("O campo Endereço é obrigatório"),
-});
 
-function NewAddressForm({ address, setAddress }: NewAddressFormProps) {
-  const { data: states, isFetching } = useQuery<Option[]>({
+function NewAddressForm({
+  address,
+  handleChange,
+  errors,
+}: NewAddressFormProps) {
+  const { data: states } = useQuery<Option[]>({
     queryFn: StatesService.getState,
     queryKey: ["states"],
   });
-  function handleChange(_object: object) {
-    setAddress((p) => ({ ...p, ..._object }));
-  }
+  const cep = address?.cep || "";
+
+  useEffect(() => {
+    async function getCep() {
+      if (cep.length < 8 || states?.length === 0) return;
+      try {
+        const _form = await StatesService.getCep(cep, states || []);
+        handleChange(_form);
+      } catch {}
+    }
+    getCep();
+  }, [cep, states]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <Input
+        error={errors["addressIdentify"]}
         value={address.addressIdentify}
         onChangeText={(addressIdentify) => handleChange({ addressIdentify })}
         label="Identificação do endereço"
       />
       <Input
+        error={errors["recipientName"]}
         onChangeText={(recipientName) => handleChange({ recipientName })}
         value={address.recipientName}
         label="Nome do destinatário"
       />
       <Input
+        error={errors["phone"]}
         onChangeText={(phone) => handleChange({ phone })}
         value={address.phone}
         mask="(99) 99999-9999"
         label="Telefone"
       />
-      <CepInput setForm={setAddress} text={address.cep} />
+      <CepInput
+        error={errors["cep"]}
+        onChangeText={(cep) => handleChange({ cep })}
+        value={address.cep}
+      />
       <StateSelect
         states={states || []}
-        setSelectedState={(state) => setAddress((p) => ({ ...p, state }))}
+        setSelectedState={(state) => handleChange({ state })}
         selectedState={address.state}
       />
       <CitySelect
-        setSelectedCity={(city) => city && setAddress((p) => ({ ...p, city }))}
+        setSelectedCity={(city) => handleChange({ city })}
         selectedCity={address.city}
         state={address.state?.key}
       />
-      <Input label="Endereço" />
-      <Input label="Bairro" />
-      <Input mask="99999999999" label="Número" />
       <Input
+        error={errors["address"]}
+        onChangeText={(address) => handleChange({ address })}
+        value={address.address}
+        label="Endereço"
+      />
+      <Input
+        error={errors["neighborhood"]}
+        onChangeText={(neighborhood) => handleChange({ neighborhood })}
+        value={address.neighborhood}
+        label="Bairro"
+      />
+      <Input
+        error={errors["number"]}
+        onChangeText={(number) => handleChange({ number })}
+        value={address.number}
+        mask="99999999999"
+        label="Número"
+      />
+      <Input
+        error={errors["complement"]}
+        onChangeText={(complement) => handleChange({ complement })}
+        value={address.complement}
         label="Complemento"
         beforeInputText={address.conciergeAllDay ? "Portaria 24h" : ""}
       />
@@ -181,11 +231,7 @@ function NewAddressForm({ address, setAddress }: NewAddressFormProps) {
   );
 }
 
-interface FirstColumnProps {
-  setAddress: Dispatch<SetStateAction<AddressI>>;
-  address: AddressI;
-}
-function FirstColumn({ address, setAddress }: FirstColumnProps) {
+function FirstColumn({ address, handleChange }: NewAddressFormProps) {
   return (
     <>
       <div className="hidden md:flex flex-col border border-custom-violet">
@@ -197,9 +243,7 @@ function FirstColumn({ address, setAddress }: FirstColumnProps) {
         </span>
         <ToggleSwitch
           isChecked={address.isFavorite}
-          setIsChecked={(isFavorite) =>
-            setAddress((p) => ({ ...p, isFavorite }))
-          }
+          setIsChecked={(isFavorite) => handleChange({ isFavorite })}
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -208,16 +252,12 @@ function FirstColumn({ address, setAddress }: FirstColumnProps) {
         </span>
         <ToggleSwitch
           isChecked={address.conciergeAllDay}
-          setIsChecked={(conciergeAllDay) =>
-            setAddress((p) => ({ ...p, conciergeAllDay }))
-          }
+          setIsChecked={(conciergeAllDay) => handleChange({ conciergeAllDay })}
         />
       </div>
       <div>
         <Input
-          onChangeText={(referencePoint) =>
-            setAddress((p) => ({ ...p, referencePoint }))
-          }
+          onChangeText={(referencePoint) => handleChange({ referencePoint })}
           value={address.referencePoint}
           label="Ponto de referência"
         />

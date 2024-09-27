@@ -7,6 +7,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   beforeInputText?: string;
   mask?: string;
   onChangeText?: (text: string) => void;
+  error?: string;
 }
 export function Input({
   label,
@@ -15,6 +16,7 @@ export function Input({
   value,
   onChangeText,
   onChange,
+  error,
   ...props
 }: InputProps) {
   const id = useId();
@@ -38,31 +40,36 @@ export function Input({
   };
 
   return (
-    <div className="relative flex w-full min">
-      {beforeInputText && (
-        <div className="items-center justify-center flex border-b border-b-custom-gray-light px-1">
-          <span className="">Portaria 24h</span>
-        </div>
-      )}
-      {mask ? (
-        <InputMask maskChar="" mask={mask} {...inputProps} />
-      ) : (
-        <input {...inputProps} onChange={(e) => console.log(e)} />
-      )}
-      <label
-        htmlFor={id}
-        className={`absolute left-1  transition-all peer-focus:-top-3 peer-focus:-translate-y-0 peer-focus:text-xs ${classNames(
-          {
-            "-top-3": hasText || beforeInputText,
-            "-translate-y-0": hasText || beforeInputText,
-            "text-xs": hasText || beforeInputText,
-            "-translate-y-1/2": !hasText && !beforeInputText,
-            "top-1/2": !hasText && !beforeInputText,
-          }
-        )}`}
-      >
-        {label}
-      </label>
+    <div className="flex flex-col gap-1">
+      <div className="relative flex w-full">
+        {beforeInputText && (
+          <div className="items-center justify-center flex border-b border-b-custom-gray-light px-1">
+            <span className="">Portaria 24h</span>
+          </div>
+        )}
+        {mask ? (
+          <InputMask maskChar="" mask={mask} {...inputProps} />
+        ) : (
+          <input {...inputProps} />
+        )}
+        <label
+          htmlFor={id}
+          className={`absolute left-1  transition-all peer-focus:-top-3 peer-focus:-translate-y-0 peer-focus:text-sm ${classNames(
+            {
+              "-top-3": hasText || beforeInputText,
+              "-translate-y-0": hasText || beforeInputText,
+              "text-sm": hasText || beforeInputText,
+              "-translate-y-1/2": !hasText && !beforeInputText,
+              "top-1/2": !hasText && !beforeInputText,
+            }
+          )}`}
+        >
+          {label}
+        </label>
+      </div>
+      <div className="text-xs text-red-600 min-h-4">
+        {error && <span>{error}</span>}
+      </div>
     </div>
   );
 }

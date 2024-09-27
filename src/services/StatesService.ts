@@ -40,6 +40,7 @@ export const StatesService = {
       },
       state,
     };
+    return _form;
   },
 };
 interface CityIBGE {
