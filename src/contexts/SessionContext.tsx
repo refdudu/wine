@@ -1,8 +1,14 @@
 import { firebaseAuthClient } from "@/utils/firebaseClient";
 import { createContext, useContext, useEffect, useState } from "react";
-import { signInWithPopup, GoogleAuthProvider, type User } from "firebase/auth";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  type User,
+  signInWithRedirect,
+} from "firebase/auth";
 import { api } from "@/utils/api";
 import { useCookies } from "react-cookie";
+import { useLayout } from "@/components/Layout";
 
 interface SessionContextProps {
   signIn: () => Promise<void>;
@@ -22,6 +28,7 @@ interface SessionProviderProps {
 // }
 
 export function SessionProvider({ children }: SessionProviderProps) {
+  const { isMobile } = useLayout();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [cookies, setCookies, deleteCookies] = useCookies(["token"]);
   const [isLoadingAuthorization, setIsLoadingAuthorization] = useState(true);
@@ -31,11 +38,15 @@ export function SessionProvider({ children }: SessionProviderProps) {
     if (user) return alert("Você já está conectado");
     const provider = new GoogleAuthProvider();
     try {
-      const { user } = await signInWithPopup(firebaseAuthClient, provider);
-      setUser(user);
-    } catch {
-      alert("Erro ao conectar usuário");
-    }
+      if (isMobile) {
+        const { user } = await signInWithRedirect(firebaseAuthClient, provider);
+        alert(user);
+        setUser(user);
+      } else {
+        const { user } = await signInWithPopup(firebaseAuthClient, provider);
+        setUser(user);
+      }
+    } catch {}
   }
   async function signOut() {
     try {

@@ -6,6 +6,7 @@ import { useSession } from "./SessionContext";
 import { useServices } from "./ServicesContext";
 import { formatPrice } from "@/utils/formatPrice";
 import { useMediaQuery } from "react-responsive";
+import { LayoutProvider } from "@/components/Layout";
 
 interface ShoppingCartContextProps {
   shoppingCartProducts: ShoppingCartProductI[];
@@ -121,10 +122,12 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       }}
     >
       {children}
-      <ShoppingCartDrawer
-        isVisible={isVisibleDrawer}
-        setIsVisible={setIsVisibleDrawer}
-      />
+      <LayoutProvider>
+        <ShoppingCartDrawer
+          isVisible={isVisibleDrawer}
+          setIsVisible={setIsVisibleDrawer}
+        />
+      </LayoutProvider>
     </ShoppingCartContext.Provider>
   );
 }

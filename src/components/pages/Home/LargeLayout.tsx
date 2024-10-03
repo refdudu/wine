@@ -38,7 +38,7 @@ export function LargeLayout() {
                 <Pagination
                   current={pageIndex}
                   changePageIndex={(page) => {
-                    console.log(document.querySelector("#products-grid"));
+                    // console.log(document.querySelector("#products-grid"));
                     document.querySelector("#products-grid")?.scrollTo(0, 0);
                     setPageIndex(page);
                   }}

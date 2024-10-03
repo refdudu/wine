@@ -7,11 +7,13 @@ interface StateSelectProps {
   selectedState: Option | null;
   setSelectedState: (state: Option | null) => void;
   states: Option[];
+  error?: string;
 }
 export function StateSelect({
   selectedState,
   setSelectedState,
   states: options,
+  error,
 }: StateSelectProps) {
   const [text, setText] = useState("");
 
@@ -32,6 +34,7 @@ export function StateSelect({
       setSelectedOption={handelSelectState}
       options={filterOptions}
       placeholder="Selecione um estado"
+      error={error}
       {...{
         text,
         setText,

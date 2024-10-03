@@ -9,11 +9,13 @@ interface StateSelectProps {
   selectedCity: Option | null;
   setSelectedCity: (city: Option | null) => void;
   state?: string;
+  error?: string;
 }
 export function CitySelect({
   selectedCity,
   setSelectedCity,
   state,
+  error
 }: StateSelectProps) {
   const [options, setOptions] = useState<Option[]>([]);
   const [text, setText] = useState("");
@@ -47,6 +49,7 @@ export function CitySelect({
       placeholder={
         !state ? "Selecione um estado primeiro" : "Selecione uma cidade"
       }
+      error={error}
       {...{ text, setText }}
     />
   );

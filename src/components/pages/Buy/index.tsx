@@ -13,6 +13,7 @@ import {
   ShoppingCartItensHeader,
 } from "./ShoppingCartItens";
 import { ShoppingCartItensDrawer } from "./DrawerShoppingCartItens";
+import { LayoutProvider } from "@/components/Layout";
 
 export function BuyPage() {
   return (
@@ -57,13 +58,13 @@ function BuyPageContent({
   const [isVisibleShoppingCartItens, setIsVisibleShoppingCartItens] =
     useState(false);
   return (
-    <>
+    <LayoutProvider>
       <ShoppingCartItensDrawer
         isVisible={isVisibleShoppingCartItens}
         setIsVisible={setIsVisibleShoppingCartItens}
       />
       <div className="flex flex-col h-screen">
-        <BuyHeader />
+        <BuyHeader openDrawer={() => setIsVisibleShoppingCartItens(true)} />
         <div className="w-full py-10 mx-auto px-3 overflow-auto h-full">
           <main className="max-w-[1120px] flex mx-auto gap-9  flex-col md:flex-row">
             <div className="w-full lg:w-4/6">
@@ -99,7 +100,7 @@ function BuyPageContent({
           </main>
         </div>
       </div>
-    </>
+    </LayoutProvider>
   );
 }
 

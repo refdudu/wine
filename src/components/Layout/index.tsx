@@ -6,23 +6,35 @@ import { MasterContext } from "@/contexts/MasterContext";
 interface LayoutProps {
   children: React.ReactNode;
 }
-const LayoutContext = createContext({} as { isMobile?: boolean });
+const LayoutContext = createContext(
+  {} as { isMobile?: boolean; getIsMobile: () => boolean }
+);
 
 export function Layout({ children }: LayoutProps) {
-  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 1120);
-  }, []);
   return (
     <MasterContext>
-      <LayoutContext.Provider value={{ isMobile }}>
-        <div className="flex flex-col h-screen">
-          <Header />
-          {children}
-          <ReactQueryDevtools />
-        </div>
-      </LayoutContext.Provider>
+      <div className="flex flex-col h-screen">
+        <Header />
+        {children}
+        <ReactQueryDevtools />
+      </div>
     </MasterContext>
+  );
+}
+
+export function LayoutProvider({ children }: LayoutProps) {
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
+  const getIsMobile = () => {
+    return window.innerWidth < 1120;
+  };
+  useEffect(() => {
+    console.log("");
+    setIsMobile(getIsMobile());
+  }, []);
+  return (
+    <LayoutContext.Provider value={{ isMobile, getIsMobile }}>
+      {children}
+    </LayoutContext.Provider>
   );
 }
 export const useLayout = () => useContext(LayoutContext);

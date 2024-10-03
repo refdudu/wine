@@ -18,6 +18,8 @@ export const useBuyPage = () => {
   }
   async function updateAddress(address: AddressI) {
     try {
+      delete address.createdAt;
+
       await api.put(`address/${address.id}`, address);
       await getAddresses();
       // setAddresses((p) => p.map((x) => (x.id === address.id ? address : x)));

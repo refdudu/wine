@@ -13,7 +13,7 @@ export interface AddressI {
   referencePoint?: string;
   isFavorite: boolean;
   conciergeAllDay: boolean;
-  createdAt: Date;
+  createdAt?: Date;
 }
 export interface Option {
   label: string;

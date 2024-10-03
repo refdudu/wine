@@ -4,6 +4,7 @@ import { SessionProvider } from "@/contexts/SessionContext";
 import { ShoppingCartProvider } from "@/contexts/ShoppingCartContext";
 import { User } from "firebase/auth";
 import { CookiesProvider } from "react-cookie";
+import { LayoutProvider } from "@/components/Layout";
 
 const queryClient = new QueryClient();
 interface MasterContextProps {
@@ -14,9 +15,11 @@ export function MasterContext({ children }: MasterContextProps) {
     <CookiesProvider>
       <QueryClientProvider client={queryClient}>
         <ServicesProvider>
-          <SessionProvider>
-            <ShoppingCartProvider>{children}</ShoppingCartProvider>
-          </SessionProvider>
+          <LayoutProvider>
+            <SessionProvider>
+              <ShoppingCartProvider>{children}</ShoppingCartProvider>
+            </SessionProvider>
+          </LayoutProvider>
         </ServicesProvider>
       </QueryClientProvider>
     </CookiesProvider>

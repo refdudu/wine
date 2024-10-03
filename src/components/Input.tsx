@@ -54,7 +54,7 @@ export function Input({
         )}
         <label
           htmlFor={id}
-          className={`absolute left-1  transition-all peer-focus:-top-3 peer-focus:-translate-y-0 peer-focus:text-sm ${classNames(
+          className={`absolute left-1 text-custom-gray  transition-all peer-focus:-top-3 peer-focus:-translate-y-0 peer-focus:text-sm ${classNames(
             {
               "-top-3": hasText || beforeInputText,
               "-translate-y-0": hasText || beforeInputText,

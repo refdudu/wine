@@ -22,7 +22,6 @@ export function WithAuth(
   return async (context: GetServerSidePropsContext) => {
     const { req } = context;
     const token = req.cookies.token || ""; // Supondo que o token JWT esteja armazenado em cookies
-    console.log("🚀 ~ return ~ token:", token);
     if (!token) return _return({}, redirect);
 
     try {

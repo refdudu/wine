@@ -5,7 +5,6 @@ import classNames from "classnames";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 import { ProductI } from "@/interfaces/ProductI";
 import { Spin } from "@/components/Spin";
-import { isLength, isObjectLike } from "node_modules/cypress/types/lodash";
 
 export function MobileLayout() {
   const {
@@ -35,7 +34,7 @@ export function MobileLayout() {
               <Spin />
             </div>
           )}
-          {hasNextPage && (
+          {hasNextPage && !isFetching && (
             <button
               type="button"
               onClick={() => fetchNextPage()}

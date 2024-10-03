@@ -3,14 +3,27 @@ import {
   useShoppingCart,
   useTotalShoppingCartProducts,
 } from "@/contexts/ShoppingCartContext";
+import classNames from "classnames";
 
-export function ShoppingCartItensHeader() {
+interface ShoppingCartItensHeaderProps {
+  isMobile?: boolean;
+}
+export function ShoppingCartItensHeader({
+  isMobile,
+}: ShoppingCartItensHeaderProps) {
+  const mobileL = isMobile ? "rounded-bl-md" : "";
+  const mobileR = isMobile ? "rounded-br-md border-custom-violet border" : "";
+
   return (
     <header className="flex h-9">
-      <button className="flex-1 bg-custom-violet text-white text-center rounded-tl-md">
+      <button
+        className={`flex-1 bg-custom-violet text-white text-center rounded-tl-md ${mobileL}`}
+      >
         Itens
       </button>
-      <button className="flex-1 bg-white text-custom-violet text-center">
+      <button
+        className={`flex-1 bg-white text-custom-violet  text-center rounded-tr-md ${mobileR}`}
+      >
         Detalhes
       </button>
     </header>

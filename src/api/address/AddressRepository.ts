@@ -21,19 +21,19 @@ export class AddressRepositoryFirebase {
   constructor(userUid: string) {
     this.dbRef = collection(firebaseFirestore, `/users/${userUid}/addresses`);
   }
-  async getFavoriteAddress() {
+  private  async getFavoriteAddress() {
     const _query = query(this.dbRef, where("isFavorite", "==", true));
     const addressRef = await getDocs(_query);
 
-    if (!addressRef.empty) return addressRef.docs[0].data() as AddressI;
-    return null;
+    if (addressRef.empty) return null;
+    const doc = addressRef.docs[0];
+    const data = doc.data() as AddressI;
+    const id = doc.id;
+    return { ...data, id };
   }
-  async verifyFavoriteAddress(address: AddressI) {
+  private async verifyFavoriteAddress(address: AddressI) {
     const favoriteAddress = await this.getFavoriteAddress();
-    console.log(
-      "🚀 ~ AddressRepositoryFirebase ~ verifyFavoriteAddress ~ favoriteAddress:",
-      favoriteAddress
-    );
+
     if (favoriteAddress && address.isFavorite) {
       const docRef = doc(this.dbRef, favoriteAddress.id || "");
       favoriteAddress.isFavorite = false;
@@ -87,6 +87,7 @@ export class AddressRepositoryFirebase {
     const addressRef = await getDocs(this.dbRef);
     return addressRef.docs.map((x) => ({
       ...x.data(),
+      createdAt: x.data().createdAt.toDate(),
       id: x.id,
     })) as AddressI[];
   }

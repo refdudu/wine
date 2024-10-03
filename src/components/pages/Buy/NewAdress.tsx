@@ -15,19 +15,19 @@ import { StatesService } from "@/services/StatesService";
 
 const validationSchema = Yup.object().shape({
   addressIdentify: Yup.string().required(
-    "O campo Identificação do Endereço é obrigatório"
+    "O campo Identificação do endereço é obrigatório"
   ),
   recipientName: Yup.string().required(
-    "O campo Nome do Destinatário é obrigatório"
+    "O campo Nome do destinatário é obrigatório"
   ),
-  phone: Yup.string().required("O campo Telefone é obrigatório"),
+  phone: Yup.string().required("O campo telefone é obrigatório"),
   cep: Yup.string().required("O campo CEP é obrigatório"),
-  state: Yup.string().required("O campo Estado é obrigatório"),
-  city: Yup.string().required("O campo Cidade é obrigatório"),
-  neighborhood: Yup.string().required("O campo Bairro é obrigatório"),
-  number: Yup.string().required("O campo Número é obrigatório"),
-  complement: Yup.string().required("O campo Complemento é obrigatório"),
-  address: Yup.string().required("O campo Endereço é obrigatório"),
+  state: Yup.string().required("O campo estado é obrigatório"),
+  city: Yup.string().required("O campo cidade é obrigatório"),
+  neighborhood: Yup.string().required("O campo bairro é obrigatório"),
+  number: Yup.string().required("O campo número é obrigatório"),
+  complement: Yup.string().required("O campo complemento é obrigatório"),
+  address: Yup.string().required("O campo endereço é obrigatório"),
 });
 
 interface NewAddressProps {
@@ -51,7 +51,12 @@ export function NewAddress({
   async function handleAddAddress() {
     setIsLoading(true);
     try {
-      await validationSchema.validate(address, { abortEarly: false });
+      const _address = {
+        ...address,
+        city: address.city?.key,
+        state: address.state?.key,
+      };
+      await validationSchema.validate(_address, { abortEarly: false });
       await addAddress(address);
     } catch (e) {
       const { inner } = e as Yup.ValidationError;
@@ -70,6 +75,7 @@ export function NewAddress({
 
   useEffect(() => {
     if (editingAddress) setAddress(editingAddress);
+    console.log(editingAddress);
   }, [editingAddress]);
 
   return (
@@ -152,21 +158,21 @@ function NewAddressForm({
     queryFn: StatesService.getState,
     queryKey: ["states"],
   });
-  const cep = address?.cep || "";
 
-  useEffect(() => {
-    async function getCep() {
-      if (cep.length < 8 || states?.length === 0) return;
-      try {
-        const _form = await StatesService.getCep(cep, states || []);
-        handleChange(_form);
-      } catch {}
-    }
-    getCep();
-  }, [cep, states]);
+  async function onChangeCEP(cep: string) {
+    handleChange({ cep });
+
+    if (cep.length !== 9 || states?.length === 0) return;
+
+    try {
+      const _form = await StatesService.getCep(cep, states || []);
+      if (!_form) return;
+      handleChange(_form);
+    } catch {}
+  }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       <Input
         error={errors["addressIdentify"]}
         value={address.addressIdentify}
@@ -188,10 +194,11 @@ function NewAddressForm({
       />
       <CepInput
         error={errors["cep"]}
-        onChangeText={(cep) => handleChange({ cep })}
+        onChangeText={onChangeCEP}
         value={address.cep}
       />
       <StateSelect
+        error={errors["state"]}
         states={states || []}
         setSelectedState={(state) => handleChange({ state })}
         selectedState={address.state}
@@ -200,6 +207,7 @@ function NewAddressForm({
         setSelectedCity={(city) => handleChange({ city })}
         selectedCity={address.city}
         state={address.state?.key}
+        error={errors["city"]}
       />
       <Input
         error={errors["address"]}
