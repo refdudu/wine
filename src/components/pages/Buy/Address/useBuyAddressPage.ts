@@ -3,8 +3,8 @@ import { api } from "@/utils/api";
 import { useEffect, useState } from "react";
 
 export const useBuyPage = () => {
+    const [editingAddress, setEditingAddress] = useState<AddressI | null>(null);
   const [addresses, setAddresses] = useState<AddressI[]>([]);
-  const [editingAddress, setEditingAddress] = useState<AddressI | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAddressId, setSelectedAddressId] = useState("");
 
@@ -45,8 +45,8 @@ export const useBuyPage = () => {
     setEditingAddress(null);
   }
 
-  async function getAddresses(isLoading = false) {
-    setIsLoading(isLoading);
+  async function getAddresses() {
+    setIsLoading(addresses.length === 0);
     try {
       const { data } = await api.get<{ addresses: AddressI[] }>("address");
       const { addresses } = data;
@@ -64,7 +64,7 @@ export const useBuyPage = () => {
     setIsLoading(false);
   }
   useEffect(() => {
-    getAddresses(true);
+    getAddresses();
   }, []);
 
   return {

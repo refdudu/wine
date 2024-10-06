@@ -1,37 +1,30 @@
-import { BuyHeader } from "./BuyHeader";
 import { NewAddress } from "./NewAdress";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { AddressI } from "@/interfaces/Address";
-import { MapPin } from "@phosphor-icons/react";
+import { ArrowRight, MapPin } from "@phosphor-icons/react";
 import { Spin } from "@/components/Spin";
-import { OnlyAuthContainer } from "@/components/OnlyAuthContainer";
-import { baseAddress, useBuyPage } from "./useBuyPage";
+import { baseAddress, useBuyPage } from "./useBuyAddressPage";
 import { AddressCard } from "./AddressCard";
-import {
-  ShoppingCartItens,
-  ShoppingCartItensFooter,
-  ShoppingCartItensHeader,
-} from "./ShoppingCartItens";
-import { ShoppingCartItensDrawer } from "./DrawerShoppingCartItens";
-import { LayoutProvider } from "@/components/Layout";
+import { BuyPageProvider } from "../BuyContext";
+import { Button } from "@/components/Button";
 
-export function BuyPage() {
+export function AddressPage() {
   return (
-    <OnlyAuthContainer>
+    <BuyPageProvider>
       <BuyPageContainer />
-    </OnlyAuthContainer>
+    </BuyPageProvider>
   );
 }
 
-function BuyPageContainer() {
+export function BuyPageContainer() {
   const { isLoading, ...props } = useBuyPage();
-
   if (isLoading)
     return (
       <div className="w-full h-64 flex justify-center items-end">
         <Spin />
       </div>
     );
+
   return <BuyPageContent {...props} />;
 }
 
@@ -49,58 +42,30 @@ function BuyPageContent({
   addresses,
   editingAddress,
   setEditingAddress,
-  getAddresses,
   selectedAddressId,
   setSelectedAddressId,
   addAddress,
   deleteAddress,
 }: BuyPageContentProps) {
-  const [isVisibleShoppingCartItens, setIsVisibleShoppingCartItens] =
-    useState(false);
-  return (
-    <LayoutProvider>
-      <ShoppingCartItensDrawer
-        isVisible={isVisibleShoppingCartItens}
-        setIsVisible={setIsVisibleShoppingCartItens}
+  if (editingAddress) {
+    return (
+      <NewAddress
+        totalAddresses={addresses.length}
+        deleteAddress={deleteAddress}
+        handleCancel={() => setEditingAddress(null)}
+        editingAddress={editingAddress}
+        addAddress={addAddress}
       />
-      <div className="flex flex-col h-screen">
-        <BuyHeader openDrawer={() => setIsVisibleShoppingCartItens(true)} />
-        <div className="w-full py-10 mx-auto px-3 overflow-auto h-full">
-          <main className="max-w-[1120px] flex mx-auto gap-9  flex-col md:flex-row">
-            <div className="w-full lg:w-4/6">
-              {editingAddress ? (
-                <NewAddress
-                  totalAddresses={addresses.length}
-                  deleteAddress={deleteAddress}
-                  handleCancel={() => setEditingAddress(null)}
-                  editingAddress={editingAddress}
-                  addAddress={addAddress}
-                />
-              ) : (
-                <AllAddress
-                  setSelectedAddressId={setSelectedAddressId}
-                  selectedAddressId={selectedAddressId}
-                  addresses={addresses}
-                  setEditingAddress={setEditingAddress}
-                />
-              )}
-            </div>
-            <div
-              onClick={getAddresses}
-              className="w-2/6  h-full shadow  hidden lg:flex flex-col"
-            >
-              <ShoppingCartItensHeader />
-              <div className="border border-custom-gray-light border-b-transparent">
-                <ShoppingCartItens />
-              </div>
-              <div className="border border-custom-gray-light ">
-                <ShoppingCartItensFooter />
-              </div>
-            </div>
-          </main>
-        </div>
-      </div>
-    </LayoutProvider>
+    );
+  }
+
+  return (
+    <AllAddress
+      setSelectedAddressId={setSelectedAddressId}
+      selectedAddressId={selectedAddressId}
+      addresses={addresses}
+      setEditingAddress={setEditingAddress}
+    />
   );
 }
 
@@ -143,6 +108,14 @@ function AllAddress({
           />
         ))}
       </div>
+      <footer className="flex justify-end w-full mt-8">
+        <Button
+          icon={<ArrowRight />}
+          className="bg-custom-green text-white max-w-64"
+        >
+          Definir pagamento
+        </Button>
+      </footer>
     </div>
   );
 }

@@ -47,14 +47,14 @@ export function ShoppingCartData({ onClick }: ShoppingCartDataProps) {
   const totalProducts = useTotalShoppingCartProducts();
 
   return (
-    <div onClick={onClick} className="lg:hidden flex flex-col justify-end items-end">
+    <button onClick={onClick} className="lg:hidden flex flex-col justify-end items-end">
       <span className="text-custom-subtitle">
         {shoppingCartProducts.length} Itens
       </span>
       <span>
         <span className="text-custom-violet">{totalProducts}</span>
       </span>
-    </div>
+    </button>
   );
 }
 interface StepProps {
