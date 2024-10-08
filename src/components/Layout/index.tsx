@@ -13,7 +13,7 @@ const LayoutContext = createContext(
 export function Layout({ children }: LayoutProps) {
   return (
     <MasterContext>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen text-custom-text">
         <Header />
         {children}
         <ReactQueryDevtools />

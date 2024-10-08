@@ -24,10 +24,10 @@ export function BuyPageProvider({ children }: BuyPageProviderProps) {
         isVisible={isVisibleShoppingCartItens}
         setIsVisible={setIsVisibleShoppingCartItens}
       />
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen text-custom-text">
         <BuyHeader openDrawer={() => setIsVisibleShoppingCartItens(true)} />
         <div className="w-full py-10 mx-auto px-3 overflow-auto h-full">
-          <main className="max-w-[1120px] flex mx-auto gap-9  flex-col md:flex-row">
+          <main className="max-w-[1120px] flex mx-auto gap-9 flex-col md:flex-row">
             <div className="w-full lg:w-4/6">{children}</div>
             <div className="w-2/6  h-full shadow  hidden lg:flex flex-col">
               <ShoppingCartItensHeader />

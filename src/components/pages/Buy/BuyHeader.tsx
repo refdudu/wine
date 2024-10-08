@@ -14,11 +14,16 @@ import {
   useShoppingCart,
   useTotalShoppingCartProducts,
 } from "@/contexts/ShoppingCartContext";
+import { useRouter } from "next/router";
 
 interface BuyHeaderProps {
   openDrawer: () => void;
 }
 export function BuyHeader({ openDrawer }: BuyHeaderProps) {
+  const { pathname } = useRouter();
+  const isAddress = pathname.includes("address");
+  const isPayment = pathname.includes("payment");
+
   return (
     <header className="text-custom-gray bg-white flex items-center text-lg h-[88px] font-neo w-full shadow-md">
       <div className="flex justify-between items-center w-full max-w-[1120px] m-auto px-3">
@@ -29,9 +34,14 @@ export function BuyHeader({ openDrawer }: BuyHeaderProps) {
         </div>
         <ShoppingCartData onClick={openDrawer} />
         <div className="hidden lg:flex items-center gap-4">
-          <Step isCurrent Icon={MapPin} label="ENDEREÇO" />
+          <Step
+            isCurrent={isAddress}
+            isSuccess={isPayment}
+            Icon={MapPin}
+            label="ENDEREÇO"
+          />
           <CaretRight size={36} />
-          <Step Icon={CreditCard} label="PAGAMENTO" />
+          <Step isCurrent={isPayment} Icon={CreditCard} label="PAGAMENTO" />
         </div>
         <div className="hidden lg:flex"></div>
       </div>
@@ -47,7 +57,10 @@ export function ShoppingCartData({ onClick }: ShoppingCartDataProps) {
   const totalProducts = useTotalShoppingCartProducts();
 
   return (
-    <button onClick={onClick} className="lg:hidden flex flex-col justify-end items-end">
+    <button
+      onClick={onClick}
+      className="lg:hidden flex flex-col justify-end items-end"
+    >
       <span className="text-custom-subtitle">
         {shoppingCartProducts.length} Itens
       </span>

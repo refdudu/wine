@@ -18,8 +18,8 @@ export function AllAddress({
   setSelectedAddressId,
 }: AllAddressProps) {
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between border-b pb-2 border-b-custom-gray-light text-custom-gray">
+    <>
+      <header className="flex items-center justify-between border-b pb-4 border-b-custom-gray-light text-custom-gray">
         <div className="flex gap-2 items-center">
           <MapPin size={24} />
           <span className="text-xl">Escolha um endereço para entrega</span>
@@ -32,8 +32,8 @@ export function AllAddress({
             Novo endereço
           </button>
         </div>
-      </div>
-      <div className="mt-4 flex flex-col lg:grid grid-cols-2 gap-4">
+      </header>
+      <main className="mt-4 flex flex-col lg:grid grid-cols-2 gap-4">
         {addresses.map((address) => (
           <AddressCard
             key={address.id}
@@ -43,15 +43,16 @@ export function AllAddress({
             setIsEditing={() => setEditingAddress(address)}
           />
         ))}
-      </div>
-      <footer className="flex justify-end w-full mt-8">
+      </main>
+      <footer className="flex justify-end w-full mt-8 border-t pt-4 border-t-custom-gray-light">
         <Button
+          href="payment"
           icon={<ArrowRight />}
           className="bg-custom-green text-white max-w-64"
         >
           Definir pagamento
         </Button>
       </footer>
-    </div>
+    </>
   );
 }
