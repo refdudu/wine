@@ -1,4 +1,4 @@
-import { Check, CreditCard, PixLogo } from "@phosphor-icons/react";
+import { Check, CreditCard, Icon, PixLogo } from "@phosphor-icons/react";
 import { BuyPageProvider } from "../BuyContext";
 import { RadioInput } from "@/components/RadioInput";
 import { useState } from "react";
@@ -23,12 +23,7 @@ export function PaymentPage() {
 
   return (
     <BuyPageProvider>
-      <header className="flex items-center justify-between border-b pb-4 border-b-custom-gray-light text-custom-gray">
-        <div className="flex gap-2 items-center">
-          <CreditCard size={24} />
-          <span className="text-xl">Escolha sua forma de pagamento</span>
-        </div>
-      </header>
+      <Header />
       <main className="mt-4 h-96 flex gap-8">
         <div className="flex flex-col gap-2 h-full border-custom-gray-light border max-w-60 w-full uppercase">
           {paymentMethods.map(({ icon: Icon, label, value }) => (
@@ -52,22 +47,38 @@ export function PaymentPage() {
           <PaymentMethod paymentMethod={selectedPaymentMethod} />
         </div>
       </main>
-      <footer className="flex justify-between w-full mt-8 border-t pt-4 border-t-custom-gray-light">
-        <Button
-          href="address"
-          className="bg-white border border-custom-gray max-w-48"
-        >
-          Voltar
-        </Button>
-        <Button
-          href="payment"
-          icon={<Check />}
-          className="bg-custom-green text-white max-w-64"
-        >
-          Finalizar pedido
-        </Button>
-      </footer>
+      <Footer />
     </BuyPageProvider>
+  );
+}
+
+function Header() {
+  return (
+    <header className="flex items-center justify-between border-b pb-4 border-b-custom-gray-light text-custom-gray">
+      <div className="flex gap-2 items-center">
+        <CreditCard size={24} />
+        <span className="text-xl">Escolha sua forma de pagamento</span>
+      </div>
+    </header>
+  );
+}
+function Footer() {
+  return (
+    <footer className="flex justify-between w-full mt-8 border-t pt-4 border-t-custom-gray-light">
+      <Button
+        href="address"
+        className="bg-white border border-custom-gray max-w-48"
+      >
+        Voltar
+      </Button>
+      <Button
+        href="payment"
+        icon={<Check />}
+        className="bg-custom-green text-white max-w-64"
+      >
+        Finalizar pedido
+      </Button>
+    </footer>
   );
 }
 
