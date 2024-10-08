@@ -47,6 +47,7 @@ export function AllAddress({
       <footer className="flex justify-end w-full mt-8 border-t pt-4 border-t-custom-gray-light">
         <Button
           href="payment"
+          linkShallow
           icon={<ArrowRight />}
           className="bg-custom-green text-white max-w-64"
         >
