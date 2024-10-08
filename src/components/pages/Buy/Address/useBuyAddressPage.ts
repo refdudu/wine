@@ -3,17 +3,19 @@ import { api } from "@/utils/api";
 import { useEffect, useState } from "react";
 
 export const useBuyPage = () => {
-    const [editingAddress, setEditingAddress] = useState<AddressI | null>(null);
+  const [editingAddress, setEditingAddress] = useState<AddressI | null>(null);
   const [addresses, setAddresses] = useState<AddressI[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAddressId, setSelectedAddressId] = useState("");
 
   async function createAddress(address: AddressI) {
     try {
-      const { data } = await api.post<{ id: string }>("address", address);
-      const { id } = data;
-      await getAddresses();
-      //   setAddresses((p) => [...p, { ...address, id }]);
+      const { data } = await api.post<{ addresses: AddressI[] }>(
+        "address",
+        address
+      );
+      const { addresses } = data;
+      setAddresses(addresses);
     } catch {}
   }
   async function updateAddress(address: AddressI) {

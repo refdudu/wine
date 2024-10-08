@@ -17,7 +17,9 @@ async function main(req: ApiRequestAuth, res: NextApiResponse) {
   if (req.method === "POST") {
     const address = req.body;
     const addressId = await addressRepository.add(address);
-    return res.status(200).json({ id: addressId });
+    const addresses = await addressRepository.get();
+
+    return res.status(200).json({ addresses });
   }
 
   if (req.method === "GET") {
