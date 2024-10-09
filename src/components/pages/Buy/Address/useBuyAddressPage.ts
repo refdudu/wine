@@ -98,26 +98,26 @@ export const baseAddress: AddressI = {
   referencePoint: "",
   state: null,
 };
-const __address: AddressI = {
-  id: "1",
-  addressIdentify: "Casa",
-  createdAt: new Date(),
-  recipientName: "Renan Fischer",
-  phone: "55999029974",
-  cep: "98910000",
-  address: "Rua Emilio Tesche",
-  neighborhood: "Oriental",
-  city: {
-    key: "4321808",
-    label: "Três de Maio",
-  },
-  state: {
-    key: "RS",
-    label: "Rio Grande do Sul",
-  },
-  referencePoint: "",
-  number: "782",
-  complement: "Casa",
-  isFavorite: true,
-  conciergeAllDay: true,
-};
+// const __address: AddressI = {
+//   id: "1",
+//   addressIdentify: "Casa",
+//   createdAt: new Date(),
+//   recipientName: "Renan Fischer",
+//   phone: "55999029974",
+//   cep: "98910000",
+//   address: "Rua Emilio Tesche",
+//   neighborhood: "Oriental",
+//   city: {
+//     key: "4321808",
+//     label: "Três de Maio",
+//   },
+//   state: {
+//     key: "RS",
+//     label: "Rio Grande do Sul",
+//   },
+//   referencePoint: "",
+//   number: "782",
+//   complement: "Casa",
+//   isFavorite: true,
+//   conciergeAllDay: true,
+// };

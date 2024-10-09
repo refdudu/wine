@@ -94,7 +94,7 @@ export function NewAddress({
           <NewAddressForm {...{ address, errors, handleChange }} />
         </div>
       </div>
-      <div className="flex py-4 gap-8 justify-end ">
+      <header className="flex py-4 gap-8 justify-end ">
         {totalAddresses > 0 && (
           <Button
             onClick={handleCancel}
@@ -111,7 +111,7 @@ export function NewAddress({
         >
           Salvar endereço
         </Button>
-      </div>
+      </header>
     </>
   );
 }
