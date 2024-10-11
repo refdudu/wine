@@ -22,13 +22,14 @@ function OnlyAuthContent({ children }: OnlyAuthContainerProps) {
       push("/");
     }
   }, [isAuthorized, isLoadingAuthorization]);
-  if (isLoadingAuthorization) {
-    return (
-      <div className="w-full h-64 flex justify-center items-end">
-        <Spin />
-      </div>
-    );
-  }
+
+  //   if (isLoadingAuthorization) {
+  //     return (
+  //       <div className="w-full h-64 flex justify-center items-end">
+  //         <Spin />
+  //       </div>
+  //     );
+  //   }
   if (isAuthorized) {
     return children;
   }

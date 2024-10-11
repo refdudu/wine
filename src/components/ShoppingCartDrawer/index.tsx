@@ -1,17 +1,14 @@
-import { type Dispatch, type SetStateAction, useMemo } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import {
   useShoppingCart,
   useTotalShoppingCartProducts,
 } from "@/contexts/ShoppingCartContext";
 import { BackIcon } from "@/utils/icons";
 import Image from "next/image";
-import { formatPrice } from "@/utils/formatPrice";
 import { Button } from "../Button";
 import { useSession } from "@/contexts/SessionContext";
 import { ShoppingCartProduct } from "../ShoppingCartProduct";
-import Link from "next/link";
 import { Drawer } from "../Drawer";
-import { use } from "chai";
 import { useLayout } from "../Layout";
 
 interface ShoppingCartDrawerProps {
@@ -111,7 +108,10 @@ function Footer() {
           {totalProductsPrice}
         </span>
       </div>
-      <Button href="/buy/address" className="w-full bg-custom-green text-white">
+      <Button
+        href="/buy/address"
+        className="w-full bg-custom-green text-white py-2"
+      >
         Finalizar
       </Button>
     </header>

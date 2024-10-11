@@ -1,6 +1,6 @@
 import { AddressI } from "@/interfaces/Address";
 import { PencilLine, User } from "@phosphor-icons/react";
-import { AddressText } from "./NewAdress";
+import { AddressText } from "./NewAddress";
 import classNames from "classnames";
 
 interface AddressCardProps {

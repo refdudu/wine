@@ -1,4 +1,10 @@
-import { createContext, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 import { BuyHeader } from "./BuyHeader";
 import { ShoppingCartItensDrawer } from "./DrawerShoppingCartItens";
 
@@ -8,8 +14,19 @@ import {
   ShoppingCartItensHeader,
 } from "./ShoppingCartItens";
 import { OnlyAuthContainer } from "@/components/OnlyAuthContainer";
+import { useBuyAddressPage } from "./Address/useBuyAddressPage";
+import { AddressI } from "@/interfaces/Address";
+import { Spin } from "@/components/Spin";
 
-const BuyContext = createContext({});
+interface BuyContextData {
+  setEditingAddress: Dispatch<SetStateAction<AddressI | null>>;
+  addresses: AddressI[];
+  selectedAddressId: string;
+  setSelectedAddressId: Dispatch<SetStateAction<string>>;
+  addAddress: (address: AddressI) => Promise<void>;
+  editingAddress: AddressI | null;
+  deleteAddress: () => Promise<void>;
+}
 
 interface BuyPageProviderProps {
   children: React.ReactNode;
@@ -24,6 +41,30 @@ export function BuyPageProvider({ children }: BuyPageProviderProps) {
         isVisible={isVisibleShoppingCartItens}
         setIsVisible={setIsVisibleShoppingCartItens}
       />
+      <Content {...{ children, setIsVisibleShoppingCartItens }} />
+    </OnlyAuthContainer>
+  );
+}
+
+const BuyContext = createContext({} as BuyContextData);
+
+interface ContentProps {
+  children: React.ReactNode;
+  setIsVisibleShoppingCartItens: Dispatch<SetStateAction<boolean>>;
+}
+function Content({ children, setIsVisibleShoppingCartItens }: ContentProps) {
+  const { isLoading, ...props } = useBuyAddressPage();
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-64 flex justify-center items-end">
+        <Spin />
+      </div>
+    );
+  }
+
+  return (
+    <BuyContext.Provider value={props}>
       <div className="flex flex-col h-screen text-custom-text">
         <BuyHeader openDrawer={() => setIsVisibleShoppingCartItens(true)} />
         <div className="w-full py-10 mx-auto px-3 overflow-auto h-full">
@@ -31,16 +72,15 @@ export function BuyPageProvider({ children }: BuyPageProviderProps) {
             <div className="w-full lg:w-4/6">{children}</div>
             <div className="w-2/6  h-full shadow  hidden lg:flex flex-col">
               <ShoppingCartItensHeader />
-              <div className="border border-custom-gray-light border-b-transparent">
+              <div className="border-r border-l border-custom-line">
                 <ShoppingCartItens />
               </div>
-              <div className="border border-custom-gray-light ">
-                <ShoppingCartItensFooter />
-              </div>
+              <ShoppingCartItensFooter />
             </div>
           </main>
         </div>
       </div>
-    </OnlyAuthContainer>
+    </BuyContext.Provider>
   );
 }
+export const useBuyPage = () => useContext(BuyContext);

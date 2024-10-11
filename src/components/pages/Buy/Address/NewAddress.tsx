@@ -12,6 +12,9 @@ import { Spin } from "@/components/Spin";
 import * as Yup from "yup";
 import { useQuery } from "react-query";
 import { StatesService } from "@/services/StatesService";
+import { BuyPageProvider, useBuyPage } from "../BuyContext";
+import { baseAddress } from "./useBuyAddressPage";
+import { NextPageWithLayout } from "@/pages/_app";
 
 const validationSchema = Yup.object().shape({
   addressIdentify: Yup.string().required(
@@ -30,21 +33,16 @@ const validationSchema = Yup.object().shape({
   address: Yup.string().required("O campo endereço é obrigatório"),
 });
 
-interface NewAddressProps {
-  addAddress: (address: AddressI) => Promise<void>;
-  editingAddress: AddressI;
-  handleCancel: () => void;
-  deleteAddress: () => Promise<void>;
-  totalAddresses: number;
-}
-export function NewAddress({
-  addAddress,
-  editingAddress,
-  handleCancel,
-  deleteAddress,
-  totalAddresses,
-}: NewAddressProps) {
-  const [address, setAddress] = useState(editingAddress);
+export const NewAddressPage: NextPageWithLayout = () => {
+  const {
+    addAddress,
+    editingAddress,
+    deleteAddress,
+    addresses,
+    setEditingAddress,
+  } = useBuyPage();
+
+  const [address, setAddress] = useState(baseAddress);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -75,14 +73,17 @@ export function NewAddress({
 
   useEffect(() => {
     if (editingAddress) setAddress(editingAddress);
-    console.log(editingAddress);
+
+    return () => {
+      setEditingAddress(null);
+    };
   }, [editingAddress]);
 
   return (
     <>
       <header className="pb-2  mb-6 md:pb-2 flex justify-between border-b border-custom-gray-light">
         <span>Cadastrar novo endereço</span>
-        {address.id && totalAddresses > 1 && (
+        {address.id && addresses.length > 1 && (
           <DeleteAddress {...{ deleteAddress }} />
         )}
       </header>
@@ -95,10 +96,10 @@ export function NewAddress({
         </div>
       </div>
       <header className="flex py-4 gap-8 justify-end ">
-        {totalAddresses > 0 && (
+        {addresses.length > 0 && (
           <Button
-            onClick={handleCancel}
-            className="max-w-32 h-10  bg-white border text-custom-gray-light border-custom-gray-light"
+            href="address"
+            className="max-w-32 h-10 bg-white border text-custom-gray-light border-custom-gray-light"
           >
             Cancelar
           </Button>
@@ -114,7 +115,12 @@ export function NewAddress({
       </header>
     </>
   );
-}
+};
+
+NewAddressPage.getLayout = function getLayout(page: React.ReactNode) {
+  return <BuyPageProvider>{page}</BuyPageProvider>;
+};
+
 interface DeleteButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   deleteAddress: () => Promise<void>;
 }

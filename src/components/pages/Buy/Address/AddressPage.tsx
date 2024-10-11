@@ -1,68 +1,64 @@
-import { NewAddress } from "./NewAdress";
-import { Dispatch, SetStateAction } from "react";
+import { ArrowRight, MapPin } from "@phosphor-icons/react";
+import { BuyPageProvider, useBuyPage } from "../BuyContext";
+import { AddressCard } from "./AddressCard";
+import { Button } from "@/components/Button";
+import { NextPageWithLayout } from "@/pages/_app";
+import { useRouter } from "next/router";
 import { AddressI } from "@/interfaces/Address";
-import { Spin } from "@/components/Spin";
-import { useBuyPage } from "./useBuyAddressPage";
-import { BuyPageProvider } from "../BuyContext";
-import { AllAddress } from "./AllAddress";
 
-export function AddressPage() {
-  return (
-    <BuyPageProvider>
-      <BuyPageContainer />
-    </BuyPageProvider>
-  );
-}
+export const AddressPage: NextPageWithLayout = () => {
+  const {
+    addresses,
+    selectedAddressId,
+    setEditingAddress,
+    setSelectedAddressId,
+  } = useBuyPage();
 
-export function BuyPageContainer() {
-  const { isLoading, ...props } = useBuyPage();
-  if (isLoading)
-    return (
-      <div className="w-full h-64 flex justify-center items-end">
-        <Spin />
-      </div>
-    );
+  const { push } = useRouter();
 
-  return <BuyPageContent {...props} />;
-}
-
-interface BuyPageContentProps {
-  addresses: AddressI[];
-  editingAddress: AddressI | null;
-  setEditingAddress: Dispatch<SetStateAction<AddressI | null>>;
-  getAddresses: () => Promise<void>;
-  selectedAddressId: string;
-  setSelectedAddressId: Dispatch<SetStateAction<string>>;
-  deleteAddress: () => Promise<void>;
-  addAddress: (address: AddressI) => Promise<void>;
-}
-function BuyPageContent({
-  addresses,
-  editingAddress,
-  setEditingAddress,
-  selectedAddressId,
-  setSelectedAddressId,
-  addAddress,
-  deleteAddress,
-}: BuyPageContentProps) {
-  if (editingAddress) {
-    return (
-      <NewAddress
-        totalAddresses={addresses.length}
-        deleteAddress={deleteAddress}
-        handleCancel={() => setEditingAddress(null)}
-        editingAddress={editingAddress}
-        addAddress={addAddress}
-      />
-    );
+  function editAddress(address: AddressI) {
+    setEditingAddress(address);
+    push("/buy/new-address");
   }
 
   return (
-    <AllAddress
-      setSelectedAddressId={setSelectedAddressId}
-      selectedAddressId={selectedAddressId}
-      addresses={addresses}
-      setEditingAddress={setEditingAddress}
-    />
+    <>
+      <header className="flex items-center justify-between border-b pb-4 border-b-line text-custom-gray">
+        <div className="flex gap-2 items-center">
+          <MapPin size={24} />
+          <span className="text-xl">Escolha um endereço para entrega</span>
+        </div>
+        <div>
+          <Button
+            href="new-address"
+            className=" border border-custom-violet text-custom-violet bg-white py-1 px-2"
+          >
+            Novo endereço
+          </Button>
+        </div>
+      </header>
+      <main className="mt-4 flex flex-col lg:grid grid-cols-2 gap-4">
+        {addresses.map((address) => (
+          <AddressCard
+            key={address.id}
+            selectAddress={() => setSelectedAddressId(address.id || "")}
+            isSelected={selectedAddressId === address.id}
+            address={address}
+            setIsEditing={() => editAddress(address)}
+          />
+        ))}
+      </main>
+      <footer className="flex justify-end w-full mt-8 border-t pt-4 border-t-line">
+        <Button
+          href="payment"
+          linkShallow
+          icon={<ArrowRight />}
+          className="bg-custom-green text-white max-w-64 p-2"
+        >
+          Definir pagamento
+        </Button>
+      </footer>
+    </>
   );
-}
+};
+AddressPage.getLayout = (page) => <BuyPageProvider>{page}</BuyPageProvider>;

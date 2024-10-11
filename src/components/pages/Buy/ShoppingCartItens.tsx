@@ -22,7 +22,7 @@ export function ShoppingCartItensHeader({
         Itens
       </button>
       <button
-        className={`flex-1 bg-white text-custom-violet  text-center rounded-tr-md ${mobileR}`}
+        className={`flex-1 bg-white text-custom-violet border border-custom-violet  text-center rounded-tr-md ${mobileR}`}
       >
         Detalhes
       </button>
@@ -33,7 +33,7 @@ export function ShoppingCartItensHeader({
 export function ShoppingCartItensFooter() {
   const total = useTotalShoppingCartProducts();
   return (
-    <footer className="flex justify-between items-center bg-custom-background-light p-4">
+    <footer className="flex justify-between items-center bg-custom-line p-4">
       <span className="text-lg text-custom-text">Total</span>
       <span className="text-2xl text-custom-violet">{total}</span>
     </footer>

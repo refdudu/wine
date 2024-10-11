@@ -18,7 +18,7 @@ export function Button({
 }: ButtonProps) {
   const as = href ? Link : "button";
 
-  const className = `filter hover:brightness-110 transition w-full py-2 font-lato  rounded-sm flex justify-center items-center gap-2 ${props.className}`;
+  const className = `filter hover:brightness-110 transition w-full font-lato  rounded-sm flex justify-center items-center gap-2 ${props.className}`;
   if (href) {
     return (
       <Link href={href} className={className} shallow={linkShallow}>

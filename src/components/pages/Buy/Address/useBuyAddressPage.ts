@@ -2,7 +2,7 @@ import { AddressI } from "@/interfaces/Address";
 import { api } from "@/utils/api";
 import { useEffect, useState } from "react";
 
-export const useBuyPage = () => {
+export const useBuyAddressPage = () => {
   const [editingAddress, setEditingAddress] = useState<AddressI | null>(null);
   const [addresses, setAddresses] = useState<AddressI[]>([]);
   const [isLoading, setIsLoading] = useState(true);
