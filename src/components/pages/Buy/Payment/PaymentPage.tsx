@@ -26,9 +26,9 @@ export const PaymentPage: NextPageWithLayout = () => {
     <>
       <Header />
       <main className="mt-4 min-h-96 flex gap-8">
-        <div className="flex flex-col gap-2 border-custom-gray-light border max-w-60 w-full uppercase">
+        <div className="flex flex-col gap-2 border-custom-line border max-w-60 w-full uppercase">
           {paymentMethods.map(({ icon: Icon, label, value }) => (
-            <div className="border-custom-gray-light text-custom-gray border-b p-2 w-full">
+            <div className="border-custom-line text-custom-gray border-b p-2 w-full">
               <RadioInput
                 value={value}
                 checked={value === selectedPaymentMethod}
@@ -57,17 +57,17 @@ PaymentPage.getLayout = (page) => <BuyPageProvider>{page}</BuyPageProvider>;
 
 function Footer() {
   return (
-    <footer className="w-full mt-8 border-t pt-4 border-t-custom-gray-light flex justify-between">
+    <footer className="w-full mt-8 border-t pt-4 border-t-custom-line flex justify-between">
       <Button
         href="address"
-        className="bg-white border border-custom-gray max-w-48"
+        className="bg-white border border-custom-gray max-w-48 py-2"
       >
         Voltar
       </Button>
       <Button
         href="payment"
         icon={<Check />}
-        className="bg-custom-green text-white max-w-64"
+        className="bg-custom-green text-white max-w-64 py-2"
       >
         Finalizar pedido
       </Button>
@@ -76,7 +76,7 @@ function Footer() {
 }
 function Header() {
   return (
-    <header className="flex items-center justify-between border-b pb-4 border-b-custom-gray-light text-custom-gray">
+    <header className="flex items-center justify-between border-b pb-4 border-b-custom-line text-custom-gray">
       <div className="flex gap-2 items-center">
         <CreditCard size={24} />
         <span className="text-xl">Escolha sua forma de pagamento</span>
@@ -124,7 +124,7 @@ function CreditCardComponent() {
       </span>
       <Button
         href="credit-card"
-        className="border border-custom-tannat text-custom-tannat max-w-64"
+        className="border border-custom-tannat text-custom-tannat max-w-64 py-2"
       >
         Cadastrar cartão
       </Button>

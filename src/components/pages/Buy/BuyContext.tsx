@@ -17,6 +17,7 @@ import { OnlyAuthContainer } from "@/components/OnlyAuthContainer";
 import { useBuyAddressPage } from "./Address/useBuyAddressPage";
 import { AddressI } from "@/interfaces/Address";
 import { Spin } from "@/components/Spin";
+import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 
 interface BuyContextData {
   setEditingAddress: Dispatch<SetStateAction<AddressI | null>>;
@@ -53,9 +54,10 @@ interface ContentProps {
   setIsVisibleShoppingCartItens: Dispatch<SetStateAction<boolean>>;
 }
 function Content({ children, setIsVisibleShoppingCartItens }: ContentProps) {
+  const { isLoadingProducts } = useShoppingCart();
   const { isLoading, ...props } = useBuyAddressPage();
 
-  if (isLoading) {
+  if (isLoading || isLoadingProducts) {
     return (
       <div className="w-full h-64 flex justify-center items-end">
         <Spin />

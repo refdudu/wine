@@ -15,6 +15,7 @@ interface ShoppingCartContextProps {
   handleOpenDrawer: () => void;
   handleCloseDrawer: () => void;
   changeProductAmount: (productId: string, amount: number) => Promise<void>;
+  isLoadingProducts:boolean;
 }
 const ShoppingCartContext = createContext({} as ShoppingCartContextProps);
 
@@ -26,6 +27,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const { user } = useSession();
   const { productService, shoppingCartService } = useServices();
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
   const [shoppingCartProducts, setShoppingCartProducts] = useState<
     ShoppingCartProductI[]
   >([]);
@@ -35,6 +37,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       setShoppingCartProducts([]);
       return;
     }
+    setIsLoadingProducts(true);
     const shoppingCartProductsKeyValue = await shoppingCartService.get();
     if (!shoppingCartProductsKeyValue) return;
 
@@ -54,6 +57,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         return { ...product, amount: 1 };
       }
     );
+    setIsLoadingProducts(false);
     setShoppingCartProducts(shoppingCartProducts);
   }
 
@@ -119,6 +123,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         handleOpenDrawer,
         handleCloseDrawer,
         changeProductAmount,
+        isLoadingProducts
       }}
     >
       {children}

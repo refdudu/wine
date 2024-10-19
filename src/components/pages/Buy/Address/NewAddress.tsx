@@ -42,7 +42,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
     setEditingAddress,
   } = useBuyPage();
 
-  const [address, setAddress] = useState(baseAddress);
+  const [address, setAddress] = useState(editingAddress || baseAddress);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -99,7 +99,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
         {addresses.length > 0 && (
           <Button
             href="address"
-            className="max-w-32 h-10 bg-white border text-custom-gray-light border-custom-gray-light"
+            className="max-w-32 h-10 bg-white border text-custom-gray-light border-custom-gray-light "
           >
             Cancelar
           </Button>
@@ -108,7 +108,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
           isLoading={isLoading}
           icon={<Check />}
           onClick={handleAddAddress}
-          className="max-w-52 bg-custom-violet text-white"
+          className="max-w-52 bg-custom-violet text-white py-2"
         >
           Salvar endereço
         </Button>

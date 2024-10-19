@@ -1,8 +1,10 @@
 import { AddressI } from "@/interfaces/Address";
 import { api } from "@/utils/api";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export const useBuyAddressPage = () => {
+  const { push } = useRouter();
   const [editingAddress, setEditingAddress] = useState<AddressI | null>(null);
   const [addresses, setAddresses] = useState<AddressI[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -58,10 +60,13 @@ export const useBuyAddressPage = () => {
       if (!selectedAddressId) setSelectedAddressId(favoriteAddress.id || "");
       setAddresses(addresses);
 
-      if (data.addresses.length === 0)
+      if (addresses.length === 0) {
         setEditingAddress({ ...baseAddress, isFavorite: true });
+        push("/buy/new-address");
+      }
     } catch (e) {
       setEditingAddress({ ...baseAddress, isFavorite: true });
+      push("/buy/new-address");
     }
     setIsLoading(false);
   }
