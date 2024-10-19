@@ -1,9 +1,10 @@
 import { Check, CreditCard, PixLogo } from "@phosphor-icons/react";
-import { BuyPageProvider } from "../BuyContext";
+import { BuyPageProvider, useBuyPage } from "../BuyContext";
 import { RadioInput } from "@/components/RadioInput";
 import { useState } from "react";
 import { Button } from "@/components/Button";
 import { NextPageWithLayout } from "@/pages/_app";
+import { BuyDefaultHeader } from "../BuyDefaultHeader";
 
 const paymentMethods = [
   {
@@ -24,9 +25,11 @@ export const PaymentPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <Header />
+      <BuyDefaultHeader
+        {...{ icon: CreditCard, title: "Escolha sua forma de pagamento" }}
+      />
       <main className="mt-4 min-h-96 flex gap-8">
-        <div className="flex flex-col gap-2 border-custom-line border max-w-60 w-full uppercase">
+        <div className="flex flex-col gap-2 border-custom-line border max-w-72 w-full uppercase">
           {paymentMethods.map(({ icon: Icon, label, value }) => (
             <div className="border-custom-line text-custom-gray border-b p-2 w-full">
               <RadioInput
@@ -60,28 +63,18 @@ function Footer() {
     <footer className="w-full mt-8 border-t pt-4 border-t-custom-line flex justify-between">
       <Button
         href="address"
-        className="bg-white border border-custom-gray max-w-48 py-2"
+        className="bg-white border border-custom-gray max-w-48 h-10"
       >
         Voltar
       </Button>
       <Button
         href="payment"
         icon={<Check />}
-        className="bg-custom-green text-white max-w-64 py-2"
+        className="bg-custom-green text-white max-w-64 h-10"
       >
         Finalizar pedido
       </Button>
     </footer>
-  );
-}
-function Header() {
-  return (
-    <header className="flex items-center justify-between border-b pb-4 border-b-custom-line text-custom-gray">
-      <div className="flex gap-2 items-center">
-        <CreditCard size={24} />
-        <span className="text-xl">Escolha sua forma de pagamento</span>
-      </div>
-    </header>
   );
 }
 interface PaymentMethodProps {
@@ -114,6 +107,11 @@ function Pix() {
 }
 
 function CreditCardComponent() {
+  const { creditCards } = useBuyPage();
+  if (creditCards.length !== 0) {
+    return <span>{creditCards[0]?.name}</span>;
+  }
+  
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       <span className="text-lg">
@@ -124,7 +122,7 @@ function CreditCardComponent() {
       </span>
       <Button
         href="credit-card"
-        className="border border-custom-tannat text-custom-tannat max-w-64 py-2"
+        className="border h-10 border-custom-tannat text-custom-tannat max-w-64"
       >
         Cadastrar cartão
       </Button>

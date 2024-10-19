@@ -1,18 +1,15 @@
-import { AddressI } from "@/interfaces/Address";
-import { api } from "@/utils/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import * as Yup from "yup";
 
-export const useBuyAddressPage = () => {
+export const useBuyPaymentPage = () => {
   const [creditCards, setCreditCards] = useState<CreditCardI[]>([]);
-  const [selectedCreditCardId, setSelectedCreditCardId] = useState("");
   const [editingCreditCard, setEditingCreditCard] =
     useState<CreditCardI | null>(null);
 
   return {
     creditCards,
-    selectedCreditCardId,
     editingCreditCard,
+    setCreditCards,
   };
 };
 export interface CreditCardI {
@@ -43,7 +40,7 @@ export const creditCardSchema = Yup.object().shape({
 
   expirationDate: Yup.string()
     .matches(
-      /^(0[1-9]|1[0-2])\/?([0-9]{2})$/,
+      /^(0[1-9]|1[0-2])\/\d{2}$/,
       "A validade deve estar no formato MM/AA"
     )
     .required("A data de validade é obrigatória"),
