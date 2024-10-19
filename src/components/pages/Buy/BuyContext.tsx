@@ -17,6 +17,7 @@ import { OnlyAuthContainer } from "@/components/OnlyAuthContainer";
 import { useBuyAddressPage } from "./Address/useBuyAddressPage";
 import { AddressI } from "@/interfaces/Address";
 import { Spin } from "@/components/Spin";
+import { CreditCardI, useBuyPaymentPage } from "./Payment/useBuyPaymentPage";
 
 interface BuyContextData {
   setEditingAddress: Dispatch<SetStateAction<AddressI | null>>;
@@ -26,6 +27,9 @@ interface BuyContextData {
   addAddress: (address: AddressI) => Promise<void>;
   editingAddress: AddressI | null;
   deleteAddress: () => Promise<void>;
+
+  creditCards: CreditCardI[];
+  setCreditCards: Dispatch<SetStateAction<CreditCardI[]>>;
 }
 
 interface BuyPageProviderProps {
@@ -53,7 +57,8 @@ interface ContentProps {
   setIsVisibleShoppingCartItens: Dispatch<SetStateAction<boolean>>;
 }
 function Content({ children, setIsVisibleShoppingCartItens }: ContentProps) {
-  const { isLoading, ...props } = useBuyAddressPage();
+  const { isLoading, ...addressProps } = useBuyAddressPage();
+  const paymentProps = useBuyPaymentPage();
 
   if (isLoading) {
     return (
@@ -64,7 +69,7 @@ function Content({ children, setIsVisibleShoppingCartItens }: ContentProps) {
   }
 
   return (
-    <BuyContext.Provider value={props}>
+    <BuyContext.Provider value={{ ...addressProps, ...paymentProps }}>
       <div className="flex flex-col h-screen text-custom-text">
         <BuyHeader openDrawer={() => setIsVisibleShoppingCartItens(true)} />
         <div className="w-full py-10 mx-auto px-3 overflow-auto h-full">

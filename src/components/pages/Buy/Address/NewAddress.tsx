@@ -15,6 +15,7 @@ import { StatesService } from "@/services/StatesService";
 import { BuyPageProvider, useBuyPage } from "../BuyContext";
 import { baseAddress } from "./useBuyAddressPage";
 import { NextPageWithLayout } from "@/pages/_app";
+import { BuyDefaultHeader } from "../BuyDefaultHeader";
 
 const validationSchema = Yup.object().shape({
   addressIdentify: Yup.string().required(
@@ -81,13 +82,16 @@ export const NewAddressPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <header className="pb-2  mb-6 md:pb-2 flex justify-between border-b border-custom-gray-light">
-        <span>Cadastrar novo endereço</span>
-        {address.id && addresses.length > 1 && (
-          <DeleteAddress {...{ deleteAddress }} />
-        )}
-      </header>
-      <div className="flex gap-4 w-full flex-col-reverse md:flex-row">
+      <BuyDefaultHeader
+        {...{
+          action: address.id && addresses.length > 1 && (
+            <DeleteAddress {...{ deleteAddress }} />
+          ),
+          title: address.id ?"Editar endereço":"Cadastrar novo endereço",
+        }}
+      />
+
+      <div className="flex gap-4 w-full flex-col-reverse md:flex-row mt-6">
         <div className="max-w-72 w-full flex flex-col gap-6">
           <FirstColumn {...{ address, errors, handleChange }} />
         </div>
@@ -95,7 +99,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
           <NewAddressForm {...{ address, errors, handleChange }} />
         </div>
       </div>
-      <header className="flex py-4 gap-8 justify-end ">
+      <footer className="flex py-4 gap-8 justify-end ">
         {addresses.length > 0 && (
           <Button
             href="address"
@@ -112,7 +116,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
         >
           Salvar endereço
         </Button>
-      </header>
+      </footer>
     </>
   );
 };
