@@ -1,10 +1,10 @@
-import { AddressRepositoryFirebase } from "@/api/address/AddressRepository";
+import { CreditCardRepositoryFirebase } from "@/api/credit-card/CreditCardRepository";
 import {
   ApiRequestAuth,
   AuthMiddleware,
 } from "@/api/middlewares/AuthMiddleware";
 import { GetProductsResponse } from "@/api/product/ProductService";
-import { addressValidationSchema } from "@/validation/address";
+import { creditCardSchema } from "@/validation/credit-card";
 import type { NextApiRequest, NextApiResponse } from "next";
 export default async function index(
   req: NextApiRequest,
@@ -14,17 +14,17 @@ export default async function index(
 }
 async function main(req: ApiRequestAuth, res: NextApiResponse) {
   const { userUid } = req;
-  const { addressId } = req.query as { addressId: string };
-  const addressRepository = new AddressRepositoryFirebase(userUid);
+  const { creditCardId } = req.query as { creditCardId: string };
+  const creditCardRepository = new CreditCardRepositoryFirebase(userUid);
 
   if (req.method === "PUT") {
-    const address = req.body;
-    await addressValidationSchema.validate(address, { abortEarly: false });
-    await addressRepository.update(addressId, address);
+    const creditCard = req.body;
+    await creditCardSchema.validate(creditCard, { abortEarly: false });
+    await creditCardRepository.update(creditCardId, creditCard);
     return res.status(200).json({});
   }
   if (req.method === "DELETE") {
-    await addressRepository.delete(addressId);
+    await creditCardRepository.delete(creditCardId);
     return res.status(200).json({});
   }
   return res.status(200);

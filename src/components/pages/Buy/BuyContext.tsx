@@ -17,8 +17,9 @@ import { OnlyAuthContainer } from "@/components/OnlyAuthContainer";
 import { useBuyAddressPage } from "./Address/useBuyAddressPage";
 import { AddressI } from "@/interfaces/Address";
 import { Spin } from "@/components/Spin";
-import { CreditCardI, useBuyPaymentPage } from "./Payment/useBuyPaymentPage";
+import { useBuyPaymentPage } from "./Payment/useBuyPaymentPage";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
+import { CreditCardI } from "@/interfaces/CreditCardI";
 
 interface BuyContextData {
   setEditingAddress: Dispatch<SetStateAction<AddressI | null>>;
@@ -28,9 +29,10 @@ interface BuyContextData {
   addAddress: (address: AddressI) => Promise<void>;
   editingAddress: AddressI | null;
   deleteAddress: () => Promise<void>;
-
+  
   creditCards: CreditCardI[];
   setCreditCards: Dispatch<SetStateAction<CreditCardI[]>>;
+  addCreditCard: (creditCard: CreditCardI) => Promise<void>;
 }
 
 interface BuyPageProviderProps {
@@ -59,10 +61,12 @@ interface ContentProps {
 }
 function Content({ children, setIsVisibleShoppingCartItens }: ContentProps) {
   const { isLoadingProducts } = useShoppingCart();
-  const { isLoading, ...addressProps } = useBuyAddressPage();
-  const paymentProps = useBuyPaymentPage();
+  const { isLoading: isLoadingAddresses, ...addressProps } =
+    useBuyAddressPage();
+  const { isLoading: isLoadingCreditCards, ...paymentProps } =
+    useBuyPaymentPage();
 
-  if (isLoading || isLoadingProducts) {
+  if (isLoadingAddresses || isLoadingProducts) {
     return (
       <div className="w-full h-64 flex justify-center items-end">
         <Spin />

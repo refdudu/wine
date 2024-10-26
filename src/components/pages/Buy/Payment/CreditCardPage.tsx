@@ -2,22 +2,20 @@ import { Input } from "@/components/Input";
 import { BuyPageProvider, useBuyPage } from "../BuyContext";
 import * as Yup from "yup";
 import { useState } from "react";
-import {
-  _creditCard,
-  CreditCardI,
-  creditCardSchema,
-} from "./useBuyPaymentPage";
+import { baseCreditCard } from "./useBuyPaymentPage";
 import { NextPageWithLayout } from "@/pages/_app";
-import { Check, CreditCard } from "@phosphor-icons/react";
+import { Check, CreditCard, Star } from "@phosphor-icons/react";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
 import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { Button } from "@/components/Button";
 import { useRouter } from "next/router";
+import { CreditCardI } from "@/interfaces/CreditCardI";
+import { creditCardSchema } from "@/validation/credit-card";
 
 export const CreditCardPage: NextPageWithLayout = () => {
-  const { setCreditCards } = useBuyPage();
+  const { addCreditCard } = useBuyPage();
   const { push } = useRouter();
-  const [creditCard, setCreditCard] = useState(_creditCard);
+  const [creditCard, setCreditCard] = useState(baseCreditCard);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,7 +27,7 @@ export const CreditCardPage: NextPageWithLayout = () => {
     setIsLoading(true);
     try {
       await creditCardSchema.validate(creditCard, { abortEarly: false });
-      setCreditCards((p) => [...p, creditCard]);
+      await addCreditCard(creditCard);
       push("/buy/payment");
     } catch (e) {
       console.log(e);
@@ -47,7 +45,7 @@ export const CreditCardPage: NextPageWithLayout = () => {
   return (
     <>
       <BuyDefaultHeader {...{ title: "Cadastrar novo cartão de crédito" }} />
-      <main className="flex gap-6 mt-4">
+      <main className="flex gap-6 mt-4 h-96">
         <div className="flex-col max-w-72 gap-6 flex">
           <CreditCardInfo {...{ creditCard }} />
           <div className="flex flex-col gap-2">
@@ -62,18 +60,16 @@ export const CreditCardPage: NextPageWithLayout = () => {
         </div>
         <Form {...{ creditCard, errors, handleChange }} />
       </main>
-      <footer className="flex py-4 gap-8 justify-end ">
-        <Button
-          href="payment"
-          className="max-w-32 h-10 bg-white border text-custom-gray-light border-custom-gray-light"
-        >
+      <footer className="flex py-4 gap-8 justify-end border-t border-t-custom-line">
+        <Button href="payment" className="max-w-32 h-10" styleType="default">
           Voltar
         </Button>
         <Button
           isLoading={isLoading}
           icon={<Check />}
           onClick={handleAddCreditCard}
-          className="max-w-52 bg-custom-violet text-white"
+          className="max-w-52"
+          styleType="primary-full"
         >
           Salvar endereço
         </Button>
@@ -128,14 +124,23 @@ interface CreditCardInfoProps {
 }
 function CreditCardInfo({ creditCard }: CreditCardInfoProps) {
   return (
-    <div className="bg-gray-500  rounded px-8 py-4 flex flex-col gap-2 w-72">
-      <div>
-        <CreditCard size="36" className="text-custom-gray" />
+    <div
+      className="rounded px-8 py-4 flex flex-col gap-2 w-72 text-left"
+      style={{
+        backgroundImage:
+          "url(https://img.wine.com.br/fenix/image/card_bg_black.png)",
+      }}
+    >
+      <div className="flex items-center justify-between">
+        <CreditCard size="36" className="text-custom-gray-light" />
+        {creditCard.isFavorite && (
+          <Star size="24" weight="fill" className="text-yellow-400" />
+        )}
       </div>
       <div className="flex justify-between">
         <CreditCardValue
           label="Número do cartão"
-          maxWidth={125}
+          maxWidth={135}
           value={creditCard.number}
         />
         <CreditCardValue
@@ -145,7 +150,7 @@ function CreditCardInfo({ creditCard }: CreditCardInfoProps) {
         />
       </div>
       <div className="flex justify-between">
-        <CreditCardValue label="Nome" maxWidth={125} value={creditCard.name} />
+        <CreditCardValue label="Nome" maxWidth={135} value={creditCard.name} />
         <CreditCardValue label="CVV" maxWidth={50} value={creditCard.cvv} />
       </div>
     </div>
@@ -159,7 +164,7 @@ interface CreditCardValueProps {
 function CreditCardValue({ label, maxWidth, value }: CreditCardValueProps) {
   return (
     <div
-      className={`flex-1 flex flex-col justify-between text-xs h-10`}
+      className={`flex-1 flex flex-col justify-between text-xs min-h-10`}
       style={{ maxWidth }}
     >
       <span className={`text-gray-200`}>{label}</span>

@@ -26,9 +26,23 @@ export const PaymentPage: NextPageWithLayout = () => {
   return (
     <>
       <BuyDefaultHeader
-        {...{ icon: CreditCard, title: "Escolha sua forma de pagamento" }}
+        {...{
+          icon: CreditCard,
+          title: "Escolha sua forma de pagamento",
+          action: selectedPaymentMethod === "credit-card" && (
+            <div>
+              <Button
+                href="credit-card"
+                styleType="primary-outline"
+                className="py-1 px-2"
+              >
+                Novo cartão
+              </Button>
+            </div>
+          ),
+        }}
       />
-      <main className="mt-4 min-h-96 flex gap-8">
+      <main className="mt-4 h-96 flex gap-8">
         <div className="flex flex-col gap-2 border-custom-line border max-w-72 w-full uppercase">
           {paymentMethods.map(({ icon: Icon, label, value }) => (
             <div className="border-custom-line text-custom-gray border-b p-2 w-full">
@@ -61,16 +75,14 @@ PaymentPage.getLayout = (page) => <BuyPageProvider>{page}</BuyPageProvider>;
 function Footer() {
   return (
     <footer className="w-full mt-8 border-t pt-4 border-t-custom-line flex justify-between">
-      <Button
-        href="address"
-        className="bg-white border border-custom-gray max-w-48 h-10"
-      >
+      <Button href="address" className="max-w-48 h-10" styleType="default">
         Voltar
       </Button>
       <Button
         href="payment"
         icon={<Check />}
-        className="bg-custom-green text-white max-w-64 h-10"
+        className=" max-w-64 h-10"
+        styleType="success"
       >
         Finalizar pedido
       </Button>
@@ -108,12 +120,29 @@ function Pix() {
 
 function CreditCardComponent() {
   const { creditCards } = useBuyPage();
-  if (creditCards.length !== 0) {
-    return <span>{creditCards[0]?.name}</span>;
-  }
-  
+
   return (
-    <div className="flex flex-col items-center gap-4 text-center">
+    <div className="flex flex-col items-center gap-4 text-center h-full w-full">
+      {creditCards.length === 0 ? (
+        <NoContent />
+      ) : (
+        <div className="flex flex-col gap-2 w-full overflow-auto">
+          {Array.from({ length: 10 })
+            .map((x) => creditCards[0])
+            .map((creditCard) => (
+              <CreditCardInfo {...{ creditCard }} />
+            ))}
+        </div>
+      )}
+    </div>
+  );
+}
+function MapCreditCard() {
+  const { creditCards } = useBuyPage();
+}
+function NoContent() {
+  return (
+    <>
       <span className="text-lg">
         Você não tem nenhum cartão de crédito cadastrado
       </span>
@@ -126,6 +155,6 @@ function CreditCardComponent() {
       >
         Cadastrar cartão
       </Button>
-    </div>
+    </>
   );
 }

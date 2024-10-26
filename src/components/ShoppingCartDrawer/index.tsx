@@ -108,10 +108,7 @@ function Footer() {
           {totalProductsPrice}
         </span>
       </div>
-      <Button
-        href="/buy/address"
-        className="w-full bg-custom-green text-white py-2"
-      >
+      <Button href="/buy/address" styleType="success" className="w-full py-2">
         Finalizar
       </Button>
     </header>

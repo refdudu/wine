@@ -5,6 +5,7 @@ import { Button } from "@/components/Button";
 import { NextPageWithLayout } from "@/pages/_app";
 import { useRouter } from "next/router";
 import { AddressI } from "@/interfaces/Address";
+import { BuyDefaultHeader } from "../BuyDefaultHeader";
 
 export const AddressPage: NextPageWithLayout = () => {
   const {
@@ -23,21 +24,24 @@ export const AddressPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <header className="flex items-center justify-between border-b pb-4 border-b-line text-custom-gray">
-        <div className="flex gap-2 items-center">
-          <MapPin size={24} />
-          <span className="text-xl">Escolha um endereço para entrega</span>
-        </div>
-        <div>
-          <Button
-            href="new-address"
-            className=" border border-custom-violet text-custom-violet bg-white py-1 px-2"
-          >
-            Novo endereço
-          </Button>
-        </div>
-      </header>
-      <main className="mt-4 flex flex-col lg:grid grid-cols-2 gap-4">
+      <BuyDefaultHeader
+        {...{
+          icon: MapPin,
+          title: "Escolha um endereço para entrega",
+          action: (
+            <div>
+              <Button
+                href="new-address"
+                styleType="primary-outline"
+                className="py-1 px-2"
+              >
+                Novo endereço
+              </Button>
+            </div>
+          ),
+        }}
+      />
+      <main className="mt-4 h-96 flex flex-col lg:grid grid-cols-2 gap-4">
         {addresses.map((address) => (
           <AddressCard
             key={address.id}

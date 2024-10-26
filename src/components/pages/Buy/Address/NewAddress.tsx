@@ -16,23 +16,7 @@ import { BuyPageProvider, useBuyPage } from "../BuyContext";
 import { baseAddress } from "./useBuyAddressPage";
 import { NextPageWithLayout } from "@/pages/_app";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
-
-const validationSchema = Yup.object().shape({
-  addressIdentify: Yup.string().required(
-    "O campo Identificação do endereço é obrigatório"
-  ),
-  recipientName: Yup.string().required(
-    "O campo Nome do destinatário é obrigatório"
-  ),
-  phone: Yup.string().required("O campo telefone é obrigatório"),
-  cep: Yup.string().required("O campo CEP é obrigatório"),
-  state: Yup.string().required("O campo estado é obrigatório"),
-  city: Yup.string().required("O campo cidade é obrigatório"),
-  neighborhood: Yup.string().required("O campo bairro é obrigatório"),
-  number: Yup.string().required("O campo número é obrigatório"),
-  complement: Yup.string().required("O campo complemento é obrigatório"),
-  address: Yup.string().required("O campo endereço é obrigatório"),
-});
+import { addressValidationSchema } from "@/validation/address";
 
 export const NewAddressPage: NextPageWithLayout = () => {
   const {
@@ -55,7 +39,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
         city: address.city?.key,
         state: address.state?.key,
       };
-      await validationSchema.validate(_address, { abortEarly: false });
+      await addressValidationSchema.validate(_address, { abortEarly: false });
       await addAddress(address);
     } catch (e) {
       const { inner } = e as Yup.ValidationError;
@@ -87,7 +71,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
           action: address.id && addresses.length > 1 && (
             <DeleteAddress {...{ deleteAddress }} />
           ),
-          title: address.id ?"Editar endereço":"Cadastrar novo endereço",
+          title: address.id ? "Editar endereço" : "Cadastrar novo endereço",
         }}
       />
 
@@ -101,10 +85,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
       </div>
       <footer className="flex py-4 gap-8 justify-end ">
         {addresses.length > 0 && (
-          <Button
-            href="address"
-            className="max-w-32 h-10 bg-white border text-custom-gray-light border-custom-gray-light "
-          >
+          <Button href="address" styleType="default" className="max-w-32 h-10">
             Cancelar
           </Button>
         )}
@@ -112,7 +93,8 @@ export const NewAddressPage: NextPageWithLayout = () => {
           isLoading={isLoading}
           icon={<Check />}
           onClick={handleAddAddress}
-          className="max-w-52 bg-custom-violet text-white py-2"
+          styleType="primary-full"
+          className="max-w-52 py-2"
         >
           Salvar endereço
         </Button>

@@ -3,8 +3,7 @@ import {
   ApiRequestAuth,
   AuthMiddleware,
 } from "@/api/middlewares/AuthMiddleware";
-import { ShoppingCartService } from "@/api/shopping-cart/ShoppingCartService";
-import { ShoppingCartProductDTO } from "@/interfaces/ProductShoppingCartI";
+import { addressValidationSchema } from "@/validation/address";
 import type { NextApiRequest, NextApiResponse } from "next";
 export default async function index(req: NextApiRequest, res: NextApiResponse) {
   return AuthMiddleware(main, req, res);
@@ -16,7 +15,9 @@ async function main(req: ApiRequestAuth, res: NextApiResponse) {
   const addressRepository = new AddressRepositoryFirebase(userUid);
   if (req.method === "POST") {
     const address = req.body;
-    const addressId = await addressRepository.add(address);
+    console.log("🚀 ~ main ~ address:", address)
+    await addressValidationSchema.validate(address, { abortEarly: false });
+    await addressRepository.add(address);
     const addresses = await addressRepository.get();
 
     return res.status(200).json({ addresses });
