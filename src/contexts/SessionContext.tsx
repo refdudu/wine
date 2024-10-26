@@ -38,15 +38,19 @@ export function SessionProvider({ children }: SessionProviderProps) {
     if (user) return alert("Você já está conectado");
     const provider = new GoogleAuthProvider();
     try {
-      if (isMobile) {
-        const { user } = await signInWithRedirect(firebaseAuthClient, provider);
-        alert(user);
-        setUser(user);
-      } else {
-        const { user } = await signInWithPopup(firebaseAuthClient, provider);
-        setUser(user);
-      }
-    } catch {}
+      //   if (isMobile) {
+      //     const { user } = await signInWithRedirect(firebaseAuthClient, provider);
+      //     console.log("🚀 ~ signIn ~ user:", user);
+      //     alert(user);
+      //     setUser(user);
+      //   } else {
+
+      //   }
+      const { user } = await signInWithPopup(firebaseAuthClient, provider);
+      setUser(user);
+    } catch (e) {
+      console.error(e);
+    }
   }
   async function signOut() {
     try {
