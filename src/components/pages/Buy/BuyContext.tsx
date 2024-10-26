@@ -29,10 +29,12 @@ interface BuyContextData {
   addAddress: (address: AddressI) => Promise<void>;
   editingAddress: AddressI | null;
   deleteAddress: () => Promise<void>;
-  
+
   creditCards: CreditCardI[];
   setCreditCards: Dispatch<SetStateAction<CreditCardI[]>>;
   addCreditCard: (creditCard: CreditCardI) => Promise<void>;
+  selectedCreditCardId: string;
+  setSelectedCreditCardId: Dispatch<SetStateAction<string>>;
 }
 
 interface BuyPageProviderProps {

@@ -86,7 +86,7 @@ export class CreditCardRepositoryFirebase {
   private async hasDoc(ref: DocumentReference<DocumentData, DocumentData>) {
     const addressDoc = await getDoc(ref);
     const existsAddress = addressDoc.exists();
-    if (!existsAddress) throw new Error("Address not found");
+    if (!existsAddress) throw new Error("CreditCard not found");
   }
   async get() {
     const creditCardRef = await getDocs(this.dbRef);

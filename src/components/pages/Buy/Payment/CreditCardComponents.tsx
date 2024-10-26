@@ -26,6 +26,7 @@ interface CreditCardItemProps {
   creditCard: CreditCardI;
 }
 function CreditCardItem({ creditCard }: CreditCardItemProps) {
+  const { selectedCreditCardId, setSelectedCreditCardId } = useBuyPage();
   return (
     <div
       className="rounded px-8 py-4 flex flex-col gap-2 text-left h-[211px] w-[390px]"
@@ -37,8 +38,19 @@ function CreditCardItem({ creditCard }: CreditCardItemProps) {
       <div className="flex gap-12">
         <Image width={64} src={MasterCardLogo} alt="Bandeira do cartão" />
         <div className="text-yellow-400 flex gap-2 items-center">
-          <Star weight="fill" size={24} />
-          <span className="text-xs">Favorito</span>
+          {selectedCreditCardId === creditCard.id ? (
+            <>
+              <Star weight="fill" size={24} />
+              <span className="text-xs">Selecionado</span>
+            </>
+          ) : (
+            <Button
+              onClick={() => setSelectedCreditCardId(creditCard.id!)}
+              className="text-yellow-400"
+            >
+              Selecionar
+            </Button>
+          )}
         </div>
       </div>
       <div>

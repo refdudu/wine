@@ -1,13 +1,10 @@
-import { Check, CreditCard, PixLogo } from "@phosphor-icons/react";
-import { BuyPageProvider, useBuyPage } from "../BuyContext";
+import { ArrowRight, Check, CreditCard, PixLogo } from "@phosphor-icons/react";
+import { BuyPageProvider } from "../BuyContext";
 import { RadioInput } from "@/components/RadioInput";
 import { useState } from "react";
 import { Button } from "@/components/Button";
 import { NextPageWithLayout } from "@/pages/_app";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
-import { CreditCardI } from "@/interfaces/CreditCardI";
-import MasterCardLogo from "./MastercardLogo.svg";
-import Image from "next/image";
 import { CreditCardComponent } from "./CreditCardComponents";
 
 const paymentMethods = [
@@ -86,11 +83,11 @@ function Footer({ selectedPaymentMethod }: FooterProps) {
         )}
         <Button
           href="payment"
-          icon={<Check />}
+          icon={<ArrowRight />}
           className="lg:max-w-64 h-10"
           styleType="success"
         >
-          Finalizar pedido
+          Continuar
         </Button>
       </div>
     </footer>
