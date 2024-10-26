@@ -28,20 +28,11 @@ export const AddressPage: NextPageWithLayout = () => {
         {...{
           icon: MapPin,
           title: "Escolha um endereço para entrega",
-          action: (
-            <div>
-              <Button
-                href="new-address"
-                styleType="primary-outline"
-                className="py-1 px-2"
-              >
-                Novo endereço
-              </Button>
-            </div>
-          ),
+          action: <div></div>,
         }}
       />
-      <main className="mt-4 h-96 flex flex-col lg:grid grid-cols-2 gap-4">
+      <main className="mt-4 lg:h-96 overflow-auto flex flex-col lg:grid grid-cols-2 auto-rows-min  gap-4">
+        {/* {Array.from({ length: 100 }, (x) => addresses[1])} */}
         {addresses.map((address) => (
           <AddressCard
             key={address.id}
@@ -52,12 +43,21 @@ export const AddressPage: NextPageWithLayout = () => {
           />
         ))}
       </main>
-      <footer className="flex justify-end w-full mt-8 border-t pt-4 border-t-line">
+      <footer className="flex flex-col lg:flex-row justify-end w-full mt-4 pt-4 border-t border-t-custom-line gap-4">
+        <Button
+          href="new-address"
+          linkShallow
+          styleType="primary-outline"
+          className="h-10 lg:max-w-32"
+        >
+          Novo endereço
+        </Button>
         <Button
           href="payment"
           linkShallow
           icon={<ArrowRight />}
-          className="bg-custom-green text-white max-w-64 p-2"
+          styleType="success"
+          className="lg:max-w-64 p-2"
         >
           Definir pagamento
         </Button>

@@ -79,11 +79,11 @@ function Content({ children, setIsVisibleShoppingCartItens }: ContentProps) {
       <div className="flex flex-col h-screen text-custom-text">
         <BuyHeader openDrawer={() => setIsVisibleShoppingCartItens(true)} />
         <div className="w-full py-10 mx-auto px-3 overflow-auto h-full">
-          <main className="max-w-[1120px] flex mx-auto gap-9 flex-col md:flex-row">
+          <main className="max-w-[1200px] flex mx-auto gap-9 flex-col md:flex-row">
             <div className="w-full lg:w-4/6">{children}</div>
             <div className="w-2/6  h-full shadow  hidden lg:flex flex-col">
               <ShoppingCartItensHeader />
-              <div className="border-r border-l border-custom-line">
+              <div className="border-r border-l border-custom-line max-h-[500px] lg:max-h-96 overflow-auto">
                 <ShoppingCartItens />
               </div>
               <ShoppingCartItensFooter />

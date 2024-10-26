@@ -24,7 +24,7 @@ export function AddressCard({
       >
         {isSelected && "Selecionado"}
       </header>
-      <div className="p-4">
+      <div className="p-4 flex flex-col justify-center">
         <div className="flex items-center text-xl justify-between">
           <div className="flex gap-2 items-center">
             <span>{address.addressIdentify}</span>

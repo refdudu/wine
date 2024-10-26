@@ -47,7 +47,7 @@ export function ShoppingCartItens() {
   } = useShoppingCart();
 
   return (
-    <main className="max-h-[500px] lg:max-h-96 overflow-auto ">
+    <main className="w-full flex flex-col">
       {products.map((product, index, array) => (
         <ShoppingCartProduct
           key={product.id}

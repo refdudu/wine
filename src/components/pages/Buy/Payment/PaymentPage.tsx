@@ -5,6 +5,10 @@ import { useState } from "react";
 import { Button } from "@/components/Button";
 import { NextPageWithLayout } from "@/pages/_app";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
+import { CreditCardI } from "@/interfaces/CreditCardI";
+import MasterCardLogo from "./MastercardLogo.svg";
+import Image from "next/image";
+import { CreditCardComponent } from "./CreditCardComponents";
 
 const paymentMethods = [
   {
@@ -29,21 +33,10 @@ export const PaymentPage: NextPageWithLayout = () => {
         {...{
           icon: CreditCard,
           title: "Escolha sua forma de pagamento",
-          action: selectedPaymentMethod === "credit-card" && (
-            <div>
-              <Button
-                href="credit-card"
-                styleType="primary-outline"
-                className="py-1 px-2"
-              >
-                Novo cartão
-              </Button>
-            </div>
-          ),
         }}
       />
-      <main className="mt-4 h-96 flex gap-8">
-        <div className="flex flex-col gap-2 border-custom-line border max-w-72 w-full uppercase">
+      <main className="mt-4 lg:h-96 flex gap-8 flex-col lg:flex-row">
+        <div className="flex flex-col gap-2 border-custom-line border lg:max-w-72 w-full uppercase">
           {paymentMethods.map(({ icon: Icon, label, value }) => (
             <div className="border-custom-line text-custom-gray border-b p-2 w-full">
               <RadioInput
@@ -65,27 +58,41 @@ export const PaymentPage: NextPageWithLayout = () => {
           <PaymentMethod paymentMethod={selectedPaymentMethod} />
         </div>
       </main>
-      <Footer />
+      <Footer {...{ selectedPaymentMethod }} />
     </>
   );
 };
 
 PaymentPage.getLayout = (page) => <BuyPageProvider>{page}</BuyPageProvider>;
 
-function Footer() {
+interface FooterProps {
+  selectedPaymentMethod: string;
+}
+function Footer({ selectedPaymentMethod }: FooterProps) {
   return (
-    <footer className="w-full mt-8 border-t pt-4 border-t-custom-line flex justify-between">
-      <Button href="address" className="max-w-48 h-10" styleType="default">
+    <footer className="flex lg:justify-between flex-col lg:flex-row gap-4 w-full mt-4 pt-4 border-t border-t-custom-line ">
+      <Button href="address" className="lg:max-w-48 h-10" styleType="default">
         Voltar
       </Button>
-      <Button
-        href="payment"
-        icon={<Check />}
-        className=" max-w-64 h-10"
-        styleType="success"
-      >
-        Finalizar pedido
-      </Button>
+      <div className="flex gap-4 flex-1 justify-end flex-col lg:flex-row">
+        {selectedPaymentMethod === "credit-card" && (
+          <Button
+            href="credit-card"
+            styleType="primary-outline"
+            className="h-10 lg:max-w-32 px-2"
+          >
+            Novo cartão
+          </Button>
+        )}
+        <Button
+          href="payment"
+          icon={<Check />}
+          className="lg:max-w-64 h-10"
+          styleType="success"
+        >
+          Finalizar pedido
+        </Button>
+      </div>
     </footer>
   );
 }
@@ -115,46 +122,5 @@ function Pix() {
         pagamento.
       </span>
     </div>
-  );
-}
-
-function CreditCardComponent() {
-  const { creditCards } = useBuyPage();
-
-  return (
-    <div className="flex flex-col items-center gap-4 text-center h-full w-full">
-      {creditCards.length === 0 ? (
-        <NoContent />
-      ) : (
-        <div className="flex flex-col gap-2 w-full overflow-auto">
-          {Array.from({ length: 10 })
-            .map((x) => creditCards[0])
-            .map((creditCard) => (
-              <CreditCardInfo {...{ creditCard }} />
-            ))}
-        </div>
-      )}
-    </div>
-  );
-}
-function MapCreditCard() {
-  const { creditCards } = useBuyPage();
-}
-function NoContent() {
-  return (
-    <>
-      <span className="text-lg">
-        Você não tem nenhum cartão de crédito cadastrado
-      </span>
-      <span className="text-sm text-custom-gray">
-        Clique no botão abaixo para cadastrar seu cartão.
-      </span>
-      <Button
-        href="credit-card"
-        className="border h-10 border-custom-tannat text-custom-tannat max-w-64"
-      >
-        Cadastrar cartão
-      </Button>
-    </>
   );
 }

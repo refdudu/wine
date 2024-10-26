@@ -45,9 +45,11 @@ export const CreditCardPage: NextPageWithLayout = () => {
   return (
     <>
       <BuyDefaultHeader {...{ title: "Cadastrar novo cartão de crédito" }} />
-      <main className="flex gap-6 mt-4 h-96">
+      <main className="flex flex-col-reverse lg:flex-row gap-6 mt-4 lg:h-96">
         <div className="flex-col max-w-72 gap-6 flex">
-          <CreditCardInfo {...{ creditCard }} />
+          <div className="hidden lg:block">
+            <CreditCardInfo {...{ creditCard }} />
+          </div>
           <div className="flex flex-col gap-2">
             <span className="text-xs text-custom-gray">
               Deseja tornar esse cartão como o favorito?
@@ -60,15 +62,15 @@ export const CreditCardPage: NextPageWithLayout = () => {
         </div>
         <Form {...{ creditCard, errors, handleChange }} />
       </main>
-      <footer className="flex py-4 gap-8 justify-end border-t border-t-custom-line">
-        <Button href="payment" className="max-w-32 h-10" styleType="default">
+      <footer className="flex flex-col lg:flex-row gap-4 lg:gap-8 justify-end mt-4 pt-4 border-t border-t-custom-line">
+        <Button href="payment" className="lg:max-w-32 h-10" styleType="default">
           Voltar
         </Button>
         <Button
           isLoading={isLoading}
           icon={<Check />}
           onClick={handleAddCreditCard}
-          className="max-w-52"
+          className="lg:max-w-52 h-10"
           styleType="primary-full"
         >
           Salvar endereço

@@ -91,8 +91,11 @@ export class CreditCardRepositoryFirebase {
   async get() {
     const creditCardRef = await getDocs(this.dbRef);
     return creditCardRef.docs.map((x) => ({
-      ...x.data(),
+      number: `************${x.data().number.slice(-4)}`,
+      name: x.data().name,
+      expirationDate: x.data().expirationDate,
       createdAt: x.data().createdAt.toDate(),
+      isFavorite: x.data().isFavorite,
       id: x.id,
     })) as CreditCardI[];
   }

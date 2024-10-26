@@ -15,8 +15,9 @@
 
 
 #Endereços
-Editar endereço
-botão para adicionar endereço
-Salvar endereços no firebase
+[x] -Editar endereço
+[x] - botão para adicionar endereço
+[x] -Salvar endereços no firebase
 
-Quando coloca o CPF errado fica undefined
+Nos inputs, quando eles estão validados deve aparecer um "ok" no lado direito do campo
+

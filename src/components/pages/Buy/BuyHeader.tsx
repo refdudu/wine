@@ -22,11 +22,12 @@ interface BuyHeaderProps {
 export function BuyHeader({ openDrawer }: BuyHeaderProps) {
   const { pathname } = useRouter();
   const isAddress = pathname.includes("address");
-  const isPayment = pathname.includes("payment");
+  const isPayment =
+    pathname.includes("payment") || pathname.includes("credit-card");
 
   return (
     <header className="text-custom-gray bg-white flex items-center text-lg h-[88px] font-neo w-full shadow-md">
-      <div className="flex justify-between items-center w-full max-w-[1120px] m-auto px-3">
+      <div className="flex justify-between items-center w-full max-w-[1200px] m-auto px-3">
         <div>
           <Link href="/">
             <Image alt="Wine" width={100} height={28} src={WineLogo} />

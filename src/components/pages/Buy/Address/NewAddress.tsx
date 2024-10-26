@@ -17,15 +17,10 @@ import { baseAddress } from "./useBuyAddressPage";
 import { NextPageWithLayout } from "@/pages/_app";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
 import { addressValidationSchema } from "@/validation/address";
+import { useRouter } from "next/router";
 
 export const NewAddressPage: NextPageWithLayout = () => {
-  const {
-    addAddress,
-    editingAddress,
-    deleteAddress,
-    addresses,
-    setEditingAddress,
-  } = useBuyPage();
+  const { addAddress, editingAddress, deleteAddress, addresses } = useBuyPage();
 
   const [address, setAddress] = useState(editingAddress || baseAddress);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -59,9 +54,9 @@ export const NewAddressPage: NextPageWithLayout = () => {
   useEffect(() => {
     if (editingAddress) setAddress(editingAddress);
 
-    return () => {
-      setEditingAddress(null);
-    };
+    // return () => {
+    //   setEditingAddress(null);
+    // };
   }, [editingAddress]);
 
   return (
@@ -69,23 +64,29 @@ export const NewAddressPage: NextPageWithLayout = () => {
       <BuyDefaultHeader
         {...{
           action: address.id && addresses.length > 1 && (
-            <DeleteAddress {...{ deleteAddress }} />
+            <div>
+              <DeleteAddress {...{ deleteAddress }} />
+            </div>
           ),
           title: address.id ? "Editar endereço" : "Cadastrar novo endereço",
         }}
       />
 
       <div className="flex gap-4 w-full flex-col-reverse md:flex-row mt-6">
-        <div className="max-w-72 w-full flex flex-col gap-6">
+        <div className="lg:max-w-72 w-full flex flex-col gap-6">
           <FirstColumn {...{ address, errors, handleChange }} />
         </div>
         <div className="w-full md:w-3/5">
           <NewAddressForm {...{ address, errors, handleChange }} />
         </div>
       </div>
-      <footer className="flex py-4 gap-8 justify-end ">
+      <footer className="flex mt-4 py-4 gap-4 lg:gap-8 justify-end flex-col lg:flex-row border-t border-t-custom-line">
         {addresses.length > 0 && (
-          <Button href="address" styleType="default" className="max-w-32 h-10">
+          <Button
+            href="address"
+            styleType="default"
+            className="lg:max-w-32 h-10"
+          >
             Cancelar
           </Button>
         )}
@@ -94,7 +95,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
           icon={<Check />}
           onClick={handleAddAddress}
           styleType="primary-full"
-          className="max-w-52 py-2"
+          className="lg:max-w-52 h-10"
         >
           Salvar endereço
         </Button>
@@ -111,14 +112,18 @@ interface DeleteButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   deleteAddress: () => Promise<void>;
 }
 function DeleteAddress({ deleteAddress, ...props }: DeleteButtonProps) {
+  const { push } = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   async function handleDelete() {
     setIsLoading(true);
-    await deleteAddress();
+    {
+      await deleteAddress();
+      push("address");
+    }
     setIsLoading(false);
   }
   return (
-    <button
+    <Button
       onClick={handleDelete}
       className="text-red-500 text-xs flex gap-2"
       {...props}
@@ -131,7 +136,7 @@ function DeleteAddress({ deleteAddress, ...props }: DeleteButtonProps) {
           borderWidth={3}
         />
       )}
-    </button>
+    </Button>
   );
 }
 

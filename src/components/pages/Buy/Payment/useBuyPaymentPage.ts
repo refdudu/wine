@@ -15,7 +15,7 @@ export const useBuyPaymentPage = () => {
   async function createCreditCard(creditCard: CreditCardI) {
     try {
       const { data } = await api.post<{ creditCards: CreditCardI[] }>(
-        "address",
+        "credit-card",
         creditCard
       );
       const { creditCards } = data;
@@ -33,10 +33,10 @@ export const useBuyPaymentPage = () => {
   }
   async function deleteCreditCard() {
     if (!editingCreditCard) return;
-    const addressId = editingCreditCard.id || "";
+    const creditCardId = editingCreditCard.id || "";
     try {
-      await api.delete(`credit-card/${addressId}`);
-      setCreditCards((p) => p.filter((x) => x.id !== addressId));
+      await api.delete(`credit-card/${creditCardId}`);
+      setCreditCards((p) => p.filter((x) => x.id !== creditCardId));
       setEditingCreditCard(null);
     } catch {}
   }
@@ -65,13 +65,13 @@ export const useBuyPaymentPage = () => {
         setSelectedCreditCardId(favoriteCreditCard.id || "");
       setCreditCards(creditCards);
 
-      if (creditCards.length === 0) {
-        setEditingCreditCard({ ...baseCreditCard, isFavorite: true });
-        push("/buy/credit-card");
-      }
+      //   if (creditCards.length === 0) {
+      //     setEditingCreditCard({ ...baseCreditCard, isFavorite: true });
+      //     push("/buy/credit-card");
+      //   }
     } catch (e) {
-      setEditingCreditCard({ ...baseCreditCard, isFavorite: true });
-      push("/buy/credit-card");
+      //   setEditingCreditCard({ ...baseCreditCard, isFavorite: true });
+      //   push("/buy/credit-card");
     }
     setIsLoading(false);
   }
