@@ -2,7 +2,7 @@ import { Button } from "@/components/Button";
 import { CreditCardI } from "@/interfaces/CreditCardI";
 import Image from "next/image";
 import { useBuyPage } from "../BuyContext";
-import MasterCardLogo from "./MastercardLogo.png";
+import MasterCardLogo from "../MastercardLogo.png";
 import { Star } from "@phosphor-icons/react";
 
 export function CreditCardComponent() {

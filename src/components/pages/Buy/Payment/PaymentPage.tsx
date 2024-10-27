@@ -1,28 +1,28 @@
 import { ArrowRight, Check, CreditCard, PixLogo } from "@phosphor-icons/react";
-import { BuyPageProvider } from "../BuyContext";
+import { BuyPageProvider, useBuyPage } from "../BuyContext";
 import { RadioInput } from "@/components/RadioInput";
 import { useState } from "react";
 import { Button } from "@/components/Button";
 import { NextPageWithLayout } from "@/pages/_app";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
 import { CreditCardComponent } from "./CreditCardComponents";
+import { PaymentMethodE } from "./useBuyPaymentPage";
 
 const paymentMethods = [
   {
     label: "Cartão de crédito",
-    value: "credit-card",
+    value: PaymentMethodE.CreditCard,
     icon: CreditCard,
   },
   {
     label: "Pix",
-    value: "pix",
+    value: PaymentMethodE.Pix,
     icon: PixLogo,
   },
 ];
 
 export const PaymentPage: NextPageWithLayout = () => {
-  const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState("credit-card");
+  const { selectedPaymentMethod, setSelectedPaymentMethod } = useBuyPage();
 
   return (
     <>
@@ -82,7 +82,7 @@ function Footer({ selectedPaymentMethod }: FooterProps) {
           </Button>
         )}
         <Button
-          href="payment"
+          href="checkout"
           icon={<ArrowRight />}
           className="lg:max-w-64 h-10"
           styleType="success"

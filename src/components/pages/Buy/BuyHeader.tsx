@@ -23,7 +23,9 @@ export function BuyHeader({ openDrawer }: BuyHeaderProps) {
   const { pathname } = useRouter();
   const isAddress = pathname.includes("address");
   const isPayment =
-    pathname.includes("payment") || pathname.includes("credit-card");
+    pathname.includes("payment") ||
+    pathname.includes("credit-card") ||
+    pathname.includes("checkout");
 
   return (
     <header className="text-custom-gray bg-white flex items-center text-lg h-[88px] font-neo w-full shadow-md">

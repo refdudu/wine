@@ -54,16 +54,16 @@ export const useBuyAddressPage = () => {
     try {
       const { data } = await api.get<{ addresses: AddressI[] }>("address");
       const { addresses } = data;
+      if (addresses.length === 0) {
+        setEditingAddress({ ...baseAddress, isFavorite: true });
+        push("/buy/new-address");
+      }
+
       const favoriteAddress =
         addresses.find((x) => x.isFavorite) || addresses[0];
 
       if (!selectedAddressId) setSelectedAddressId(favoriteAddress.id || "");
       setAddresses(addresses);
-
-      if (addresses.length === 0) {
-        setEditingAddress({ ...baseAddress, isFavorite: true });
-        push("/buy/new-address");
-      }
     } catch (e) {
       setEditingAddress({ ...baseAddress, isFavorite: true });
       push("/buy/new-address");

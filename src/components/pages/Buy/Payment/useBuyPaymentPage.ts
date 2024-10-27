@@ -2,17 +2,23 @@ import { CreditCardI } from "@/interfaces/CreditCardI";
 import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import * as Yup from "yup";
+
+export enum PaymentMethodE {
+  CreditCard = "credit-card",
+  Pix = "pix",
+}
 
 export const useBuyPaymentPage = () => {
   const { push } = useRouter();
   const [creditCards, setCreditCards] = useState<CreditCardI[]>([]);
-  const [editingCreditCard, setEditingCreditCard] =
-    useState<CreditCardI | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCreditCardId, setSelectedCreditCardId] = useState("");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
+    PaymentMethodE.CreditCard
+  );
 
-  async function createCreditCard(creditCard: CreditCardI) {
+  async function addCreditCard(creditCard: CreditCardI) {
     try {
       const { data } = await api.post<{ creditCards: CreditCardI[] }>(
         "credit-card",
@@ -22,33 +28,11 @@ export const useBuyPaymentPage = () => {
       setCreditCards(creditCards);
     } catch {}
   }
-  async function updateCreditCard(creditCard: CreditCardI) {
-    try {
-      delete creditCard.createdAt;
-
-      await api.put(`credit-card/${creditCard.id}`, creditCard);
-      await getCreditCards();
-      // setCreditCardes((p) => p.map((x) => (x.id === address.id ? address : x)));
-    } catch {}
-  }
-  async function deleteCreditCard() {
-    if (!editingCreditCard) return;
-    const creditCardId = editingCreditCard.id || "";
+  async function deleteCreditCard(creditCardId: string) {
     try {
       await api.delete(`credit-card/${creditCardId}`);
       setCreditCards((p) => p.filter((x) => x.id !== creditCardId));
-      setEditingCreditCard(null);
     } catch {}
-  }
-  async function addCreditCard(address: CreditCardI) {
-    try {
-      if (address.id) {
-        await updateCreditCard(address);
-      } else {
-        await createCreditCard(address);
-      }
-    } catch {}
-    setEditingCreditCard(null);
   }
 
   async function getCreditCards() {
@@ -64,15 +48,7 @@ export const useBuyPaymentPage = () => {
       if (!selectedCreditCardId)
         setSelectedCreditCardId(favoriteCreditCard.id || "");
       setCreditCards(creditCards);
-
-      //   if (creditCards.length === 0) {
-      //     setEditingCreditCard({ ...baseCreditCard, isFavorite: true });
-      //     push("/buy/credit-card");
-      //   }
-    } catch (e) {
-      //   setEditingCreditCard({ ...baseCreditCard, isFavorite: true });
-      //   push("/buy/credit-card");
-    }
+    } catch (e) {}
     setIsLoading(false);
   }
   useEffect(() => {
@@ -81,13 +57,14 @@ export const useBuyPaymentPage = () => {
 
   return {
     creditCards,
-    editingCreditCard,
     setCreditCards,
     addCreditCard,
     deleteCreditCard,
     isLoading,
     selectedCreditCardId,
     setSelectedCreditCardId,
+    selectedPaymentMethod,
+    setSelectedPaymentMethod,
   };
 };
 

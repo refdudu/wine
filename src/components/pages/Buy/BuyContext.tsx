@@ -17,7 +17,7 @@ import { OnlyAuthContainer } from "@/components/OnlyAuthContainer";
 import { useBuyAddressPage } from "./Address/useBuyAddressPage";
 import { AddressI } from "@/interfaces/Address";
 import { Spin } from "@/components/Spin";
-import { useBuyPaymentPage } from "./Payment/useBuyPaymentPage";
+import { PaymentMethodE, useBuyPaymentPage } from "./Payment/useBuyPaymentPage";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 import { CreditCardI } from "@/interfaces/CreditCardI";
 
@@ -35,6 +35,8 @@ interface BuyContextData {
   addCreditCard: (creditCard: CreditCardI) => Promise<void>;
   selectedCreditCardId: string;
   setSelectedCreditCardId: Dispatch<SetStateAction<string>>;
+  selectedPaymentMethod: PaymentMethodE;
+  setSelectedPaymentMethod: Dispatch<SetStateAction<PaymentMethodE>>;
 }
 
 interface BuyPageProviderProps {
