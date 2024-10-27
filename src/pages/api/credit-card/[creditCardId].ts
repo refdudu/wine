@@ -4,7 +4,6 @@ import {
   AuthMiddleware,
 } from "@/api/middlewares/AuthMiddleware";
 import { GetProductsResponse } from "@/api/product/ProductService";
-import { creditCardSchema } from "@/validation/credit-card";
 import type { NextApiRequest, NextApiResponse } from "next";
 export default async function index(
   req: NextApiRequest,
@@ -17,15 +16,16 @@ async function main(req: ApiRequestAuth, res: NextApiResponse) {
   const { creditCardId } = req.query as { creditCardId: string };
   const creditCardRepository = new CreditCardRepositoryFirebase(userUid);
 
-  if (req.method === "PUT") {
-    const creditCard = req.body;
-    await creditCardSchema.validate(creditCard, { abortEarly: false });
-    await creditCardRepository.update(creditCardId, creditCard);
-    return res.status(200).json({});
-  }
   if (req.method === "DELETE") {
     await creditCardRepository.delete(creditCardId);
     return res.status(200).json({});
   }
   return res.status(200);
+
+  //   if (req.method === "PUT") {
+  //     const creditCard = req.body;
+  //     await creditCardSchema.validate(creditCard, { abortEarly: false });
+  //     await creditCardRepository.update(creditCardId, creditCard);
+  //     return res.status(200).json({});
+  //   }
 }

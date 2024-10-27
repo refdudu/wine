@@ -35,7 +35,7 @@ export class CreditCardRepositoryFirebase {
     const id = doc.id;
     return { ...data, id };
   }
-  private async verifyFavoriteAddress(creditCard: CreditCardI) {
+  private async verifyFavoriteCreditCard(creditCard: CreditCardI) {
     const favoriteCreditCard = await this.getFavoriteCreditCard();
 
     if (favoriteCreditCard && creditCard.isFavorite) {
@@ -54,28 +54,13 @@ export class CreditCardRepositoryFirebase {
       createdAt: new Date(),
     };
 
-    // _address = await this.verifyFavoriteAddress(_address);
+    _creditCard = await this.verifyFavoriteCreditCard(_creditCard);
     const _data = Object.entries(_creditCard).filter(
       ([key, value]) => Boolean(value) || key === "isFavorite"
     );
     const data = Object.fromEntries(_data);
     const creditCardRef = await addDoc(this.dbRef, data);
     return creditCardRef.id;
-  }
-  async update(id: string, creditCard: CreditCardI) {
-    if (!id) throw new Error("Credit card id is required");
-
-    const creditCardRef = doc(this.dbRef, id);
-    await this.hasDoc(creditCardRef);
-
-    creditCard = await this.verifyFavoriteAddress(creditCard);
-
-    const _data = Object.entries(creditCard).filter(
-      ([key, value]) => Boolean(value) || key === "isFavorite"
-    ) as [string, any];
-
-    const data = Object.fromEntries(_data);
-    return updateDoc(creditCardRef, data);
   }
   async delete(id: string) {
     if (!id) throw new Error("Credit card id is required");
@@ -99,4 +84,19 @@ export class CreditCardRepositoryFirebase {
       id: x.id,
     })) as CreditCardI[];
   }
+  //   async update(id: string, creditCard: CreditCardI) {
+  //     if (!id) throw new Error("Credit card id is required");
+
+  //     const creditCardRef = doc(this.dbRef, id);
+  //     await this.hasDoc(creditCardRef);
+
+  //     creditCard = await this.verifyFavoriteAddress(creditCard);
+
+  //     const _data = Object.entries(creditCard).filter(
+  //       ([key, value]) => Boolean(value) || key === "isFavorite"
+  //     ) as [string, any];
+
+  //     const data = Object.fromEntries(_data);
+  //     return updateDoc(creditCardRef, data);
+  //   }
 }

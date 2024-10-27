@@ -16,7 +16,7 @@ import { BuyPageProvider, useBuyPage } from "../BuyContext";
 import { baseAddress } from "./useBuyAddressPage";
 import { NextPageWithLayout } from "@/pages/_app";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
-import { addressValidationSchema } from "@/validation/address";
+import { addressValidationSchemaForm } from "@/validation/address";
 import { useRouter } from "next/router";
 
 export const NewAddressPage: NextPageWithLayout = () => {
@@ -34,7 +34,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
         city: address.city?.key,
         state: address.state?.key,
       };
-      await addressValidationSchema.validate(_address, { abortEarly: false });
+      await addressValidationSchemaForm.validate(_address, { abortEarly: false });
       await addAddress(address);
     } catch (e) {
       const { inner } = e as Yup.ValidationError;

@@ -3,6 +3,7 @@ import { Header } from "./Header";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ShoppingCartProvider } from "@/contexts/ShoppingCartContext";
 import { MasterContext } from "@/contexts/MasterContext";
+import { FadersHorizontal } from "@phosphor-icons/react";
 interface LayoutProps {
   children: React.ReactNode;
 }
@@ -13,10 +14,11 @@ const LayoutContext = createContext(
 export function Layout({ children }: LayoutProps) {
   return (
     <MasterContext>
-      <div className="flex flex-col h-screen text-custom-text">
+      <div className="flex flex-col h-screen text-custom-text relative">
         <Header />
         {children}
-        <ReactQueryDevtools />
+       
+        {/* <ReactQueryDevtools /> */}
       </div>
     </MasterContext>
   );
@@ -28,7 +30,6 @@ export function LayoutProvider({ children }: LayoutProps) {
     return window.innerWidth < 1120;
   };
   useEffect(() => {
-    console.log("");
     setIsMobile(getIsMobile());
   }, []);
   return (

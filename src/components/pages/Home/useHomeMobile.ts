@@ -12,6 +12,7 @@ export const useHomeMobile = () => {
 		data: productsResponse,
 		isFetching,
 		fetchNextPage,
+    
 		hasNextPage
 	} = useInfiniteQuery<GetProductsResponse>({
 		queryFn: async ({ pageParam = 1 }) => {

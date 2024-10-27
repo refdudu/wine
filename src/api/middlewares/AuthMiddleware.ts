@@ -1,6 +1,7 @@
 import { firebaseAuth } from "@/utils/firebaseAdmin";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as Yup from "yup";
+import { GetFieldsErrors } from "../errors/GetFieldsErrors";
 
 export interface ApiRequestAuth extends NextApiRequest {
   userUid: string;
@@ -25,14 +26,7 @@ export const AuthMiddleware = async (
 
     return main(reqAuth, res);
   } catch (err) {
-    if (err instanceof Yup.ValidationError) {
-      const { inner } = err as Yup.ValidationError;
-      const errors: Record<string, string> = {};
-      for (const { path, message } of inner) {
-        if (path) errors[path] = message;
-      }
-      return res.status(404).json({ errors });
-    }
+    
     return res.status(404).json({ message: err });
   }
 };

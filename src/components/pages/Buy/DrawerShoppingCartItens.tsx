@@ -32,17 +32,21 @@ function ShoppingCartItensDrawerContent({
   closeDrawer,
 }: ShoppingCartItensDrawerContentProps) {
   return (
-    <div>
-      <header className="text-lg p-4 flex justify-between items-center">
-        <button onClick={closeDrawer}>
-          <X className="text-custom-gray-dark" size={36} />
-        </button>
-        <ShoppingCartData />
-      </header>
-      <div className="p-2">
-        <ShoppingCartItensHeader isMobile />
+    <div className="">
+      <div className="absolute top-0 w-full bg-white pb-4 shadow-sm">
+        <header className="text-lg p-4 flex justify-between items-center">
+          <button onClick={closeDrawer}>
+            <X className="text-custom-gray-dark" size={36} />
+          </button>
+          <ShoppingCartData />
+        </header>
+        <div className="p-2">
+          <ShoppingCartItensHeader isMobile />
+        </div>
       </div>
-      <ShoppingCartItens />
+      <div className="mt-40 lg:max-h-96 overflow-auto">
+        <ShoppingCartItens />
+      </div>
     </div>
   );
 }

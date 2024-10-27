@@ -30,7 +30,6 @@ export const CreditCardPage: NextPageWithLayout = () => {
       await addCreditCard(creditCard);
       push("/buy/payment");
     } catch (e) {
-      console.log(e);
       if (e instanceof Yup.ValidationError) {
         const { inner } = e as Yup.ValidationError;
         const errors: Record<string, string> = {};
