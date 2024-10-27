@@ -18,14 +18,9 @@ async function main(req: ApiRequestAuth, res: NextApiResponse) {
 
   if (req.method === "DELETE") {
     await creditCardRepository.delete(creditCardId);
-    return res.status(200).json({});
+    const creditCards = await creditCardRepository.get();
+    return res.status(200).json({ creditCards });
   }
-  return res.status(200);
 
-  //   if (req.method === "PUT") {
-  //     const creditCard = req.body;
-  //     await creditCardSchema.validate(creditCard, { abortEarly: false });
-  //     await creditCardRepository.update(creditCardId, creditCard);
-  //     return res.status(200).json({});
-  //   }
+  return res.status(200);
 }

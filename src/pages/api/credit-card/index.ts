@@ -14,8 +14,8 @@ export default async function index(req: NextApiRequest, res: NextApiResponse) {
 
 async function main(req: ApiRequestAuth, res: NextApiResponse) {
   const { userUid } = req;
-
   const creditCardRepository = new CreditCardRepositoryFirebase(userUid);
+
   if (req.method === "POST") {
     const creditCard = req.body;
     try {

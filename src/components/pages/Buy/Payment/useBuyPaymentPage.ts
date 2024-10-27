@@ -1,6 +1,5 @@
+import { useServices } from "@/contexts/ServicesContext";
 import { CreditCardI } from "@/interfaces/CreditCardI";
-import { api } from "@/utils/api";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export enum PaymentMethodE {
@@ -9,9 +8,8 @@ export enum PaymentMethodE {
 }
 
 export const useBuyPaymentPage = () => {
-  const { push } = useRouter();
+  const { creditCardService } = useServices();
   const [creditCards, setCreditCards] = useState<CreditCardI[]>([]);
-
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCreditCardId, setSelectedCreditCardId] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
@@ -20,33 +18,29 @@ export const useBuyPaymentPage = () => {
 
   async function addCreditCard(creditCard: CreditCardI) {
     try {
-      const { data } = await api.post<{ creditCards: CreditCardI[] }>(
-        "credit-card",
-        creditCard
-      );
-      const { creditCards } = data;
+      const creditCards = await creditCardService.createCreditCard(creditCard);
       setCreditCards(creditCards);
     } catch {}
   }
   async function deleteCreditCard(creditCardId: string) {
     try {
-      await api.delete(`credit-card/${creditCardId}`);
-      setCreditCards((p) => p.filter((x) => x.id !== creditCardId));
+      const creditCards = await creditCardService.deleteCreditCard(
+        creditCardId
+      );
+      setCreditCards(creditCards);
     } catch {}
   }
 
   async function getCreditCards() {
     setIsLoading(creditCards.length === 0);
     try {
-      const { data } = await api.get<{ creditCards: CreditCardI[] }>(
-        "credit-card"
-      );
-      const { creditCards } = data;
+      const creditCards = await creditCardService.getCreditCard();
+
       const favoriteCreditCard =
         creditCards.find((x) => x.isFavorite) || creditCards[0];
-
       if (!selectedCreditCardId)
         setSelectedCreditCardId(favoriteCreditCard.id || "");
+
       setCreditCards(creditCards);
     } catch (e) {}
     setIsLoading(false);
