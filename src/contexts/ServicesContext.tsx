@@ -1,3 +1,4 @@
+import { AddressServiceI, ApiAddressService } from "@/services/AddressService";
 import {
   type ProductServiceI,
   ApiProductService,
@@ -11,6 +12,7 @@ import { createContext, useContext } from "react";
 interface ServicesContextProps {
   productService: ProductServiceI;
   shoppingCartService: ShoppingCartServiceI;
+  addressService: AddressServiceI;
 }
 const ServicesContext = createContext({} as ServicesContextProps);
 
@@ -20,9 +22,12 @@ interface ServicesProviderProps {
 
 const productService = new ApiProductService();
 const shoppingCartService = new ApiShoppingCartService();
+const addressService = new ApiAddressService();
 export function ServicesProvider({ children }: ServicesProviderProps) {
   return (
-    <ServicesContext.Provider value={{ productService, shoppingCartService }}>
+    <ServicesContext.Provider
+      value={{ productService, shoppingCartService, addressService }}
+    >
       {children}
     </ServicesContext.Provider>
   );

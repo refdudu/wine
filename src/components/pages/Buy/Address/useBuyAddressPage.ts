@@ -1,10 +1,11 @@
+import { useServices } from "@/contexts/ServicesContext";
 import { AddressI } from "@/interfaces/Address";
-import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export const useBuyAddressPage = () => {
   const { push } = useRouter();
+  const { addressService } = useServices();
   const [editingAddress, setEditingAddress] = useState<AddressI | null>(null);
   const [addresses, setAddresses] = useState<AddressI[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,29 +13,22 @@ export const useBuyAddressPage = () => {
 
   async function createAddress(address: AddressI) {
     try {
-      const { data } = await api.post<{ addresses: AddressI[] }>(
-        "address",
-        address
-      );
-      const { addresses } = data;
+      const addresses = await addressService.createAddress(address);
       setAddresses(addresses);
     } catch {}
   }
   async function updateAddress(address: AddressI) {
     try {
-      delete address.createdAt;
-
-      await api.put(`address/${address.id}`, address);
-      await getAddresses();
-      // setAddresses((p) => p.map((x) => (x.id === address.id ? address : x)));
+      const addresses = await addressService.updateAddress(address);
+      setAddresses(addresses);
     } catch {}
   }
   async function deleteAddress() {
     if (!editingAddress) return;
     const addressId = editingAddress.id || "";
     try {
-      await api.delete(`address/${addressId}`);
-      setAddresses((p) => p.filter((x) => x.id !== addressId));
+      const addresses = await addressService.deleteAddress(addressId);
+      setAddresses(addresses);
       setEditingAddress(null);
     } catch {}
   }
@@ -44,7 +38,8 @@ export const useBuyAddressPage = () => {
         await updateAddress(address);
       } else {
         await createAddress(address);
-      }
+      }      
+      push("/buy/address");
     } catch {}
     setEditingAddress(null);
   }
@@ -52,17 +47,17 @@ export const useBuyAddressPage = () => {
   async function getAddresses() {
     setIsLoading(addresses.length === 0);
     try {
-      const { data } = await api.get<{ addresses: AddressI[] }>("address");
-      const { addresses } = data;
+      const addresses = await addressService.getAddresses();
+
       if (addresses.length === 0) {
         setEditingAddress({ ...baseAddress, isFavorite: true });
         push("/buy/new-address");
       }
-
+      
       const favoriteAddress =
         addresses.find((x) => x.isFavorite) || addresses[0];
-
       if (!selectedAddressId) setSelectedAddressId(favoriteAddress.id || "");
+
       setAddresses(addresses);
     } catch (e) {
       setEditingAddress({ ...baseAddress, isFavorite: true });

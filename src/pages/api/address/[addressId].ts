@@ -26,7 +26,7 @@ async function main(req: ApiRequestAuth, res: NextApiResponse) {
       await addressValidationSchema.validate(address, { abortEarly: false });
       await addressRepository.update(addressId, address);
       const addresses = await addressRepository.get();
-      return res.status(200).json(addresses);
+      return res.status(200).json({ addresses });
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         return res.status(404).json({ errors: GetFieldsErrors(err) });
@@ -35,7 +35,8 @@ async function main(req: ApiRequestAuth, res: NextApiResponse) {
   }
   if (req.method === "DELETE") {
     await addressRepository.delete(addressId);
-    return res.status(200).json({});
+    const addresses = await addressRepository.get();
+    return res.status(200).json({ addresses });
   }
   return res.status(200);
 }

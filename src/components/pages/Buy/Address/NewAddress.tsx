@@ -20,7 +20,13 @@ import { addressValidationSchemaForm } from "@/validation/address";
 import { useRouter } from "next/router";
 
 export const NewAddressPage: NextPageWithLayout = () => {
-  const { addAddress, editingAddress, deleteAddress, addresses } = useBuyPage();
+  const {
+    addAddress,
+    editingAddress,
+    deleteAddress,
+    addresses,
+    setEditingAddress,
+  } = useBuyPage();
 
   const [address, setAddress] = useState(editingAddress || baseAddress);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -34,7 +40,9 @@ export const NewAddressPage: NextPageWithLayout = () => {
         city: address.city?.key,
         state: address.state?.key,
       };
-      await addressValidationSchemaForm.validate(_address, { abortEarly: false });
+      await addressValidationSchemaForm.validate(_address, {
+        abortEarly: false,
+      });
       await addAddress(address);
     } catch (e) {
       const { inner } = e as Yup.ValidationError;
@@ -53,11 +61,11 @@ export const NewAddressPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (editingAddress) setAddress(editingAddress);
-
-    // return () => {
-    //   setEditingAddress(null);
-    // };
   }, [editingAddress]);
+
+  useEffect(() => {
+    return () => setEditingAddress(null);
+  }, []);
 
   return (
     <>

@@ -32,7 +32,6 @@ export const AddressPage: NextPageWithLayout = () => {
         }}
       />
       <main className="mt-4 lg:h-96 overflow-auto flex flex-col lg:grid grid-cols-2 auto-rows-min  gap-4">
-        {/* {Array.from({ length: 100 }, (x) => addresses[1])} */}
         {addresses.map((address) => (
           <AddressCard
             key={address.id}
