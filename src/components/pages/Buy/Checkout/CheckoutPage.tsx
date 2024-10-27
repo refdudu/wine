@@ -7,6 +7,7 @@ import { Button } from "@/components/Button";
 import { PaymentMethodE } from "../Payment/useBuyPaymentPage";
 import MasterCardLogo from "../MastercardLogo.png";
 import Image from "next/image";
+import { useTotalShoppingCartProducts } from "@/contexts/ShoppingCartContext";
 
 export const CheckoutPage: NextPageWithLayout = () => {
   return (
@@ -22,6 +23,7 @@ export const CheckoutPage: NextPageWithLayout = () => {
   );
 };
 function Main() {
+  const totalProducts = useTotalShoppingCartProducts();
   const {
     selectedAddressId,
     addresses,
@@ -54,7 +56,7 @@ function Main() {
       break;
   }
   if (!address) return null;
-  
+
   return (
     <main className="mt-4 lg:h-96 flex gap-8 flex-col">
       <InformationItem
@@ -62,11 +64,7 @@ function Main() {
         icon={<MapPin className="text-custom-violet" size={24} />}
         info={{
           title: address.addressIdentify,
-          subTitle: (
-            <div className="text-custom-gray-light text-sm">
-              <AddressText address={address} />
-            </div>
-          ),
+          subTitle: <AddressText address={address} />,
         }}
         title="Detalhes do envio"
       />
@@ -75,6 +73,7 @@ function Main() {
         icon={paymentMethodInfo.icon}
         info={{
           title: paymentMethodInfo.title,
+          subTitle: `Você pagara ${totalProducts}`,
         }}
         title="Detalhes do pagamento"
       />
@@ -119,7 +118,9 @@ function InformationItem({ icon, title, action, info }: InformationItemProps) {
           </div>
           <div className="flex flex-col flex-1 max-w-80">
             {<span className="text-lg">{info.title}</span>}
-            {info.subTitle}
+            <div className="text-custom-gray-light text-sm">
+              {info.subTitle}
+            </div>
           </div>
         </div>
         <div>
