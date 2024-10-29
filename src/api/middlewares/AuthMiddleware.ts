@@ -1,14 +1,10 @@
 import { firebaseAuth } from "@/utils/firebaseAdmin";
 import { NextApiRequest, NextApiResponse } from "next";
-import * as Yup from "yup";
-import { GetFieldsErrors } from "../../utils/errors/GetFieldsErrors";
 
 export interface ApiRequestAuth extends NextApiRequest {
   userUid: string;
 }
 
-//TODO isso aqui é um middleware
-// Deve ser criado um WithAuth para buscar o usuário ssr
 export const AuthMiddleware = async (
   main: (req: ApiRequestAuth, res: NextApiResponse) => void,
   req: NextApiRequest,
@@ -26,7 +22,6 @@ export const AuthMiddleware = async (
 
     return main(reqAuth, res);
   } catch (err) {
-    
     return res.status(404).json({ message: err });
   }
 };
