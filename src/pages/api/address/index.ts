@@ -8,7 +8,7 @@ import { addressValidationSchema } from "@/validation/address";
 import * as Yup from "yup";
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { GetFieldsErrors } from "@/api/errors/GetFieldsErrors";
+import { GetFieldsErrors } from "@/utils/errors/GetFieldsErrors";
 export default async function index(req: NextApiRequest, res: NextApiResponse) {
   return AuthMiddleware(main, req, res);
 }

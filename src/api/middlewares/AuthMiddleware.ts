@@ -1,7 +1,7 @@
 import { firebaseAuth } from "@/utils/firebaseAdmin";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as Yup from "yup";
-import { GetFieldsErrors } from "../errors/GetFieldsErrors";
+import { GetFieldsErrors } from "../../utils/errors/GetFieldsErrors";
 
 export interface ApiRequestAuth extends NextApiRequest {
   userUid: string;

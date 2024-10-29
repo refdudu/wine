@@ -1,9 +1,6 @@
-import { ReactQueryDevtools } from "react-query/devtools";
 import { Header } from "./Header";
 import { createContext, useContext, useEffect, useState } from "react";
-import { ShoppingCartProvider } from "@/contexts/ShoppingCartContext";
 import { MasterContext } from "@/contexts/MasterContext";
-import { FadersHorizontal } from "@phosphor-icons/react";
 interface LayoutProps {
   children: React.ReactNode;
 }
@@ -17,8 +14,6 @@ export function Layout({ children }: LayoutProps) {
       <div className="flex flex-col h-screen text-custom-text relative">
         <Header />
         {children}
-       
-        {/* <ReactQueryDevtools /> */}
       </div>
     </MasterContext>
   );

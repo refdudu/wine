@@ -18,6 +18,7 @@ import { NextPageWithLayout } from "@/pages/_app";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
 import { addressValidationSchema } from "@/validation/address";
 import { useRouter } from "next/router";
+import { GetFieldsErrors } from "@/utils/errors/GetFieldsErrors";
 
 export const NewAddressPage: NextPageWithLayout = () => {
   const {
@@ -38,12 +39,9 @@ export const NewAddressPage: NextPageWithLayout = () => {
       await addressValidationSchema.validate(address, { abortEarly: false });
       await addAddress(address);
     } catch (e) {
-      const { inner } = e as Yup.ValidationError;
-      const errors: Record<string, string> = {};
-      for (const { path, message } of inner) {
-        if (path) errors[path] = message;
+      if (e instanceof Yup.ValidationError) {
+        setErrors(GetFieldsErrors(e));
       }
-      setErrors(errors);
     }
     setIsLoading(false);
   }

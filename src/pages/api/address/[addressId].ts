@@ -1,5 +1,5 @@
 import { AddressRepositoryFirebase } from "@/api/address/AddressRepository";
-import { GetFieldsErrors } from "@/api/errors/GetFieldsErrors";
+import { GetFieldsErrors } from "@/utils/errors/GetFieldsErrors";
 import {
   ApiRequestAuth,
   AuthMiddleware,

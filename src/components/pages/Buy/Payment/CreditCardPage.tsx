@@ -11,6 +11,7 @@ import { Button } from "@/components/Button";
 import { useRouter } from "next/router";
 import { CreditCardI } from "@/interfaces/CreditCardI";
 import { creditCardSchema } from "@/validation/credit-card";
+import { GetFieldsErrors } from "@/utils/errors/GetFieldsErrors";
 
 export const CreditCardPage: NextPageWithLayout = () => {
   const { addCreditCard } = useBuyPage();
@@ -30,14 +31,7 @@ export const CreditCardPage: NextPageWithLayout = () => {
       await addCreditCard(creditCard);
       push("/buy/payment");
     } catch (e) {
-      if (e instanceof Yup.ValidationError) {
-        const { inner } = e as Yup.ValidationError;
-        const errors: Record<string, string> = {};
-        for (const { path, message } of inner) {
-          if (path) errors[path] = message;
-        }
-        setErrors(errors);
-      }
+      if (e instanceof Yup.ValidationError) setErrors(GetFieldsErrors(e));
     }
     setIsLoading(false);
   }
