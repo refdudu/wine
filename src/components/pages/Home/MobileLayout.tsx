@@ -79,10 +79,10 @@ export function MobileLayout() {
           Filtrar
         </Button>
       </footer>
-      <HomeFilterDrawer
+      {/* <HomeFilterDrawer
         isVisible={isVisibleFilterDrawer}
         setIsVisible={setIsVisibleFilterDrawer}
-      />
+      /> */}
     </>
   );
 }
