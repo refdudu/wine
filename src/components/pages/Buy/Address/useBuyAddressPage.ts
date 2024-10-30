@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export const useBuyAddressPage = () => {
-  const { push } = useRouter();
+  const { replace, push } = useRouter();
   const { addressService } = useServices();
   const [editingAddress, setEditingAddress] = useState<AddressI | null>(null);
   const [addresses, setAddresses] = useState<AddressI[]>([]);
@@ -38,7 +38,7 @@ export const useBuyAddressPage = () => {
         await updateAddress(address);
       } else {
         await createAddress(address);
-      }      
+      }
       push("/buy/address");
     } catch {}
     setEditingAddress(null);
@@ -51,9 +51,9 @@ export const useBuyAddressPage = () => {
 
       if (addresses.length === 0) {
         setEditingAddress({ ...baseAddress, isFavorite: true });
-        push("/buy/new-address");
+        replace("/buy/new-address");
       }
-      
+
       const favoriteAddress =
         addresses.find((x) => x.isFavorite) || addresses[0];
       if (!selectedAddressId) setSelectedAddressId(favoriteAddress.id || "");
@@ -61,7 +61,7 @@ export const useBuyAddressPage = () => {
       setAddresses(addresses);
     } catch (e) {
       setEditingAddress({ ...baseAddress, isFavorite: true });
-      push("/buy/new-address");
+      replace("/buy/new-address");
     }
     setIsLoading(false);
   }
