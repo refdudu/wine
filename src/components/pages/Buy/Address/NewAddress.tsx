@@ -20,6 +20,19 @@ import { addressValidationSchema } from "@/validation/address";
 import { useRouter } from "next/router";
 import { GetFieldsErrors } from "@/utils/errors/GetFieldsErrors";
 
+const validateAddress = async (address: AddressI) => {
+  try {
+    await addressValidationSchema.validate(address, { abortEarly: false });
+    return null;
+  } catch (e) {
+    if (e instanceof Yup.ValidationError) {
+      return GetFieldsErrors(e);
+    }
+    console.error(e); // Handle unexpected errors
+    return { unexpected: "An unexpected error occurred" };
+  }
+};
+
 export const NewAddressPage: NextPageWithLayout = () => {
   const {
     addAddress,
@@ -32,19 +45,6 @@ export const NewAddressPage: NextPageWithLayout = () => {
   const [address, setAddress] = useState(editingAddress || baseAddress);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
-
-  const validateAddress = useCallback(async (address: AddressI) => {
-    try {
-      await addressValidationSchema.validate(address, { abortEarly: false });
-      return null;
-    } catch (e) {
-      if (e instanceof Yup.ValidationError) {
-        return GetFieldsErrors(e);
-      }
-      console.error(e); // Handle unexpected errors
-      return { unexpected: "An unexpected error occurred" };
-    }
-  }, []);
 
   const handleAddAddress = useCallback(async () => {
     setIsLoading(true);
@@ -65,20 +65,20 @@ export const NewAddressPage: NextPageWithLayout = () => {
   function handleChange(_object: object) {
     setAddress((prev) => ({ ...prev, ..._object }));
   }
+  useEffect(() => () => {
+    console.log("renan");
+  });
 
   useEffect(() => {
-    if (editingAddress) setAddress(editingAddress);
+    setAddress(editingAddress || baseAddress);
   }, [editingAddress]);
-
-  useEffect(() => {
-    return () => setEditingAddress(null);
-  }, []);
 
   return (
     <>
       <BuyDefaultHeader
         {...{
-          action: address.id && addresses.length > 1 && (
+          //   action: address.id && addresses.length > 1 && (
+          action: address.id && (
             <div>
               <DeleteAddress {...{ deleteAddress }} />
             </div>
@@ -119,9 +119,9 @@ export const NewAddressPage: NextPageWithLayout = () => {
   );
 };
 
-NewAddressPage.getLayout = function getLayout(page: React.ReactNode) {
-  return <BuyPageProvider>{page}</BuyPageProvider>;
-};
+NewAddressPage.getLayout = (page: React.ReactNode) => (
+  <BuyPageProvider>{page}</BuyPageProvider>
+);
 
 interface DeleteButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   deleteAddress: () => Promise<void>;
@@ -130,9 +130,11 @@ function DeleteAddress({ deleteAddress, ...props }: DeleteButtonProps) {
   const { push } = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   async function handleDelete() {
+    console.log("object");
     setIsLoading(true);
     try {
       await deleteAddress();
+      return;
       push("address");
     } catch (e) {
       console.error(e); // Handle unexpected errors

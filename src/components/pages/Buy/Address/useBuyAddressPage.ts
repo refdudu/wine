@@ -7,7 +7,7 @@ export const useBuyAddressPage = () => {
   const { replace, push } = useRouter();
   const { addressService } = useServices();
   const [editingAddress, setEditingAddress] = useState<AddressI | null>(null);
-  const [addresses, setAddresses] = useState<AddressI[]>([]);
+  const [addresses, _setAddresses] = useState<AddressI[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAddressId, setSelectedAddressId] = useState("");
 
@@ -24,13 +24,14 @@ export const useBuyAddressPage = () => {
     } catch {}
   }
   async function deleteAddress() {
+      console.log("🚀 ~ deleteAddress ~ editingAddress:", editingAddress)
     if (!editingAddress) return;
-    const addressId = editingAddress.id || "";
-    try {
-      const addresses = await addressService.deleteAddress(addressId);
-      setAddresses(addresses);
-      setEditingAddress(null);
-    } catch {}
+    // const addressId = editingAddress.id || "";
+    // try {
+    //   const addresses = await addressService.deleteAddress(addressId);
+    //   setAddresses(addresses);
+    //   setEditingAddress(null);
+    // } catch {}
   }
   async function addAddress(address: AddressI) {
     try {
@@ -44,6 +45,13 @@ export const useBuyAddressPage = () => {
     setEditingAddress(null);
   }
 
+  function setAddresses(addressses: AddressI[]) {
+    const favoriteAddress = addresses.find((x) => x.isFavorite) || addresses[0];
+    if (!selectedAddressId && favoriteAddress)
+      setSelectedAddressId(favoriteAddress.id || "");
+    _setAddresses(addressses);
+  }
+
   async function getAddresses() {
     setIsLoading(addresses.length === 0);
     try {
@@ -54,12 +62,8 @@ export const useBuyAddressPage = () => {
         replace("/buy/new-address");
       }
 
-      const favoriteAddress =
-        addresses.find((x) => x.isFavorite) || addresses[0];
-      if (!selectedAddressId) setSelectedAddressId(favoriteAddress.id || "");
-
       setAddresses(addresses);
-    } catch (e) {
+    } catch {
       setEditingAddress({ ...baseAddress, isFavorite: true });
       replace("/buy/new-address");
     }
