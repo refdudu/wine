@@ -4,7 +4,7 @@ import { CepInput } from "@/components/CepInput";
 import { StateSelect } from "@/components/StateSelect";
 import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { Check, Star } from "@phosphor-icons/react";
-import { useState, useEffect, ButtonHTMLAttributes } from "react";
+import { useState, useEffect, ButtonHTMLAttributes, useCallback } from "react";
 import { Input } from "@/components/Input";
 import { AddressI, Option } from "@/interfaces/Address";
 import { Spin } from "@/components/Spin";
@@ -33,21 +33,37 @@ export const NewAddressPage: NextPageWithLayout = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  async function handleAddAddress() {
-    setIsLoading(true);
+  const validateAddress = useCallback(async (address: AddressI) => {
     try {
       await addressValidationSchema.validate(address, { abortEarly: false });
-      await addAddress(address);
+      return null;
     } catch (e) {
       if (e instanceof Yup.ValidationError) {
-        setErrors(GetFieldsErrors(e));
+        return GetFieldsErrors(e);
       }
+      console.error(e); // Handle unexpected errors
+      return { unexpected: "An unexpected error occurred" };
+    }
+  }, []);
+
+  const handleAddAddress = useCallback(async () => {
+    setIsLoading(true);
+    const errors = await validateAddress(address);
+    if (errors) {
+      setErrors(errors);
+      setIsLoading(false);
+      return;
+    }
+    try {
+      await addAddress(address);
+    } catch (e) {
+      console.error(e); // Handle unexpected errors
     }
     setIsLoading(false);
-  }
+  }, [address, validateAddress]);
 
   function handleChange(_object: object) {
-    setAddress((p) => ({ ...p, ..._object }));
+    setAddress((prev) => ({ ...prev, ..._object }));
   }
 
   useEffect(() => {
@@ -115,9 +131,11 @@ function DeleteAddress({ deleteAddress, ...props }: DeleteButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   async function handleDelete() {
     setIsLoading(true);
-    {
+    try {
       await deleteAddress();
       push("address");
+    } catch (e) {
+      console.error(e); // Handle unexpected errors
     }
     setIsLoading(false);
   }
@@ -164,7 +182,9 @@ function NewAddressForm({
       const _form = await StatesService.getCep(cep, states || []);
       if (!_form) return;
       handleChange(_form);
-    } catch {}
+    } catch (e) {
+      console.error(e); // Handle unexpected errors
+    }
   }
 
   return (

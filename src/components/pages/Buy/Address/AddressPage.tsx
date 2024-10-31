@@ -42,26 +42,32 @@ export const AddressPage: NextPageWithLayout = () => {
           />
         ))}
       </main>
-      <footer className="flex flex-col lg:flex-row justify-end w-full mt-4 pt-4 border-t border-t-custom-line gap-4">
-        <Button
-          href="new-address"
-          linkShallow
-          styleType="primary-outline"
-          className="h-10 lg:max-w-32"
-        >
-          Novo endereço
-        </Button>
-        <Button
-          href="payment"
-          linkShallow
-          icon={<ArrowRight />}
-          styleType="success"
-          className="lg:max-w-64 p-2"
-        >
-          Definir pagamento
-        </Button>
-      </footer>
+      <Footer />
     </>
   );
 };
 AddressPage.getLayout = (page) => <BuyPageProvider>{page}</BuyPageProvider>;
+
+function Footer() {
+  return (
+    <footer className="flex flex-col lg:flex-row justify-end w-full mt-4 pt-4 border-t border-t-custom-line gap-4">
+      <Button
+        href="new-address"
+        linkShallow
+        styleType="primary-outline"
+        className="h-10 lg:max-w-32"
+      >
+        Novo endereço
+      </Button>
+      <Button
+        href="payment"
+        linkShallow
+        icon={<ArrowRight />}
+        styleType="success"
+        className="h-10 lg:max-w-64"
+      >
+        Definir pagamento
+      </Button>
+    </footer>
+  );
+}
