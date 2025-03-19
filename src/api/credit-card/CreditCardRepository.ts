@@ -17,7 +17,7 @@ import {
 } from "firebase/firestore";
 
 export class CreditCardRepositoryFirebase {
-  private dbRef: CollectionReference;
+  private readonly dbRef: CollectionReference;
   constructor(userUid: string) {
     this.dbRef = collection(
       firebaseFirestore,
