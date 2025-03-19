@@ -60,7 +60,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
     }
     setIsLoading(false);
   }, [address, validateAddress]);
-  1;
+  
   function handleChange(_object: object) {
     setAddress((prev) => ({ ...prev, ..._object }));
   }
