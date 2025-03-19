@@ -45,10 +45,6 @@ export const NewAddressPage: NextPageWithLayout = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  function a<T>(){
-    
-  }
-
   const handleAddAddress = useCallback(async () => {
     setIsLoading(true);
     const errors = await validateAddress(address);
@@ -64,7 +60,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
     }
     setIsLoading(false);
   }, [address, validateAddress]);
-1
+  1;
   function handleChange(_object: object) {
     setAddress((prev) => ({ ...prev, ..._object }));
   }
