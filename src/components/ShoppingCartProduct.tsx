@@ -1,4 +1,4 @@
-import { ShoppingCartProductI } from "@/interfaces/ProductShoppingCartI";
+import type { ShoppingCartProductI } from "@/interfaces/ProductShoppingCartI";
 import classNames from "classnames";
 import Image from "next/image";
 import { Counter } from "./Couter";

@@ -7,10 +7,11 @@ interface ToggleSwitchProps {
 }
 
 export function ToggleSwitch({ isChecked, setIsChecked }: ToggleSwitchProps) {
-//   const [isChecked, setIsChecked] = useState(false);
+  //   const [isChecked, setIsChecked] = useState(false);
 
   return (
-    <div
+    <button
+      type="button"
       onClick={() => setIsChecked(!isChecked)}
       className="max-w-20 bg-custom-background-light border border-custom-border flex items-center justify-center px-2 py-1 cursor-pointer"
     >
@@ -30,7 +31,7 @@ export function ToggleSwitch({ isChecked, setIsChecked }: ToggleSwitchProps) {
           {isChecked ? "Sim" : "Não"}
         </span>
       </div>
-    </div>
+    </button>
   );
 }
 

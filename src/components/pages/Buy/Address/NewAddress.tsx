@@ -4,9 +4,14 @@ import { CepInput } from "@/components/CepInput";
 import { StateSelect } from "@/components/StateSelect";
 import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { Check, Star } from "@phosphor-icons/react";
-import { useState, useEffect, ButtonHTMLAttributes, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  type ButtonHTMLAttributes,
+  useCallback,
+} from "react";
 import { Input } from "@/components/Input";
-import { AddressI, Option } from "@/interfaces/Address";
+import type { AddressI, Option } from "@/interfaces/Address";
 import { Spin } from "@/components/Spin";
 
 import * as Yup from "yup";
@@ -14,7 +19,7 @@ import { useQuery } from "react-query";
 import { StatesService } from "@/services/StatesService";
 import { BuyPageProvider, useBuyPage } from "../BuyContext";
 import { baseAddress } from "./useBuyAddressPage";
-import { NextPageWithLayout } from "@/pages/_app";
+import type { NextPageWithLayout } from "@/pages/_app";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
 import { addressValidationSchema } from "@/validation/address";
 import { useRouter } from "next/router";
@@ -34,17 +39,15 @@ const validateAddress = async (address: AddressI) => {
 };
 
 export const NewAddressPage: NextPageWithLayout = () => {
-  const {
-    addAddress,
-    editingAddress,
-    deleteAddress,
-    addresses,
-    setEditingAddress,
-  } = useBuyPage();
+  const { addAddress, editingAddress, deleteAddress, addresses } = useBuyPage();
 
   const [address, setAddress] = useState(editingAddress || baseAddress);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  function a<T>(){
+    
+  }
 
   const handleAddAddress = useCallback(async () => {
     setIsLoading(true);
@@ -61,13 +64,10 @@ export const NewAddressPage: NextPageWithLayout = () => {
     }
     setIsLoading(false);
   }, [address, validateAddress]);
-
+1
   function handleChange(_object: object) {
     setAddress((prev) => ({ ...prev, ..._object }));
   }
-  useEffect(() => () => {
-    console.log("renan");
-  });
 
   useEffect(() => {
     setAddress(editingAddress || baseAddress);
@@ -134,8 +134,8 @@ function DeleteAddress({ deleteAddress, ...props }: DeleteButtonProps) {
     setIsLoading(true);
     try {
       await deleteAddress();
-      return;
       push("address");
+      return;
     } catch (e) {
       console.error(e); // Handle unexpected errors
     }
@@ -160,7 +160,7 @@ function DeleteAddress({ deleteAddress, ...props }: DeleteButtonProps) {
 }
 
 interface NewAddressFormProps {
-  handleChange: ({}: object) => void;
+  handleChange: (obj: object) => void;
   address: AddressI;
   errors: Record<string, string>;
 }
@@ -192,31 +192,31 @@ function NewAddressForm({
   return (
     <div className="flex flex-col gap-5">
       <Input
-        error={errors["addressIdentify"]}
+        error={errors.addressIdentify}
         value={address.addressIdentify}
         onChangeText={(addressIdentify) => handleChange({ addressIdentify })}
         label="Identificação do endereço"
       />
       <Input
-        error={errors["recipientName"]}
+        error={errors.recipientName}
         onChangeText={(recipientName) => handleChange({ recipientName })}
         value={address.recipientName}
         label="Nome do destinatário"
       />
       <Input
-        error={errors["phone"]}
+        error={errors.phone}
         onChangeText={(phone) => handleChange({ phone })}
         value={address.phone}
         mask="(99) 99999-9999"
         label="Telefone"
       />
       <CepInput
-        error={errors["cep"]}
+        error={errors.cep}
         onChangeText={onChangeCEP}
         value={address.cep}
       />
       <StateSelect
-        error={errors["state"]}
+        error={errors.state}
         states={states || []}
         setSelectedState={(state) => handleChange({ state })}
         selectedState={address.state}
@@ -225,29 +225,29 @@ function NewAddressForm({
         setSelectedCity={(city) => handleChange({ city })}
         selectedCity={address.city}
         state={address.state?.key}
-        error={errors["city"]}
+        error={errors.city}
       />
       <Input
-        error={errors["address"]}
+        error={errors.address}
         onChangeText={(address) => handleChange({ address })}
         value={address.address}
         label="Endereço"
       />
       <Input
-        error={errors["neighborhood"]}
+        error={errors.neighborhood}
         onChangeText={(neighborhood) => handleChange({ neighborhood })}
         value={address.neighborhood}
         label="Bairro"
       />
       <Input
-        error={errors["number"]}
+        error={errors.number}
         onChangeText={(number) => handleChange({ number })}
         value={address.number}
         mask="99999999999"
         label="Número"
       />
       <Input
-        error={errors["complement"]}
+        error={errors.complement}
         onChangeText={(complement) => handleChange({ complement })}
         value={address.complement}
         label="Complemento"
@@ -313,9 +313,9 @@ function LocationCard({ address }: LocationCardProps) {
   );
 }
 function formatCEP(cep: string) {
-  cep = cep.replace(/\D/g, "");
-  if (cep.length < 5) return cep;
-  return cep.substring(0, 5) + "-" + cep.substring(5, 8);
+  const _cep = cep.replace(/\D/g, "");
+  if (_cep.length < 5) return _cep;
+  return `${_cep.substring(0, 5)}-${_cep.substring(5, 8)}`;
 }
 interface AddressTextProps {
   address: AddressI;

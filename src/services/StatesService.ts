@@ -1,4 +1,4 @@
-import { Option } from "@/interfaces/Address";
+import type { Option } from "@/interfaces/Address";
 import axios from "axios";
 
 export const StatesService = {
@@ -32,7 +32,7 @@ export const StatesService = {
     const state = states.find((x) => x.key === data.uf) || null;
     if (!state) return undefined;
 
-    let _form = {
+    const _form = {
       address: data.logradouro.length > 0 ? data.logradouro : undefined,
       neighborhood: data.bairro.length > 0 ? data.bairro : undefined,
       city: {

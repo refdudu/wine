@@ -3,7 +3,7 @@ import { BuyPageProvider, useBuyPage } from "../BuyContext";
 import { RadioInput } from "@/components/RadioInput";
 import { useState } from "react";
 import { Button } from "@/components/Button";
-import { NextPageWithLayout } from "@/pages/_app";
+import type { NextPageWithLayout } from "@/pages/_app";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
 import { CreditCardComponent } from "./CreditCardComponents";
 import { PaymentMethodE } from "./useBuyPaymentPage";

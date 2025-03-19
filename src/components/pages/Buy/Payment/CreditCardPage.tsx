@@ -3,13 +3,13 @@ import { BuyPageProvider, useBuyPage } from "../BuyContext";
 import * as Yup from "yup";
 import { useState } from "react";
 import { baseCreditCard } from "./useBuyPaymentPage";
-import { NextPageWithLayout } from "@/pages/_app";
+import type { NextPageWithLayout } from "@/pages/_app";
 import { Check, CreditCard, Star } from "@phosphor-icons/react";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
 import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { Button } from "@/components/Button";
 import { useRouter } from "next/router";
-import { CreditCardI } from "@/interfaces/CreditCardI";
+import type { CreditCardErrors, CreditCardI } from "@/interfaces/CreditCardI";
 import { creditCardSchema } from "@/validation/credit-card";
 import { GetFieldsErrors } from "@/utils/errors/GetFieldsErrors";
 
@@ -84,27 +84,27 @@ function Form({ creditCard, errors, handleChange }: FormProps) {
   return (
     <main className="flex-1 flex flex-col gap-5">
       <Input
-        error={errors["name"]}
+        error={errors.name}
         value={creditCard.name}
         onChangeText={(name) => handleChange({ name })}
         label="Nome"
       />
       <Input
-        error={errors["number"]}
+        error={errors.number}
         value={creditCard.number}
         onChangeText={(number) => handleChange({ number })}
         label="Número do cartão"
         mask="9999 9999 9999 9999"
       />
       <Input
-        error={errors["expirationDate"]}
+        error={errors.expirationDate}
         value={creditCard.expirationDate}
         onChangeText={(expirationDate) => handleChange({ expirationDate })}
         label="Validade (MM/AA)"
         mask="99/99"
       />
       <Input
-        error={errors["cvv"]}
+        error={errors.cvv}
         value={creditCard.cvv}
         onChangeText={(cvv) => handleChange({ cvv })}
         label="CVV"
@@ -159,10 +159,10 @@ interface CreditCardValueProps {
 function CreditCardValue({ label, maxWidth, value }: CreditCardValueProps) {
   return (
     <div
-      className={`flex-1 flex flex-col justify-between text-xs min-h-10`}
+      className={"flex-1 flex flex-col justify-between text-xs min-h-10"}
       style={{ maxWidth }}
     >
-      <span className={`text-gray-200`}>{label}</span>
+      <span className={"text-gray-200"}>{label}</span>
       <div className="border-b border-b-white pb-1 text-white">
         <span className="">{value}</span>
       </div>

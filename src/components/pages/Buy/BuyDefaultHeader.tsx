@@ -1,4 +1,4 @@
-import { CreditCard, Icon } from "@phosphor-icons/react";
+import { CreditCard, type Icon } from "@phosphor-icons/react";
 
 interface HeaderProps {
   icon?: Icon;

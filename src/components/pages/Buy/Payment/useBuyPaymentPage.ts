@@ -1,5 +1,5 @@
 import { useServices } from "@/contexts/ServicesContext";
-import { CreditCardI } from "@/interfaces/CreditCardI";
+import type { CreditCardI } from "@/interfaces/CreditCardI";
 import { useEffect, useState } from "react";
 
 export enum PaymentMethodE {

@@ -1,10 +1,10 @@
 import { AddressRepositoryFirebase } from "@/api/address/AddressRepository";
 import { GetFieldsErrors } from "@/utils/errors/GetFieldsErrors";
 import {
-  ApiRequestAuth,
+  type ApiRequestAuth,
   AuthMiddleware,
 } from "@/api/middlewares/AuthMiddleware";
-import { GetProductsResponse } from "@/api/product/ProductService";
+import type { GetProductsResponse } from "@/api/product/ProductService";
 import { addressValidationSchema } from "@/validation/address";
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as Yup from "yup";

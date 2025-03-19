@@ -1,4 +1,4 @@
-import { CreditCardI } from "@/interfaces/CreditCardI";
+import type { CreditCardI } from "@/interfaces/CreditCardI";
 import { api } from "@/utils/api";
 
 export interface CreditCardServiceI {

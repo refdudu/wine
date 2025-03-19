@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import {
   useShoppingCart,
   useTotalShoppingCartProducts,
@@ -88,6 +88,7 @@ function Main() {
     <>
       {products.map((product, index, array) => (
         <ShoppingCartProduct
+          key={product.id}
           array={array}
           changeProductAmount={changeProductAmount}
           handleRemove={handleRemoveFromShoppingCart}

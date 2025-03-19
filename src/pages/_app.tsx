@@ -12,15 +12,15 @@ const neoSansBold = localFont({
 });
 import type { AppProps } from "next/app";
 import { QueryClient } from "react-query";
-import { ReactElement, ReactNode } from "react";
-import { NextPage } from "next";
+import type { ReactElement, ReactNode } from "react";
+import type { NextPage } from "next";
 
 const lato = Lato({
   weight: ["700", "400"],
   preload: false,
 });
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+export type NextPageWithLayout<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 

@@ -1,4 +1,4 @@
-import { Option } from "@/interfaces/Address";
+import type { Option } from "@/interfaces/Address";
 import classNames from "classnames";
 import { Dispatch, SetStateAction, useId, useState } from "react";
 interface SelectProps {
@@ -48,7 +48,7 @@ export function Select({
         />
         <label
           htmlFor={id}
-          className={`absolute left-1 transition-all -top-3 -translate-y-0 text-xs text-custom-gray`}
+          className="absolute left-1 transition-all -top-3 -translate-y-0 text-xs text-custom-gray"
         >
           {label}
         </label>

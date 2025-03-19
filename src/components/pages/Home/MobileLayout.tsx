@@ -3,7 +3,7 @@ import { ProductsGridLayout } from "@/components/pages/Home/ProductsGridLayout";
 import { ProductCard, ProductCardSkeleton } from "./ProductCard";
 import classNames from "classnames";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
-import { ProductI } from "@/interfaces/ProductI";
+import type { ProductI } from "@/interfaces/ProductI";
 import { Spin } from "@/components/Spin";
 import { FadersHorizontal } from "@phosphor-icons/react";
 import { HomeFilterDrawer } from "./HomeFilterDrawer";

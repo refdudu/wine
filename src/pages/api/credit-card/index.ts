@@ -1,6 +1,6 @@
 import { CreditCardRepositoryFirebase } from "@/api/credit-card/CreditCardRepository";
 import {
-  ApiRequestAuth,
+  type ApiRequestAuth,
   AuthMiddleware,
 } from "@/api/middlewares/AuthMiddleware";
 import type { NextApiRequest, NextApiResponse } from "next";

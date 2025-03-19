@@ -7,3 +7,10 @@ export interface CreditCardI {
   isFavorite: boolean;
   createdAt?: Date;
 }
+
+export interface CreditCardErrors {
+  name: string;
+  number: string;
+  expirationDate: string;
+  cvv: string;
+}

@@ -18,8 +18,6 @@ export function Button({
   styleType,
   ...props
 }: ButtonProps) {
-  const as = href ? Link : "button";
-
   let typeClass = "";
   switch (styleType) {
     case "primary-full":

@@ -1,9 +1,9 @@
 import { CreditCardRepositoryFirebase } from "@/api/credit-card/CreditCardRepository";
 import {
-  ApiRequestAuth,
+  type ApiRequestAuth,
   AuthMiddleware,
 } from "@/api/middlewares/AuthMiddleware";
-import { GetProductsResponse } from "@/api/product/ProductService";
+import type { GetProductsResponse } from "@/api/product/ProductService";
 import type { NextApiRequest, NextApiResponse } from "next";
 export default async function index(
   req: NextApiRequest,

@@ -1,16 +1,16 @@
-import { CreditCardI } from "@/interfaces/CreditCardI";
+import type { CreditCardI } from "@/interfaces/CreditCardI";
 import { firebaseFirestore } from "@/utils/firebaseClient";
 import {
   addDoc,
   setDoc,
-  CollectionReference,
+  type CollectionReference,
   collection,
   getDocs,
   doc,
   deleteDoc,
   getDoc,
-  DocumentReference,
-  DocumentData,
+  type DocumentReference,
+  type DocumentData,
   updateDoc,
   query,
   where,
@@ -84,19 +84,4 @@ export class CreditCardRepositoryFirebase {
       id: x.id,
     })) as CreditCardI[];
   }
-  //   async update(id: string, creditCard: CreditCardI) {
-  //     if (!id) throw new Error("Credit card id is required");
-
-  //     const creditCardRef = doc(this.dbRef, id);
-  //     await this.hasDoc(creditCardRef);
-
-  //     creditCard = await this.verifyFavoriteAddress(creditCard);
-
-  //     const _data = Object.entries(creditCard).filter(
-  //       ([key, value]) => Boolean(value) || key === "isFavorite"
-  //     ) as [string, any];
-
-  //     const data = Object.fromEntries(_data);
-  //     return updateDoc(creditCardRef, data);
-  //   }
 }

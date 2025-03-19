@@ -7,7 +7,7 @@ export interface GetProductsResponse {
 	pageSize: number;
 }
 export class ProductService {
-	constructor(private productRepository: ProductRepositoryI) {}
+	constructor(private readonly productRepository: ProductRepositoryI) {}
 	public get(filter: GetProductsFilter): GetProductsResponse {
 		const products = this.productRepository.get(filter);
 		const total = this.productRepository.getTotal(filter);

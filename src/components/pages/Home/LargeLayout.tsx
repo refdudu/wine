@@ -27,36 +27,34 @@ export function LargeLayout() {
         betweenPrices={betweenPrices}
         changeBetweenPrice={handleFilterBetweenPrices}
       />
-      <>
-        <ProductsGridLayout
-          isLoading={isFetching && !productsResponse}
-          searchText={searchText}
-          handleFilterSearch={handleFilterSearch}
-          footer={
-            productsResponse && (
-              <div className="lg:flex justify-center">
-                <Pagination
-                  current={pageIndex}
-                  changePageIndex={(page) => {
-                    // console.log(document.querySelector("#products-grid"));
-                    document.querySelector("#products-grid")?.scrollTo(0, 0);
-                    setPageIndex(page);
-                  }}
-                  total={Math.ceil(
-                    productsResponse.total / productsResponse.pageSize
-                  )}
-                />
-              </div>
-            )
-          }
-          totalProducts={productsResponse?.total || 0}
-        >
-          <ProductGrid
-            isLoading={isFetching}
-            products={productsResponse?.products}
-          />
-        </ProductsGridLayout>
-      </>
+      <ProductsGridLayout
+        isLoading={isFetching && !productsResponse}
+        searchText={searchText}
+        handleFilterSearch={handleFilterSearch}
+        footer={
+          productsResponse && (
+            <div className="lg:flex justify-center">
+              <Pagination
+                current={pageIndex}
+                changePageIndex={(page) => {
+                  // console.log(document.querySelector("#products-grid"));
+                  document.querySelector("#products-grid")?.scrollTo(0, 0);
+                  setPageIndex(page);
+                }}
+                total={Math.ceil(
+                  productsResponse.total / productsResponse.pageSize
+                )}
+              />
+            </div>
+          )
+        }
+        totalProducts={productsResponse?.total || 0}
+      >
+        <ProductGrid
+          isLoading={isFetching}
+          products={productsResponse?.products}
+        />
+      </ProductsGridLayout>
     </>
   );
 }

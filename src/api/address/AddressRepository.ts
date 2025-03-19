@@ -1,16 +1,16 @@
-import { AddressI } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/Address";
 import { firebaseFirestore } from "@/utils/firebaseClient";
 import {
   addDoc,
   setDoc,
-  CollectionReference,
+  type CollectionReference,
   collection,
   getDocs,
   doc,
   deleteDoc,
   getDoc,
-  DocumentReference,
-  DocumentData,
+  type DocumentReference,
+  type DocumentData,
   updateDoc,
   query,
   where,
@@ -64,9 +64,9 @@ export class AddressRepositoryFirebase {
     const addressRef = doc(this.dbRef, id);
     await this.hasDoc(addressRef);
 
-    address = await this.verifyFavoriteAddress(address);
+    const _address = await this.verifyFavoriteAddress(address);
 
-    const _data = Object.entries(address).filter(
+    const _data = Object.entries(_address).filter(
       ([key, value]) => Boolean(value) || key === "isFavorite"
     );
     const data = Object.fromEntries(_data);

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Select } from "./Select";
 import axios from "axios";
 import { normalizeString } from "@/utils/normalizeString";
-import { Option } from "@/interfaces/Address";
+import type { Option } from "@/interfaces/Address";
 import { StatesService } from "@/services/StatesService";
 
 interface StateSelectProps {

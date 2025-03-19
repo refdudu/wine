@@ -1,4 +1,4 @@
-import { AddressI } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/Address";
 import { api } from "@/utils/api";
 
 export interface AddressServiceI {
@@ -26,7 +26,7 @@ export class ApiAddressService implements AddressServiceI {
     return data.addresses;
   }
   public async updateAddress(address: AddressI): Promise<AddressI[]> {
-    delete address.createdAt;
+    address.createdAt = undefined;
     const { data } = await api.put<{ addresses: AddressI[] }>(
       `address/${address.id}`,
       address

@@ -1,7 +1,7 @@
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
+  type Dispatch,
+  type SetStateAction,
   useContext,
   useState,
 } from "react";
@@ -15,11 +15,11 @@ import {
 } from "./ShoppingCartItens";
 import { OnlyAuthContainer } from "@/components/OnlyAuthContainer";
 import { useBuyAddressPage } from "./Address/useBuyAddressPage";
-import { AddressI } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/Address";
 import { Spin } from "@/components/Spin";
-import { PaymentMethodE, useBuyPaymentPage } from "./Payment/useBuyPaymentPage";
+import { type PaymentMethodE, useBuyPaymentPage } from "./Payment/useBuyPaymentPage";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
-import { CreditCardI } from "@/interfaces/CreditCardI";
+import type { CreditCardI } from "@/interfaces/CreditCardI";
 
 interface BuyContextData {
   setEditingAddress: Dispatch<SetStateAction<AddressI | null>>;

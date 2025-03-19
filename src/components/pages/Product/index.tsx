@@ -3,7 +3,7 @@ import { Form } from "@/components/Form";
 import { Layout } from "@/components/Layout";
 import classNames from "classnames";
 import { useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 
 interface Inputs {
   name: string;

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ChangeEvent, InputHTMLAttributes, useId } from "react";
+import { type ChangeEvent, type InputHTMLAttributes, useId } from "react";
 import InputMask from "react-input-mask";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {

@@ -2,9 +2,9 @@ import { ArrowRight, MapPin } from "@phosphor-icons/react";
 import { BuyPageProvider, useBuyPage } from "../BuyContext";
 import { AddressCard } from "./AddressCard";
 import { Button } from "@/components/Button";
-import { NextPageWithLayout } from "@/pages/_app";
+import type { NextPageWithLayout } from "@/pages/_app";
 import { useRouter } from "next/router";
-import { AddressI } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/Address";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
 
 export const AddressPage: NextPageWithLayout = () => {
@@ -28,7 +28,7 @@ export const AddressPage: NextPageWithLayout = () => {
         {...{
           icon: MapPin,
           title: "Escolha um endereço para entrega",
-          action: <div></div>,
+          action: <div/>,
         }}
       />
       <main className="mt-4 lg:h-96 overflow-auto flex flex-col lg:grid grid-cols-2 auto-rows-min  gap-4">

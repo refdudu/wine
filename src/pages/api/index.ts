@@ -1,4 +1,4 @@
-import { ApiRequestAuth, AuthMiddleware } from "@/api/middlewares/AuthMiddleware";
+import { type ApiRequestAuth, AuthMiddleware } from "@/api/middlewares/AuthMiddleware";
 import { firebaseAuth } from "@/utils/firebaseAdmin";
 import type { NextApiRequest, NextApiResponse } from "next";
 

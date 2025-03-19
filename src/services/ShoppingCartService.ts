@@ -1,5 +1,5 @@
 import { firebaseDatabase } from "@/utils/firebaseClient";
-import { DatabaseReference, child, get, ref, set } from "firebase/database";
+import { type DatabaseReference, child, get, ref, set } from "firebase/database";
 
 export interface ShoppingCartServiceI {
   get(): Promise<[string, number][]>;

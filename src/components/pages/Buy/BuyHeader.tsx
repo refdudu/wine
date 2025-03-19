@@ -4,7 +4,7 @@ import {
   CaretRight,
   Check,
   CreditCard,
-  Icon,
+  type Icon,
   MapPin,
   User,
 } from "@phosphor-icons/react";
@@ -46,7 +46,7 @@ export function BuyHeader({ openDrawer }: BuyHeaderProps) {
           <CaretRight size={36} />
           <Step isCurrent={isPayment} Icon={CreditCard} label="PAGAMENTO" />
         </div>
-        <div className="hidden lg:flex"></div>
+        <div className="hidden lg:flex" />
       </div>
     </header>
   );
@@ -61,6 +61,7 @@ export function ShoppingCartData({ onClick }: ShoppingCartDataProps) {
 
   return (
     <button
+      type="button"
       onClick={onClick}
       className="lg:hidden flex flex-col justify-end items-end"
     >

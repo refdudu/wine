@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Select } from "./Select";
 import { normalizeString } from "@/utils/normalizeString";
-import { Option } from "@/interfaces/Address";
+import type { Option } from "@/interfaces/Address";
 
 interface StateSelectProps {
   selectedState: Option | null;

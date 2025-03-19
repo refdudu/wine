@@ -1,6 +1,6 @@
 import { AddressRepositoryFirebase } from "@/api/address/AddressRepository";
 import {
-  ApiRequestAuth,
+  type ApiRequestAuth,
   AuthMiddleware,
 } from "@/api/middlewares/AuthMiddleware";
 import { addressValidationSchema } from "@/validation/address";

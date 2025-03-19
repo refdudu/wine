@@ -1,4 +1,4 @@
-import { ChangeEvent, HTMLAttributes, InputHTMLAttributes } from "react";
+import { ChangeEvent, HTMLAttributes, type InputHTMLAttributes } from "react";
 import { Input } from "./Input";
 
 interface CpfInputProps extends InputHTMLAttributes<HTMLInputElement> {

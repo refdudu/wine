@@ -1,5 +1,5 @@
 import { firebaseAuth } from "@/utils/firebaseAdmin";
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export interface ApiRequestAuth extends NextApiRequest {
   userUid: string;

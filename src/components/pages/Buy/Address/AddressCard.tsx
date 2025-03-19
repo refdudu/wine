@@ -1,4 +1,4 @@
-import { AddressI } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/Address";
 import { PencilLine, User } from "@phosphor-icons/react";
 import { AddressText } from "./NewAddress";
 import classNames from "classnames";
@@ -94,6 +94,7 @@ function AddressHeader({
         <span>{address.addressIdentify}</span>
         {!isSelected && (
           <button
+            type="button"
             onClick={selectAddress}
             className="text-custom-violet text-sm"
           >
@@ -101,7 +102,7 @@ function AddressHeader({
           </button>
         )}
       </div>
-      <button onClick={setIsEditing}>
+      <button type='button' onClick={setIsEditing}>
         <PencilLine color="#B6116E" />
       </button>
     </div>

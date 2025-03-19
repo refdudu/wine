@@ -79,13 +79,13 @@ export function SessionProvider({ children }: SessionProviderProps) {
       try {
         setIsLoadingAuthorization(true);
         const token = await user.getIdToken();
-        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        api.defaults.headers.common.Authorization = `Bearer ${token}`;
         // setCookies("token", token, { path: "/" });
         setIsAuthorized(true);
       } catch {}
       setIsLoadingAuthorization(false);
     } else {
-      api.defaults.headers.common["Authorization"] = ``;
+      api.defaults.headers.common.Authorization = '';
       setIsAuthorized(false);
     }
     _setUser(user);

@@ -1,6 +1,6 @@
 import { MapPin, PixLogo } from "@phosphor-icons/react";
 import { BuyPageProvider, useBuyPage } from "../BuyContext";
-import { NextPageWithLayout } from "@/pages/_app";
+import type { NextPageWithLayout } from "@/pages/_app";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
 import { AddressText } from "../Address/NewAddress";
 import { Button } from "@/components/Button";

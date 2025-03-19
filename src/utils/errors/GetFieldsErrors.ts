@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import type * as Yup from "yup";
 
 export function GetFieldsErrors(err: Yup.ValidationError) {
   const { inner } = err as Yup.ValidationError;

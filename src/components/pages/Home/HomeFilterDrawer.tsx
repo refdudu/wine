@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { X } from "@phosphor-icons/react";
 import { Drawer } from "@/components/Drawer";
 import { BetweenPriceFilter } from "@/components/BetweenPriceFilter";

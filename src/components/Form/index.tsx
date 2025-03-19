@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { HTMLAttributes, LabelHTMLAttributes } from "react";
+import type { HTMLAttributes, LabelHTMLAttributes } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 // interface FormProps {

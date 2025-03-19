@@ -1,7 +1,7 @@
-import { AddressServiceI, ApiAddressService } from "@/services/AddressService";
+import { type AddressServiceI, ApiAddressService } from "@/services/AddressService";
 import {
   ApiCreditCardService,
-  CreditCardServiceI,
+  type CreditCardServiceI,
 } from "@/services/CreditCardService";
 import {
   type ProductServiceI,
@@ -9,7 +9,7 @@ import {
 } from "@/services/ProductsService";
 import {
   ApiShoppingCartService,
-  ShoppingCartServiceI,
+  type ShoppingCartServiceI,
 } from "@/services/ShoppingCartService";
 import { createContext, useContext } from "react";
 

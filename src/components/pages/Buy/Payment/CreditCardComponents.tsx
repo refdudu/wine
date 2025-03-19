@@ -1,5 +1,5 @@
 import { Button } from "@/components/Button";
-import { CreditCardI } from "@/interfaces/CreditCardI";
+import type { CreditCardI } from "@/interfaces/CreditCardI";
 import Image from "next/image";
 import { useBuyPage } from "../BuyContext";
 import MasterCardLogo from "../MastercardLogo.png";
