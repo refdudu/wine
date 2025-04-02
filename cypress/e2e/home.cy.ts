@@ -37,7 +37,7 @@ describe("template spec", () => {
     await filterBetweenPrice0_40();
     cy.wait(1000); // wait request
     newProductName = await getFirstProductName();
-    ("");
+    
     expect(productName).not.to.equal(newProductName);
     productName = newProductName;
 

@@ -20,7 +20,6 @@ export function Input({
   ...props
 }: InputProps) {
   const id = useId();
-  //   const [text, setText] = useState<string>("");
   const hasText = Boolean(value);
   function _onChange(e: ChangeEvent<HTMLInputElement>) {
     if (onChangeText) return onChangeText(e.currentTarget.value);

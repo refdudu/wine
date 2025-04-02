@@ -16,7 +16,11 @@ export function Dropdown({ options, onChange }: DropdownProps) {
   const [isOpened, setIsOpened] = useState(false);
 
   return (
-    <div className="flex flex-col" onBlur={() => setIsOpened(false)}>
+    <button
+      type="button"
+      className="flex flex-col"
+      onBlur={() => setIsOpened(false)}
+    >
       <button
         type="button"
         onFocus={() => setIsOpened(true)}
@@ -46,6 +50,6 @@ export function Dropdown({ options, onChange }: DropdownProps) {
           </button>
         ))}
       </div>
-    </div>
+    </button>
   );
 }
