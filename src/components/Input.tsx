@@ -47,7 +47,7 @@ export function Input({
           </div>
         )}
         {mask ? (
-          <InputMask maskChar="" mask={mask} {...inputProps} />
+          <InputMask mask={mask} {...inputProps} />
         ) : (
           <input {...inputProps} />
         )}
