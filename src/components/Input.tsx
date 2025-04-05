@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { type ChangeEvent, type InputHTMLAttributes, useId } from "react";
-import InputMask from "react-input-mask";
+import InputMask, { ReactInputMask } from "react-input-mask";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -47,9 +47,9 @@ export function Input({
           </div>
         )}
         {mask ? (
-          <InputMask mask={mask} {...inputProps}>
+          <ReactInputMask mask={mask} value={value} onChange={_onChange}>
             <input {...inputProps} />
-          </InputMask>
+          </ReactInputMask>
         ) : (
           <input {...inputProps} />
         )}
