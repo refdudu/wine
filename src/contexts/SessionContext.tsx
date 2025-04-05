@@ -46,6 +46,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
       //   } else {
 
       //   }
+      console.log('🚀 ~ signIn ~ user:', 'user');
       const { user } = await signInWithPopup(firebaseAuthClient, provider);
       setUser(user);
     } catch (e) {

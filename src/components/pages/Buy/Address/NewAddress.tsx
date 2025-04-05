@@ -59,8 +59,8 @@ export const NewAddressPage: NextPageWithLayout = () => {
       console.error(e); // Handle unexpected errors
     }
     setIsLoading(false);
-  }, [address, validateAddress]);
-  
+  }, [address, addAddress]);
+
   function handleChange(_object: object) {
     setAddress((prev) => ({ ...prev, ..._object }));
   }
@@ -126,14 +126,13 @@ function DeleteAddress({ deleteAddress, ...props }: DeleteButtonProps) {
   const { push } = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   async function handleDelete() {
-    console.log("object");
     setIsLoading(true);
     try {
       await deleteAddress();
-      push("address");
+    //   push("address");
       return;
     } catch (e) {
-      console.error(e); // Handle unexpected errors
+      console.error(e); 
     }
     setIsLoading(false);
   }

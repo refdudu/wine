@@ -24,14 +24,13 @@ export const useBuyAddressPage = () => {
     } catch {}
   }
   async function deleteAddress() {
-      console.log("🚀 ~ deleteAddress ~ editingAddress:", editingAddress)
     if (!editingAddress) return;
-    // const addressId = editingAddress.id || "";
-    // try {
-    //   const addresses = await addressService.deleteAddress(addressId);
-    //   setAddresses(addresses);
-    //   setEditingAddress(null);
-    // } catch {}
+    const addressId = editingAddress.id || "";
+    try {
+      const addresses = await addressService.deleteAddress(addressId);
+      setAddresses(addresses);
+      setEditingAddress(null);
+    } catch {}
   }
   async function addAddress(address: AddressI) {
     try {
@@ -63,12 +62,13 @@ export const useBuyAddressPage = () => {
       }
 
       setAddresses(addresses);
+      setIsLoading(false);
     } catch {
       setEditingAddress({ ...baseAddress, isFavorite: true });
       replace("/buy/new-address");
     }
-    setIsLoading(false);
   }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     getAddresses();
   }, []);
