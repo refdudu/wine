@@ -47,7 +47,8 @@ export function Input({
           </div>
         )}
         {mask ? (
-          <InputMask mask={mask} {...inputProps} />
+          // biome-ignore lint/correctness/noChildrenProp: <explanation>
+          <InputMask mask={mask} children={null} {...inputProps} />
         ) : (
           <input {...inputProps} />
         )}
