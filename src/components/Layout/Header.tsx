@@ -108,7 +108,10 @@ function UserPopup() {
               className(false)
             )}
           >
-            <Button styleType="primary-outline" onClick={signIn}>
+            <Button
+              styleType="primary-outline"
+              onClick={() => (user ? signOut() : signIn())}
+            >
               {user ? "Sair" : "Faça seu login"}
             </Button>
           </div>
@@ -177,7 +180,7 @@ function Tabs() {
           width: line.width,
           left: line.left,
         }}
-        className="absolute -bottom-2 h-[2px] bg-custom-tannat transition-all time "
+        className="absolute -bottom-2 h-[2px] bg-custom-tannat transition-all duration-300 "
       />
     </div>
   );

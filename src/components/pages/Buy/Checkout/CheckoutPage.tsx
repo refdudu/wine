@@ -40,19 +40,26 @@ function Main() {
   };
   switch (selectedPaymentMethod) {
     case PaymentMethodE.CreditCard:
-      const creditCard = creditCards.find((x) => x.id === selectedCreditCardId);
-      paymentMethodInfo = {
-        icon: (
-          <Image width={24} src={MasterCardLogo} alt="Bandeira do cartão" />
-        ),
-        title: `Mastercard ${creditCard?.number}`,
-      };
+      {
+        // Removed console.log to avoid unintentional logging in production
+        const creditCard = creditCards.find(
+          (x) => x.id === selectedCreditCardId
+        );
+        paymentMethodInfo = {
+          icon: (
+            <Image width={24} src={MasterCardLogo} alt="Bandeira do cartão" />
+          ),
+          title: `Mastercard ${creditCard?.number}`,
+        };
+      }
       break;
     case PaymentMethodE.Pix:
-      paymentMethodInfo = {
-        icon: <PixLogo size={24} className="text-teal-500" />,
-        title: "Pix",
-      };
+      {
+        paymentMethodInfo = {
+          icon: <PixLogo size={24} className="text-teal-500" />,
+          title: "Pix",
+        };
+      }
       break;
   }
   if (!address) return null;
@@ -73,7 +80,7 @@ function Main() {
         icon={paymentMethodInfo.icon}
         info={{
           title: paymentMethodInfo.title,
-          subTitle: `Você pagara ${totalProducts}`,
+          subTitle: `Você pagará ${totalProducts}`,
         }}
         title="Detalhes do pagamento"
       />

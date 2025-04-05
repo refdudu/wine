@@ -30,6 +30,7 @@ export const useBuyAddressPage = () => {
       const addresses = await addressService.deleteAddress(addressId);
       setAddresses(addresses);
       setEditingAddress(null);
+      push("/buy/address");
     } catch {}
   }
   async function addAddress(address: AddressI) {
@@ -44,11 +45,12 @@ export const useBuyAddressPage = () => {
     setEditingAddress(null);
   }
 
-  function setAddresses(addressses: AddressI[]) {
+  function setAddresses(addresses: AddressI[]) {
     const favoriteAddress = addresses.find((x) => x.isFavorite) || addresses[0];
-    if (!selectedAddressId && favoriteAddress)
+    if (!selectedAddressId && favoriteAddress) {
       setSelectedAddressId(favoriteAddress.id || "");
-    _setAddresses(addressses);
+    }
+    _setAddresses(addresses);
   }
 
   async function getAddresses() {

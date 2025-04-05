@@ -21,14 +21,14 @@ export const AddressPage: NextPageWithLayout = () => {
     setEditingAddress(address);
     push("/buy/new-address");
   }
-
+  if (addresses.length === 0) return null;
   return (
     <>
       <BuyDefaultHeader
         {...{
           icon: MapPin,
           title: "Escolha um endereço para entrega",
-          action: <div/>,
+          action: <div />,
         }}
       />
       <main className="mt-4 lg:h-96 overflow-auto flex flex-col lg:grid grid-cols-2 auto-rows-min  gap-4">

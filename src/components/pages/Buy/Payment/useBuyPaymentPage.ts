@@ -19,6 +19,11 @@ export const useBuyPaymentPage = () => {
   async function addCreditCard(creditCard: CreditCardI) {
     try {
       const creditCards = await creditCardService.createCreditCard(creditCard);
+      const favoriteCreditCard =
+        creditCards.find((x) => x.isFavorite) || creditCards[0];
+      if (favoriteCreditCard)
+        setSelectedCreditCardId(favoriteCreditCard.id || "");
+    
       setCreditCards(creditCards);
     } catch {}
   }
@@ -31,21 +36,23 @@ export const useBuyPaymentPage = () => {
     } catch {}
   }
 
-  async function getCreditCards() {
-    setIsLoading(creditCards.length === 0);
-    try {
-      const creditCards = await creditCardService.getCreditCard();
-
-      const favoriteCreditCard =
-        creditCards.find((x) => x.isFavorite) || creditCards[0];
-      if (!selectedCreditCardId)
-        setSelectedCreditCardId(favoriteCreditCard.id || "");
-
-      setCreditCards(creditCards);
-    } catch (e) {}
-    setIsLoading(false);
-  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
+    async function getCreditCards() {
+      setIsLoading(creditCards.length === 0);
+      try {
+        const creditCards = await creditCardService.getCreditCard();
+
+        const favoriteCreditCard =
+          creditCards.find((x) => x.isFavorite) || creditCards[0];
+        if (favoriteCreditCard)
+          setSelectedCreditCardId(favoriteCreditCard.id || "");
+
+        setCreditCards(creditCards);
+      } catch (e) {}
+      setIsLoading(false);
+    }
+
     getCreditCards();
   }, []);
 

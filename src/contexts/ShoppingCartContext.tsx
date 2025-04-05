@@ -15,7 +15,7 @@ interface ShoppingCartContextProps {
   handleOpenDrawer: () => void;
   handleCloseDrawer: () => void;
   changeProductAmount: (productId: string, amount: number) => Promise<void>;
-  isLoadingProducts:boolean;
+  isLoadingProducts: boolean;
 }
 const ShoppingCartContext = createContext({} as ShoppingCartContextProps);
 
@@ -31,35 +31,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [shoppingCartProducts, setShoppingCartProducts] = useState<
     ShoppingCartProductI[]
   >([]);
-
-  async function getProducts() {
-    if (!user) {
-      setShoppingCartProducts([]);
-      return;
-    }
-    setIsLoadingProducts(true);
-    const shoppingCartProductsKeyValue = await shoppingCartService.get();
-    if (!shoppingCartProductsKeyValue) return;
-
-    const productIds = shoppingCartProductsKeyValue.map(
-      ([productId]) => productId
-    );
-    const products = await productService.searchProducts(productIds);
-    const shoppingCartProducts: ShoppingCartProductI[] = products.map(
-      (product) => {
-        const keyValue = shoppingCartProductsKeyValue.find(
-          ([id]) => id === product.id
-        );
-        if (keyValue) {
-          const amount = keyValue[1];
-          return { ...product, amount };
-        }
-        return { ...product, amount: 1 };
-      }
-    );
-    setIsLoadingProducts(false);
-    setShoppingCartProducts(shoppingCartProducts);
-  }
 
   async function handleAddInShoppingCart(product: ProductI) {
     if (!user) return;
@@ -105,11 +76,37 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     setIsVisibleDrawer(false);
   }
 
-  //   useEffect(() => {
-  //     if (shoppingCartProducts.length === 1) setIsVisibleDrawer(false);
-  //   }, [shoppingCartProducts.length]);
-
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
+    async function getProducts() {
+      if (!user) {
+        setShoppingCartProducts([]);
+        return;
+      }
+      setIsLoadingProducts(true);
+      const shoppingCartProductsKeyValue = await shoppingCartService.get();
+      if (!shoppingCartProductsKeyValue) return;
+
+      const productIds = shoppingCartProductsKeyValue.map(
+        ([productId]) => productId
+      );
+      const products = await productService.searchProducts(productIds);
+      const shoppingCartProducts: ShoppingCartProductI[] = products.map(
+        (product) => {
+          const keyValue = shoppingCartProductsKeyValue.find(
+            ([id]) => id === product.id
+          );
+          if (keyValue) {
+            const amount = keyValue[1];
+            return { ...product, amount };
+          }
+          return { ...product, amount: 1 };
+        }
+      );
+      setIsLoadingProducts(false);
+      setShoppingCartProducts(shoppingCartProducts);
+    }
+
     shoppingCartService.setUserUid(user?.uid);
     getProducts();
   }, [user]);
@@ -123,7 +120,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         handleOpenDrawer,
         handleCloseDrawer,
         changeProductAmount,
-        isLoadingProducts
+        isLoadingProducts,
       }}
     >
       {children}
@@ -140,12 +137,15 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 export const useShoppingCart = () => useContext(ShoppingCartContext);
 export const useTotalShoppingCartProducts = () => {
   const { shoppingCartProducts } = useShoppingCart();
-  function getTotalPrice() {
-    return formatPrice(
-      shoppingCartProducts
-        .map((x) => x.amount * x.price)
-        .reduce((pv, cv) => pv + cv, 0)
-    );
-  }
-  return useMemo(getTotalPrice, [shoppingCartProducts]);
+
+  return useMemo(() => {
+    function getTotalPrice() {
+      return formatPrice(
+        shoppingCartProducts
+          .map((x) => x.amount * x.price)
+          .reduce((pv, cv) => pv + cv, 0)
+      );
+    }
+    return getTotalPrice();
+  }, [shoppingCartProducts]);
 };

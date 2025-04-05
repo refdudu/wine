@@ -1,14 +1,14 @@
 import type { ButtonHTMLAttributes, HTMLAttributes } from "react";
 import { Spin } from "./Spin";
 import Link from "next/link";
-import { hr } from "@faker-js/faker";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
   href?: string;
   icon?: React.ReactNode;
   linkShallow?: boolean;
-  styleType?: "default" | "success" | "primary-full"|"primary-outline";
+  styleType?: "default" | "success" | "primary-full" | "primary-outline";
+  spinColor?: string;
 }
 export function Button({
   isLoading,
@@ -16,6 +16,7 @@ export function Button({
   icon,
   linkShallow,
   styleType,
+  spinColor,
   ...props
 }: ButtonProps) {
   let typeClass = "";
@@ -31,16 +32,18 @@ export function Button({
         "bg-white border text-custom-gray-light border-custom-gray-light hover:bg-custom-gray-light hover:text-white";
       break;
     case "success":
-      typeClass =
-        "bg-custom-green text-white";
+      typeClass = "bg-custom-green text-white";
       break;
   }
   const className = `filter hover:brightness-110 transition w-full font-lato  rounded-sm flex justify-center items-center gap-2 ${typeClass} ${props.className}`;
+  const SpinC = () => (
+    <Spin borderWidth={3} color={spinColor ?? "#fff"} size={20} />
+  );
   if (href) {
     return (
       <Link href={href} className={`${className}`} shallow={linkShallow}>
         {props.children}
-        {isLoading && <Spin borderWidth={3} color="#fff" size={20} />}
+        {isLoading && <SpinC />}
         {!isLoading && icon}
       </Link>
     );
@@ -48,7 +51,7 @@ export function Button({
   return (
     <button {...props} className={className}>
       {props.children}
-      {isLoading && <Spin borderWidth={3} color="#fff" size={20} />}
+      {isLoading && <SpinC />}
       {!isLoading && icon}
     </button>
   );

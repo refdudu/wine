@@ -3,7 +3,8 @@ import type { CreditCardI } from "@/interfaces/CreditCardI";
 import Image from "next/image";
 import { useBuyPage } from "../BuyContext";
 import MasterCardLogo from "../MastercardLogo.png";
-import { Star } from "@phosphor-icons/react";
+import { Star, Trash } from "@phosphor-icons/react";
+import { useState } from "react";
 
 export function CreditCardComponent() {
   const { creditCards } = useBuyPage();
@@ -15,7 +16,7 @@ export function CreditCardComponent() {
       ) : (
         <div className="flex flex-col gap-2 w-full overflow-auto items-center">
           {creditCards.map((creditCard) => (
-            <CreditCardItem {...{ creditCard }} />
+            <CreditCardItem key={creditCard.id} {...{ creditCard }} />
           ))}
         </div>
       )}
@@ -26,7 +27,15 @@ interface CreditCardItemProps {
   creditCard: CreditCardI;
 }
 function CreditCardItem({ creditCard }: CreditCardItemProps) {
-  const { selectedCreditCardId, setSelectedCreditCardId } = useBuyPage();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { selectedCreditCardId, setSelectedCreditCardId, deleteCreditCard } =
+    useBuyPage();
+
+  async function handleDelete() {
+    setIsDeleting(true);
+    await deleteCreditCard(creditCard.id || "");
+    setIsDeleting(false);
+  }
   return (
     <div
       className="rounded px-8 py-4 flex flex-col gap-2 text-left h-[211px] w-[390px]"
@@ -35,22 +44,30 @@ function CreditCardItem({ creditCard }: CreditCardItemProps) {
           "url(https://img.wine.com.br/fenix/image/card_bg_black.png)",
       }}
     >
-      <div className="flex gap-12">
+      <div className="flex gap-4 flex-1">
         <Image width={64} src={MasterCardLogo} alt="Bandeira do cartão" />
-        <div className="text-yellow-400 flex gap-2 items-center">
+        <div className="text-yellow-400 flex-1 flex justify-between items-center">
           {selectedCreditCardId === creditCard.id ? (
-            <>
+            <div className="flex gap-2 items-center">
               <Star weight="fill" size={24} />
               <span className="text-xs">Selecionado</span>
-            </>
+            </div>
           ) : (
             <Button
-              onClick={() => setSelectedCreditCardId(creditCard.id!)}
-              className="text-yellow-400"
+              onClick={() => setSelectedCreditCardId(creditCard.id || "")}
             >
               Selecionar
             </Button>
           )}
+          <Button
+            isLoading={isDeleting}
+            spinColor="rgb(239 68 68)"
+            className="text-red-500"
+            icon={<Trash className="text-red-500" />}
+            onClick={handleDelete}
+          >
+            Deletar
+          </Button>
         </div>
       </div>
       <div>

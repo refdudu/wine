@@ -66,7 +66,7 @@ export const CreditCardPage: NextPageWithLayout = () => {
           className="lg:max-w-52 h-10"
           styleType="primary-full"
         >
-          Salvar endereço
+          Salvar cartão
         </Button>
       </footer>
     </>

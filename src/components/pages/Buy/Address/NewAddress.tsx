@@ -85,7 +85,7 @@ export const NewAddressPage: NextPageWithLayout = () => {
 
       <div className="flex gap-4 w-full flex-col-reverse md:flex-row mt-6">
         <div className="lg:max-w-72 w-full flex flex-col gap-6">
-          <FirstColumn {...{ address, errors, handleChange }} />
+          <FirstColumn {...{ address, errors, handleChange, addresses }} />
         </div>
         <div className="w-full md:w-3/5">
           <NewAddressForm {...{ address, errors, handleChange }} />
@@ -123,16 +123,16 @@ interface DeleteButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   deleteAddress: () => Promise<void>;
 }
 function DeleteAddress({ deleteAddress, ...props }: DeleteButtonProps) {
-  const { push } = useRouter();
+  const { replace } = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   async function handleDelete() {
     setIsLoading(true);
     try {
       await deleteAddress();
-    //   push("address");
+      replace("address");
       return;
     } catch (e) {
-      console.error(e); 
+      console.error(e);
     }
     setIsLoading(false);
   }
@@ -252,7 +252,10 @@ function NewAddressForm({
   );
 }
 
-function FirstColumn({ address, handleChange }: NewAddressFormProps) {
+interface FirstColumnProps extends NewAddressFormProps {
+  addresses: AddressI[];
+}
+function FirstColumn({ address, handleChange, addresses }: FirstColumnProps) {
   return (
     <>
       <div className="hidden md:flex flex-col border border-custom-violet">
@@ -264,7 +267,9 @@ function FirstColumn({ address, handleChange }: NewAddressFormProps) {
         </span>
         <ToggleSwitch
           isChecked={address.isFavorite}
-          setIsChecked={(isFavorite) => handleChange({ isFavorite })}
+          setIsChecked={(isFavorite) =>
+            addresses?.length > 0 && handleChange({ isFavorite })
+          }
         />
       </div>
       <div className="flex flex-col gap-2">

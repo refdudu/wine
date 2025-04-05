@@ -1,12 +1,12 @@
-import { ArrowRight, Check, CreditCard, PixLogo } from "@phosphor-icons/react";
+import { ArrowRight, CreditCard, PixLogo } from "@phosphor-icons/react";
 import { BuyPageProvider, useBuyPage } from "../BuyContext";
 import { RadioInput } from "@/components/RadioInput";
-import { useState } from "react";
 import { Button } from "@/components/Button";
 import type { NextPageWithLayout } from "@/pages/_app";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
 import { CreditCardComponent } from "./CreditCardComponents";
 import { PaymentMethodE } from "./useBuyPaymentPage";
+import type { CreditCardI } from "@/interfaces/CreditCardI";
 
 const paymentMethods = [
   {
@@ -22,7 +22,8 @@ const paymentMethods = [
 ];
 
 export const PaymentPage: NextPageWithLayout = () => {
-  const { selectedPaymentMethod, setSelectedPaymentMethod } = useBuyPage();
+  const { selectedPaymentMethod, setSelectedPaymentMethod, creditCards } =
+    useBuyPage();
 
   return (
     <>
@@ -35,7 +36,10 @@ export const PaymentPage: NextPageWithLayout = () => {
       <main className="mt-4 lg:h-96 flex gap-8 flex-col lg:flex-row">
         <div className="flex flex-col gap-2 border-custom-line border lg:max-w-72 w-full uppercase">
           {paymentMethods.map(({ icon: Icon, label, value }) => (
-            <div className="border-custom-line text-custom-gray border-b p-2 w-full">
+            <div
+              key={label}
+              className="border-custom-line text-custom-gray border-b p-2 w-full"
+            >
               <RadioInput
                 value={value}
                 checked={value === selectedPaymentMethod}
@@ -55,7 +59,7 @@ export const PaymentPage: NextPageWithLayout = () => {
           <PaymentMethod paymentMethod={selectedPaymentMethod} />
         </div>
       </main>
-      <Footer {...{ selectedPaymentMethod }} />
+      <Footer {...{ selectedPaymentMethod, creditCards }} />
     </>
   );
 };
@@ -64,15 +68,19 @@ PaymentPage.getLayout = (page) => <BuyPageProvider>{page}</BuyPageProvider>;
 
 interface FooterProps {
   selectedPaymentMethod: string;
+  creditCards: CreditCardI[];
 }
-function Footer({ selectedPaymentMethod }: FooterProps) {
+function Footer({ selectedPaymentMethod, creditCards }: FooterProps) {
+  const showContinueButton =
+    (selectedPaymentMethod === "credit-card" && creditCards.length > 0) ||
+    selectedPaymentMethod === "pix";
   return (
     <footer className="flex lg:justify-between flex-col lg:flex-row gap-4 w-full mt-4 pt-4 border-t border-t-custom-line ">
       <Button href="address" className="lg:max-w-48 h-10" styleType="default">
         Voltar
       </Button>
       <div className="flex gap-4 flex-1 justify-end flex-col lg:flex-row">
-        {selectedPaymentMethod === "credit-card" && (
+        {selectedPaymentMethod === "credit-card" && creditCards.length > 0 && (
           <Button
             href="credit-card"
             styleType="primary-outline"
@@ -81,14 +89,16 @@ function Footer({ selectedPaymentMethod }: FooterProps) {
             Novo cartão
           </Button>
         )}
-        <Button
-          href="checkout"
-          icon={<ArrowRight />}
-          className="lg:max-w-64 h-10"
-          styleType="success"
-        >
-          Continuar
-        </Button>
+        {showContinueButton && (
+          <Button
+            href="checkout"
+            icon={<ArrowRight />}
+            className="lg:max-w-64 h-10"
+            styleType="success"
+          >
+            Continuar
+          </Button>
+        )}
       </div>
     </footer>
   );
