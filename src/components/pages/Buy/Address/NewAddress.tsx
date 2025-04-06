@@ -202,7 +202,7 @@ function NewAddressForm({
         error={errors.phone}
         onChangeText={(phone) => handleChange({ phone })}
         value={address.phone}
-        mask="(99) 99999-9999"
+        mask="(__) _____-____"
         label="Telefone"
       />
       <CepInput
@@ -238,7 +238,7 @@ function NewAddressForm({
         error={errors.number}
         onChangeText={(number) => handleChange({ number })}
         value={address.number}
-        mask="99999999999"
+        mask="____"
         label="Número"
       />
       <Input

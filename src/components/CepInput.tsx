@@ -7,5 +7,5 @@ interface CpfInputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function CepInput(props: CpfInputProps) {
-  return <Input mask="99999-999" label="CEP" {...props} />;
+  return <Input mask="_____-___" label="CEP" {...props} />;
 }

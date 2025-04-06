@@ -94,21 +94,21 @@ function Form({ creditCard, errors, handleChange }: FormProps) {
         value={creditCard.number}
         onChangeText={(number) => handleChange({ number })}
         label="Número do cartão"
-        mask="9999 9999 9999 9999"
+        mask="____ ____ ____ ____"
       />
       <Input
         error={errors.expirationDate}
         value={creditCard.expirationDate}
         onChangeText={(expirationDate) => handleChange({ expirationDate })}
         label="Validade (MM/AA)"
-        mask="99/99"
+        mask="__/__"
       />
       <Input
         error={errors.cvv}
         value={creditCard.cvv}
         onChangeText={(cvv) => handleChange({ cvv })}
         label="CVV"
-        mask="999"
+        mask="___"
       />
     </main>
   );
