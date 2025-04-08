@@ -29,7 +29,7 @@ export function Header() {
           </div>
         </div>
         <div className="flex gap-10 items-center">
-          <Image {...iconsProps} src={SearchIcon} alt="Pesquisa" />
+          {/* <Image {...iconsProps} src={SearchIcon} alt="Pesquisa" /> */}
           <UserPopup />
           <ShoppingCartButton />
         </div>

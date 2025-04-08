@@ -41,7 +41,7 @@ function HomeFilterDrawerContent({
     <div>
       <div className="absolute top-0 w-full bg-white pb-4 shadow-sm">
         <header className="text-lg p-4 flex justify-between items-center">
-          <button onClick={closeDrawer}>
+          <button type='button' onClick={closeDrawer}>
             <X className="text-custom-gray-dark" size={36} />
           </button>
         </header>

@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { Button } from "@/components/Button";
 import { useSession } from "@/contexts/SessionContext";
+import { useProductPrice } from "@/hooks/useProductPrice";
 import type { ProductI } from "@/interfaces/ProductI";
 import { formatPrice } from "@/utils/formatPrice";
 import classNames from "classnames";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 interface ProductCardProps {
   product: ProductI;
@@ -12,31 +14,22 @@ interface ProductCardProps {
 export function ProductCard({ onAdd, product }: ProductCardProps) {
   const { user } = useSession();
   const [isLoading, setIsLoading] = useState(false);
-
-  async function handelAdd() {
+  const { priceFormatted, partnerPriceFormatted } = useProductPrice(product);
+  async function handleAdd() {
     setIsLoading(true);
     await onAdd();
     setIsLoading(false);
   }
 
-  const priceFormatted = useMemo(
-    () => formatPrice(product.price),
-    [product.price]
-  );
-  const partnerPriceFormatted = useMemo(() => {
-    const integer = Math.floor(product.partnerPrice);
-    const decimal = product.partnerPrice - integer;
-    return {
-      integer,
-      decimal: Number(decimal * 100).toFixed(0),
-    };
-  }, [product.partnerPrice]);
   return (
     <div
       data-cy="product-card"
       className="flex-1 flex flex-col gap-4 font-bold text-center"
     >
-      <div className="flex flex-col items-center justify-center shadow-product-card bg-white md:p-4 px-0 py-4 h-[400px]">
+      <Link
+        href={`/product/${product.id}`}
+        className="flex flex-col items-center justify-center shadow-product-card bg-white md:p-4 px-0 py-4 h-[400px]"
+      >
         <img
           className="object-contain transition-transform max-h-40"
           width={200}
@@ -72,11 +65,11 @@ export function ProductCard({ onAdd, product }: ProductCardProps) {
         <span className="md:text-2xs text-xs text-custom-gray uppercase">
           Não sócio {priceFormatted}
         </span>
-      </div>
+      </Link>
       <Button
         disabled={!user || isLoading}
         isLoading={isLoading}
-        onClick={handelAdd}
+        onClick={handleAdd}
         className={`h-10 bg-custom-green text-white ${classNames({
           "brightness-90": isLoading,
           "hover:brightness-90": isLoading,
