@@ -1,4 +1,4 @@
-import type { AddressI } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/AddressI";
 import { api } from "@/utils/api";
 
 export interface AddressServiceI {

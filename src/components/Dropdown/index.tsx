@@ -2,11 +2,8 @@ import { CaretDown } from "@phosphor-icons/react";
 import classNames from "classnames";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Form } from "../Form";
+import type { Option } from "@/interfaces/OptionI";
 
-interface Option {
-  id: string;
-  label: string;
-}
 interface DropdownProps {
   options: Option[];
   onChange: (option: Option) => void;
@@ -44,7 +41,7 @@ export function Dropdown({ options, onChange }: DropdownProps) {
           <button
             onClick={() => setSelectedOption(option)}
             type="button"
-            key={option.id}
+            key={option.key}
           >
             {option.label}
           </button>

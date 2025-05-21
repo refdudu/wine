@@ -1,7 +1,7 @@
 import { Layout } from '@/components/Layout';
-import { OrderI, OrderItemI } from '@/interfaces/OrderI';
-import { UserProfileI } from '@/interfaces/UserProfileI';
-import { OrderReviewI } from '@/interfaces/OrderReviewI'; // Importar OrderReviewI
+import { type OrderI, OrderItemI } from '@/interfaces/OrderI';
+import type { UserProfileI } from '@/interfaces/UserProfileI';
+import type { OrderReviewI } from '@/interfaces/OrderReviewI'; // Importar OrderReviewI
 import { RatingStars } from '@/components/RatingStars'; // Importar RatingStars
 import { Button } from '@/components/Button';
 import type { GetServerSideProps } from 'next';

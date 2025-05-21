@@ -9,10 +9,10 @@ import MasterCardLogo from "../MastercardLogo.png";
 import Image from "next/image";
 import { useShoppingCart, useTotalShoppingCartProducts } from "@/contexts/ShoppingCartContext";
 import { useSession } from "@/contexts/SessionContext"; // Para obter o userId
-import { ApiOrderService, CreateOrderData } from "@/services/OrderService"; // Serviço de Pedido
+import { ApiOrderService, type CreateOrderData } from "@/services/OrderService"; // Serviço de Pedido
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { OrderItemI } from "@/interfaces/OrderI";
+import type { OrderItemI } from "@/interfaces/OrderI";
 
 export const CheckoutPage: NextPageWithLayout = () => {
   return (

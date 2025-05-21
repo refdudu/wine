@@ -4,7 +4,7 @@ import { AddressCard } from "./AddressCard";
 import { Button } from "@/components/Button";
 import type { NextPageWithLayout } from "@/pages/_app";
 import { useRouter } from "next/router";
-import type { AddressI } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/AddressI";
 import { BuyDefaultHeader } from "../BuyDefaultHeader";
 
 export const AddressPage: NextPageWithLayout = () => {

@@ -1,4 +1,4 @@
-import { AddressI } from './AddressI';
+import type { AddressI } from './AddressI';
 
 export interface OrderItemI {
   productId: string;

@@ -1,4 +1,4 @@
-import type { AddressI } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/AddressI";
 import { PencilLine, User } from "@phosphor-icons/react";
 import { AddressText } from "./NewAddress";
 import classNames from "classnames";

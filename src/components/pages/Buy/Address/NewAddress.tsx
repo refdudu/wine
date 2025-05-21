@@ -11,7 +11,8 @@ import {
   useCallback,
 } from "react";
 import { Input } from "@/components/Input";
-import type { AddressI, Option } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/AddressI";
+import type { Option } from "@/interfaces/OptionI";
 import { Spin } from "@/components/Spin";
 
 import * as Yup from "yup";

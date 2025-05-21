@@ -1,5 +1,5 @@
 import { useServices } from "@/contexts/ServicesContext";
-import type { AddressI } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/AddressI";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 

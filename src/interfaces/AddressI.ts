@@ -1,3 +1,5 @@
+import type { Option } from "./OptionI";
+
 export interface AddressI {
   id: string | null;
   state: Option | null;
@@ -14,8 +16,4 @@ export interface AddressI {
   isFavorite: boolean;
   conciergeAllDay: boolean;
   createdAt?: Date;
-}
-export interface Option {
-  label: string;
-  key: string;
 }
