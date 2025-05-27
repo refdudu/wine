@@ -1,4 +1,4 @@
-import type { AddressI } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/AddressI";
 import { firebaseFirestore } from "@/utils/firebaseClient";
 import {
   addDoc,

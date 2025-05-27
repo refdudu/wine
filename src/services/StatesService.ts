@@ -1,4 +1,4 @@
-import type { Option } from "@/interfaces/Address";
+import type { Option } from "@/interfaces/OptionI";
 import axios from "axios";
 
 export const StatesService = {

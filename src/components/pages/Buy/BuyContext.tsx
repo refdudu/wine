@@ -15,7 +15,7 @@ import {
 } from "./ShoppingCartItens";
 import { OnlyAuthContainer } from "@/components/OnlyAuthContainer";
 import { useBuyAddressPage } from "./Address/useBuyAddressPage";
-import type { AddressI } from "@/interfaces/Address";
+import type { AddressI } from "@/interfaces/AddressI";
 import { Spin } from "@/components/Spin";
 import {
   type PaymentMethodE,

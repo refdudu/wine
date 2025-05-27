@@ -1,4 +1,4 @@
-import type { Option } from "@/interfaces/Address";
+import type { Option } from "@/interfaces/OptionI";
 import classNames from "classnames";
 import { Dispatch, SetStateAction, useId, useState } from "react";
 interface SelectProps {
