@@ -17,11 +17,13 @@ export function ShoppingCartItensHeader({
   return (
     <header className="flex h-9">
       <button
+        type="button"
         className={`flex-1 bg-custom-violet text-white text-center rounded-tl-md ${mobileL}`}
       >
         Itens
       </button>
       <button
+        type="button"
         className={`flex-1 bg-white text-custom-violet border border-custom-violet  text-center rounded-tr-md ${mobileR}`}
       >
         Detalhes
@@ -31,11 +33,11 @@ export function ShoppingCartItensHeader({
 }
 
 export function ShoppingCartItensFooter() {
-  const total = useTotalShoppingCartProducts();
+  const { totalFormatted } = useTotalShoppingCartProducts();
   return (
     <footer className="flex justify-between items-center bg-custom-line p-4">
       <span className="text-lg text-custom-text">Total</span>
-      <span className="text-2xl text-custom-violet">{total}</span>
+      <span className="text-2xl text-custom-violet">{totalFormatted}</span>
     </footer>
   );
 }

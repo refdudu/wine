@@ -57,7 +57,7 @@ interface ShoppingCartDataProps {
 }
 export function ShoppingCartData({ onClick }: ShoppingCartDataProps) {
   const { shoppingCartProducts } = useShoppingCart();
-  const totalProducts = useTotalShoppingCartProducts();
+  const { totalFormatted } = useTotalShoppingCartProducts();
 
   return (
     <button
@@ -69,7 +69,7 @@ export function ShoppingCartData({ onClick }: ShoppingCartDataProps) {
         {shoppingCartProducts.length} Itens
       </span>
       <span>
-        <span className="text-custom-violet">{totalProducts}</span>
+        <span className="text-custom-violet">{totalFormatted}</span>
       </span>
     </button>
   );

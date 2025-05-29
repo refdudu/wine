@@ -15,13 +15,14 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { AddressNotFound } from "./AddressNotFound";
 
 export class AddressRepositoryFirebase {
   private readonly dbRef: CollectionReference;
   constructor(userUid: string) {
     this.dbRef = collection(firebaseFirestore, `/users/${userUid}/addresses`);
   }
-  private  async getFavoriteAddress() {
+  private async getFavoriteAddress() {
     const _query = query(this.dbRef, where("isFavorite", "==", true));
     const addressRef = await getDocs(_query);
 
@@ -85,10 +86,23 @@ export class AddressRepositoryFirebase {
   }
   async get() {
     const addressRef = await getDocs(this.dbRef);
-    return addressRef.docs.map((x) => ({
-      ...x.data(),
-      createdAt: x.data().createdAt.toDate(),
-      id: x.id,
-    })) as AddressI[];
+    return addressRef.docs.map(this.mapAddressData) as AddressI[];
+  }
+  private mapAddressData(addressDoc: DocumentData): AddressI {
+    return {
+      id: addressDoc.id,
+      ...addressDoc.data(),
+      createdAt: addressDoc.data().createdAt.toDate(),
+    };
+  }
+
+  async getById(id: string) {
+    const addressRef = doc(this.dbRef, id);
+    await this.hasDoc(addressRef);
+    const addressDoc = await getDoc(addressRef);
+    const data = addressDoc.data();
+    if (!data) throw new AddressNotFound();
+
+    return this.mapAddressData(addressDoc);
   }
 }

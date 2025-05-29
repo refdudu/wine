@@ -140,12 +140,14 @@ export const useTotalShoppingCartProducts = () => {
 
   return useMemo(() => {
     function getTotalPrice() {
-      return formatPrice(
-        shoppingCartProducts
-          .map((x) => x.amount * x.price)
-          .reduce((pv, cv) => pv + cv, 0)
-      );
+      return shoppingCartProducts
+        .map((x) => x.amount * x.price)
+        .reduce((pv, cv) => pv + cv, 0);
     }
-    return getTotalPrice();
+    const total = getTotalPrice();
+    return {
+      total,
+      totalFormatted: formatPrice(total),
+    };
   }, [shoppingCartProducts]);
 };

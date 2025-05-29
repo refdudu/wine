@@ -100,14 +100,12 @@ function Main() {
   );
 }
 function Footer() {
-  const totalProductsPrice = useTotalShoppingCartProducts();
+  const { totalFormatted } = useTotalShoppingCartProducts();
   return (
     <header className="w-full flex items-center p-4 bg-white flex-col gap-4 ">
       <div className="flex items-center justify-between w-full">
         <span className="text-custom-gray text-2xl font-bold">Total</span>
-        <span className="text-custom-tannat text-3xl">
-          {totalProductsPrice}
-        </span>
+        <span className="text-custom-tannat text-3xl">{totalFormatted}</span>
       </div>
       <Button href="/buy/address" styleType="success" className="w-full py-2">
         Finalizar
