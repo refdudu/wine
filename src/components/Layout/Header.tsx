@@ -4,6 +4,7 @@ import WineLogo from "@/images/WineLogo.svg";
 import { SearchIcon, AccountIcon, ShoppingCardIcon } from "@/utils/icons";
 import classNames from "classnames";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "../Button";
 interface Line {
@@ -59,6 +60,7 @@ function ShoppingCartButton() {
 function UserPopup() {
   const { signIn, signOut, user, isLoadingAuthorization, isAuthorized } =
     useSession();
+  const router = useRouter();
   const [isOpened, setIsOpened] = useState(true);
   const userImage = user?.photoURL;
   const divRef = useRef<HTMLDivElement>(null);
@@ -68,6 +70,11 @@ function UserPopup() {
     "opacity-100 scale-100": isOpened,
     "scale-90": triangle && !isOpened,
   });
+
+  const handleProfileClick = () => {
+    router.push("/profile/settings");
+    setIsOpened(false);
+  };
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -104,10 +111,19 @@ function UserPopup() {
           />
           <div
             className={classNames(
-              "bg-white flex items-center px-4 justify-center absolute border border-custom-gray-light shadow-lg w-48 h-24 z-10 top-16 left-1/2 -translate-x-1/2 rounded-md transition-opacity duration-300 ease-in-out",
+              "bg-white flex flex-col gap-3 px-4 py-4 justify-center absolute border border-custom-gray-light shadow-lg w-48 z-10 top-16 left-1/2 -translate-x-1/2 rounded-md transition-opacity duration-300 ease-in-out",
               className(false)
             )}
           >
+            {user && (
+              <button
+                type="button"
+                className="text-left px-2 py-1 hover:bg-gray-50 rounded text-custom-gray transition-colors duration-200"
+                onClick={handleProfileClick}
+              >
+                Meu Perfil
+              </button>
+            )}
             <Button
               styleType="primary-outline"
               onClick={() => (user ? signOut() : signIn())}

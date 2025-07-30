@@ -19,7 +19,7 @@ export interface OrderI {
   // Futuramente: paymentMethod, trackingNumber, etc.
 }
 export interface OrderDTO {
-  userId: string;
+  userUid: string;
   items: OrderItemDTO[];
   shippingAddressId: string;
 }

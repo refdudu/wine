@@ -17,24 +17,26 @@ export default async function index(req: NextApiRequest, res: NextApiResponse) {
 async function main(req: ApiRequestAuth, res: NextApiResponse) {
   const { userUid } = req;
   const orderRepository = new OrderRepositoryFirebase(userUid);
+  //   return res.json({ message: "Order API is working" });
 
-  if (req.method === "POST") {
-    const order = req.body;
-    try {
-      await orderSchema.validate(order, { abortEarly: false });
-      await orderRepository.add(order);
-      const orders = await orderRepository.get();
-      return res.status(200).json({ orders });
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        return res.status(404).json({ errors: GetFieldsErrors(err) });
+    if (req.method === "POST") {
+      const order = req.body;
+      try {
+        await orderSchema.validate({ ...order, userUid }, { abortEarly: false });
+        const orderId = await orderRepository.add({ ...order, userUid });
+        // console.log("🚀 ~ main ~ orderId:", orderId);
+        return res.status(200).json({ orderId });
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          return res.status(404).json({ errors: GetFieldsErrors(err) });
+        }
+        throw err;
       }
     }
-  }
 
-//   if (req.method === "GET") {
-//     const orders = await orderRepository.get();
-//     return res.status(200).json({ orders });
-//   }
-  return res.status(405);
+  if (req.method === "GET") {
+    const orders = await orderRepository.get();
+    return res.status(200).json({ orders });
+  }
+  return res.status(405).send('');
 }

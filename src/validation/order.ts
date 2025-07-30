@@ -5,7 +5,7 @@ export const orderSchema = Yup.object().shape({
   items: Yup.array(
     Yup.object().shape({
       productId: Yup.string().required("O ID do produto é obrigatório"),
-      quantity: Yup.number()
+      amount: Yup.number()
         .min(1, "A quantidade deve ser pelo menos 1")
         .required("A quantidade é obrigatória"),
     })

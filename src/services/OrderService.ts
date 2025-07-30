@@ -1,15 +1,12 @@
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { firebaseFirestore } from "@/utils/firebaseClient"; // Seu arquivo de configuração do Firebase Client
-import type { OrderDTO, OrderI, OrderItemDTO } from "@/interfaces/OrderI";
-import type { AddressI } from "@/interfaces/AddressI";
+import type { OrderDTO } from "@/interfaces/OrderI";
 import { api } from "@/utils/api";
 
 // Interface para os dados necessários para criar um pedido
 
 export class ApiOrderService {
-  async createOrder(orderData: OrderDTO) {
+  async createOrder(orderData: OrderDTO): Promise<string> {
     const { data } = await api.post("orders", orderData);
-    return data.order;
+    return data.orderId;
   }
 
   // Futuramente, você pode adicionar métodos como:

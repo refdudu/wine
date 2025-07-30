@@ -34,34 +34,29 @@ export class OrderRepositoryFirebase {
     _data.push(["createdAt", serverTimestamp()]);
     _data.push(["status", "pending"]);
 
-    if (order.shippingAddressId) {
-      const address = await this.addressRepository.getById(
-        order.shippingAddressId
-      );
-      _data.push(["shippingAddress", address]);
-    }
+    const address = await this.addressRepository.getById(
+      order.shippingAddressId
+    );
+    _data.push(["shippingAddress", address]);
 
-    if (order.items) {
-      const productsId = order.items.map((item) => item.productId);
-      const products = this.productRepository.search(productsId);
-      const items: OrderItem[] = order.items.map((item) => {
-        const product = products.find(
-          (product) => product.id === item.productId
-        );
-        if (!product) throw new ProductNotFound();
-        return {
-          product: {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            image: product.image,
-          },
-          amount: item.amount,
-        };
-      });
-      _data.push(["items", items]);
-    }
-    const orderRef = await addDoc(this.dbRef, _data);
+    const productsId = order.items.map((item) => item.productId);
+    const products = this.productRepository.search(productsId);
+    const items: OrderItem[] = order.items.map((item) => {
+      const product = products.find((product) => product.id === item.productId);
+      if (!product) throw new ProductNotFound();
+      return {
+        product: {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+        },
+        amount: item.amount,
+      };
+    });
+    _data.push(["items", items]);
+    
+    const orderRef = await addDoc(this.dbRef, Object.fromEntries(_data));
     return orderRef.id;
   }
   async delete(id: string) {

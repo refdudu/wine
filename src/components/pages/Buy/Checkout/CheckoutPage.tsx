@@ -30,7 +30,7 @@ export const CheckoutPage: NextPageWithLayout = () => {
   );
 };
 function Main() {
-  const totalFormatted = useTotalShoppingCartProducts();
+  const {totalFormatted} = useTotalShoppingCartProducts();
   const { shoppingCartProducts } = useShoppingCart();
   const orderService = new ApiOrderService();
   const { user } = useSession();
@@ -85,7 +85,7 @@ function Main() {
     }));
 
     const orderData: OrderDTO = {
-      userId: user.uid,
+      userUid: user.uid,
       items: orderItems,
       shippingAddressId: deliveryAddress.id || "",
     };

@@ -24,6 +24,7 @@ export function LayoutProvider({ children }: LayoutProps) {
   const getIsMobile = () => {
     return window.innerWidth < 1120;
   };
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setIsMobile(getIsMobile());
   }, []);
