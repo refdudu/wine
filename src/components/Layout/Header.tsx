@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "../Button";
+import Link from "next/link";
 interface Line {
   left: number;
   width: number;
@@ -21,10 +22,12 @@ const iconsProps = {
 };
 export function Header() {
   return (
-    <header className="text-custom-gray bg-white flex items-center text-lg h-[88px] font-neo w-full shadow-md">
+    <header className="text-custom-gray bg-white flex items-center text-lg min-h-[80px] max-h-[80px] h-[80px] font-neo w-full shadow-md">
       <div className="flex justify-between items-center w-full max-w-[1120px] m-auto px-3">
         <div className="flex gap-20">
-          <Image alt="Wine" width={100} height={28} src={WineLogo} />
+          <Link href="/">
+            <Image alt="Wine" width={100} height={28} src={WineLogo} />
+          </Link>
           <div className="hidden lg:block">
             <Tabs />
           </div>
@@ -72,7 +75,7 @@ function UserPopup() {
   });
 
   const handleProfileClick = () => {
-    router.push("/profile/settings");
+    router.push("/profile/orders");
     setIsOpened(false);
   };
 
@@ -88,8 +91,8 @@ function UserPopup() {
     };
   }, []);
   useEffect(() => {
-    setIsOpened(!isAuthorized);
-  }, [isAuthorized]);
+    setIsOpened(!isAuthorized && !isLoadingAuthorization);
+  }, [isAuthorized, isLoadingAuthorization]);
 
   return (
     <div ref={divRef} className="relative flex items-center justify-center">
@@ -121,7 +124,7 @@ function UserPopup() {
                 className="text-left px-2 py-1 hover:bg-gray-50 rounded text-custom-gray transition-colors duration-200"
                 onClick={handleProfileClick}
               >
-                Meu Perfil
+                Meus Pedidos
               </button>
             )}
             <Button

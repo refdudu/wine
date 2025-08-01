@@ -2,7 +2,7 @@ import { MasterContext } from "@/contexts/MasterContext";
 import { useSession } from "@/contexts/SessionContext";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { Spin } from "./Spin";
+import { Layout } from "./Layout";
 
 interface OnlyAuthContainerProps {
   children: React.ReactNode;
@@ -14,9 +14,17 @@ export function OnlyAuthContainer({ children }: OnlyAuthContainerProps) {
     </MasterContext>
   );
 }
-function OnlyAuthContent({ children }: OnlyAuthContainerProps) {
+export function OnlyAuthLayout({ children }: OnlyAuthContainerProps) {
+  return (
+    <Layout>
+      <OnlyAuthContent>{children}</OnlyAuthContent>
+    </Layout>
+  );
+}
+export function OnlyAuthContent({ children }: OnlyAuthContainerProps) {
   const { isAuthorized, isLoadingAuthorization } = useSession();
   const { push } = useRouter();
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (!isLoadingAuthorization && !isAuthorized) {
       push("/");

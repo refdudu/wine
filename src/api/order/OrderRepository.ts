@@ -55,7 +55,7 @@ export class OrderRepositoryFirebase {
       };
     });
     _data.push(["items", items]);
-    
+
     const orderRef = await addDoc(this.dbRef, Object.fromEntries(_data));
     return orderRef.id;
   }
@@ -72,14 +72,14 @@ export class OrderRepositoryFirebase {
   }
   async get() {
     const orderRef = await getDocs(this.dbRef);
-    // return orderRef.docs.map((x) => ({
-    //   userId: x.data().userId,
-    //   items: x.data().items,
-    //   totalAmount: x.data().totalAmount,
-    //   shippingAddress: x.data().shippingAddress,
-    //   createdAt: x.data().createdAt.toDate(),
-    //   status: x.data().status || "pending",
-    //   id: x.id,
-    // })) as OrderDTO[];
+    return orderRef.docs.map((x) => ({
+      id: x.id,
+      userUid: x.data().userUid,
+      items: x.data().items.slice(0, 3),
+      totalAmount: x.data().totalAmount,
+      shippingAddress: x.data().shippingAddress,
+      createdAt: x.data().createdAt.toDate(),
+      status: x.data().status || "pending",
+    }));
   }
 }

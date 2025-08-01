@@ -1,3 +1,5 @@
+import type { Option } from "./OptionI";
+
 export interface OrderItemDTO {
   productId: string;
   amount: number;
@@ -14,9 +16,12 @@ export interface OrderItem {
 
 export interface OrderI {
   id: string;
+  userUid: string;
+  items: OrderItem[];
+  totalAmount?: number;
+  shippingAddress: AddressOrderI;
   createdAt: Date;
-  //   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-  // Futuramente: paymentMethod, trackingNumber, etc.
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
 }
 export interface OrderDTO {
   userUid: string;
@@ -24,8 +29,8 @@ export interface OrderDTO {
   shippingAddressId: string;
 }
 export interface AddressOrderI {
-  state: string;
-  city: string;
+  state: Option;
+  city: Option;
   phone: string;
   cep: string;
   addressIdentify: string;
