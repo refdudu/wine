@@ -51,7 +51,7 @@ const PedidosPageContent = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container  mx-auto px-4 py-8">
         <div className="flex justify-center items-center min-h-[400px]">
           <Spin />
         </div>
@@ -61,7 +61,7 @@ const PedidosPageContent = () => {
 
   return (
     <div className="w-full px-4 py-8 overflow-auto h-full">
-      <div className="container mx-auto">
+      <div className="container max-w-5xl mx-auto">
         <header className="w-full mb-5">
           <h1 className="text-3xl font-bold">Meus Pedidos</h1>
           <p className="text-gray-600 mt-2">

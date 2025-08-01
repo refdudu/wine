@@ -4,6 +4,7 @@ import { formatPrice } from "@/utils/formatPrice";
 import { OrderInfoField, StatusBadge } from "../atoms";
 import { AddressDropdownButton } from "../molecules";
 import { AddressDropdown } from "./AddressDropdown";
+import Link from "next/link";
 
 interface OrderHeaderProps {
   order: OrderI;
@@ -30,7 +31,7 @@ export const OrderHeader = ({ order, totalAmount }: OrderHeaderProps) => {
   }, [showAddressDropdown]);
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+    <div className="flex gap-4 flex-col lg:flex-row lg:items-center lg:justify-between mb-4">
       <OrderInfoField
         label="PEDIDO REALIZADO EM"
         value={new Date(order.createdAt).toLocaleDateString("pt-BR", {
@@ -41,11 +42,8 @@ export const OrderHeader = ({ order, totalAmount }: OrderHeaderProps) => {
           minute: "2-digit",
         })}
       />
-      
-      <OrderInfoField
-        label="TOTAL"
-        value={formatPrice(totalAmount)}
-      />
+
+      <OrderInfoField label="TOTAL" value={formatPrice(totalAmount)} />
 
       <OrderInfoField
         label="ENDEREÇO DE ENTREGA"
@@ -56,7 +54,7 @@ export const OrderHeader = ({ order, totalAmount }: OrderHeaderProps) => {
               isOpen={showAddressDropdown}
               onClick={() => setShowAddressDropdown(!showAddressDropdown)}
             />
-            
+
             {showAddressDropdown && (
               <AddressDropdown
                 address={order.shippingAddress}
@@ -67,9 +65,16 @@ export const OrderHeader = ({ order, totalAmount }: OrderHeaderProps) => {
         }
       />
 
-      <div className="flex flex-col items-end gap-2 text-sm text-gray-500">
+      <div className="flex flex-row lg:flex-col items-center lg:items-end gap-2 text-sm text-gray-500">
         <span>PEDIDO #{order.id}</span>
-        <StatusBadge status={order.status} />
+        <div className="flex items-center gap-2">
+          <Link href={`/profile/orders/${order.id}`}>
+            <span className="text-blue-600 hover:underline">
+              Detalhes do Pedido
+            </span>
+          </Link>
+          <StatusBadge status={order.status} />
+        </div>
       </div>
     </div>
   );
