@@ -14,8 +14,12 @@ export class ApiOrderService {
     return data.orders;
   }
 
+  async getOrderById(orderId: string): Promise<OrderI> {
+    const { data } = await api.get(`orders/${orderId}`);
+    return data.order;
+  }
+
   // Futuramente, você pode adicionar métodos como:
-  // async getOrderById(orderId: string): Promise<OrderI | null> { ... }
   // async updateOrderStatus(orderId: string, status: OrderI['status']): Promise<boolean> { ... }
 }
 

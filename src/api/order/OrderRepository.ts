@@ -82,4 +82,25 @@ export class OrderRepositoryFirebase {
       status: x.data().status || "pending",
     }));
   }
+
+  async getById(id: string) {
+    if (!id) throw new Error("Order id is required");
+    const orderRef = doc(this.dbRef, id);
+    const orderDoc = await getDoc(orderRef);
+    
+    if (!orderDoc.exists()) {
+      return null;
+    }
+
+    const data = orderDoc.data();
+    return {
+      id: orderDoc.id,
+      userUid: data.userUid,
+      items: data.items, // Retorna todos os itens para a página de detalhes
+      totalAmount: data.totalAmount,
+      shippingAddress: data.shippingAddress,
+      createdAt: data.createdAt.toDate(),
+      status: data.status || "pending",
+    };
+  }
 }

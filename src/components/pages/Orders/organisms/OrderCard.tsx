@@ -8,13 +8,10 @@ interface OrderCardProps {
 }
 
 export const OrderCard = ({ order }: OrderCardProps) => {
-  const calculateOrderTotal = () => {
-    return order.items.reduce((total, item) => {
-      return total + item.product.price * item.amount;
-    }, 0);
-  };
-
-  const totalAmount = calculateOrderTotal();
+  // Usar totalAmount da API ou calcular como fallback
+  const totalAmount = order.totalAmount ?? order.items.reduce((total, item) => {
+    return total + item.product.price * item.amount;
+  }, 0);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
